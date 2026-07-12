@@ -1,0 +1,54 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: how to change current working directory in python?
+- role: assistant
+  content: |-
+    In Python, you can change the current working directory (CWD) using the `os` module. Here are the common methods:
+
+    ### **1. Using `os.chdir()`**
+    ```python
+    import os
+
+    # Change directory to a new path
+    os.chdir("/path/to/new/directory")
+
+    # Verify the change
+    print(os.getcwd())  # Output: /path/to/new/directory
+    ```
+
+    ### **2. Using `pathlib.Path` (Python 3.4+)**
+    ```python
+    from pathlib import Path
+
+    # Change directory
+    Path("/path/to/new/directory").resolve().mkdir(exist_ok=True)  # Ensure directory exists
+    os.chdir("/path/to/new/directory")
+
+    # Verify
+    print(Path.cwd())  # Output: /path/to/new/directory
+    ```
+
+    ### **Key Notes:**
+    - **`os.getcwd()`** → Gets the current working directory.
+    - **`os.chdir()`** → Changes the working directory.
+    - **`Path.cwd()`** → Returns the current working directory as a `Path` object (from `pathlib`).
+    - **`Path.resolve()`** → Resolves relative paths to absolute paths.
+
+    ### **Example with Error Handling**
+    ```python
+    import os
+
+    try:
+        os.chdir("/path/to/new/directory")
+        print(f"Changed to: {os.getcwd()}")
+    except FileNotFoundError:
+        print("Directory does not exist!")
+    except PermissionError:
+        print("Permission denied!")
+    ```
+
+    This ensures robustness when changing directories. 🚀

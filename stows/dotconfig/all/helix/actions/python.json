@@ -1,0 +1,34 @@
+{
+    "annotate": {
+        "title": "annotate",
+        "filter": "[[ \"$TM_CURRENT_LINE\" == *def* ]] && echo true || echo false",
+        "shell": [
+            "righttyper --module ${TM_FILENAME_BASE} --srcdir ${TM_DIRETORY} --include-functions ${TM_SELECTED_TEXT} --python-version 3.11"
+        ],
+        "description": "add type annotations"
+    },
+    "pydoc": {
+        "title": "search python.docs",
+        "filter": "",
+        "shell": [
+            "zen https://docs.python.org/3/search.html?q=${TM_CURRENT_WORD}"
+        ],
+        "description": "go to python doc search page"
+    },
+    "run": {
+        "title": "run file with venv",
+        "filter": "",
+        "shell": [
+            "tmux popup -d ${WORKSPACE_FOLDER} -w 65% -h 65% -T ${TM_FILENAME} 'uv run ${TM_FILEPATH}'"
+        ],
+        "description": "run current file in a tmux popup"
+    },
+    "black": {
+        "title": "Black",
+        "filter": "",
+        "shell": [
+            "black ${TM_FILEPATH}"
+        ],
+        "description": "format file with Black"
+    }
+}

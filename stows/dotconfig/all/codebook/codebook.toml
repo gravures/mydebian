@@ -1,0 +1,17 @@
+dictionaries = [
+    "en_us",
+    "en_gb",
+    "fr",
+]
+words = [
+    "enum's",
+    "franky",
+    "noqa",
+    "objclass",
+    "pkgdir",
+    "pth",
+    "pygments",
+    "pyright",
+    "qualname",
+    "venv",
+]

@@ -1,0 +1,4 @@
+set style github-dark
+info code
+where
+list .

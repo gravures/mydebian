@@ -1,0 +1,76 @@
+[batman]
+archive = "/archive/duplicity"
+tempdir = "/var/tmp"
+restoredir = "RESTORED"
+
+[batman.env]
+
+[volumes.rear]
+scheme = "file"
+host = "REAR-000"
+path = "BACKUP"
+
+[jobs.home]
+active = true
+volume = "rear"
+root = "/home/gilles/"
+encryption = true
+compression = false
+concurrency = 4
+blocksize = 512
+prehook = "mister-freeze"
+exclude = [
+  "/home/gilles/.tmp",
+  "/home/gilles/.steam",
+  "/home/gilles/.local/tmp/",
+  "/home/gilles/.local/share/Trash",
+  "/home/gilles/DEVELOPPEMENT/REPOS/**/node_modules",
+  "/home/gilles/DEVELOPPEMENT/REPOS/**/build",
+  "/home/gilles/DEVELOPPEMENT/REPOS/**/.env",
+  "/home/gilles/DEVELOPPEMENT/REPOS/**/.venv",
+  "/home/gilles/DEVELOPPEMENT/BUILD",
+  "/home/gilles/Téléchargements",
+  "/home/gilles/.cache",
+  "/home/gilles/.var",
+  "/home/gilles/.tmux",
+  "/home/gilles/.npm",
+  "/home/gilles/.nvm",
+]
+exclude_ofs = true
+full_delay = "2M"
+keep_last_full = 4
+
+[jobs.graphisme]
+active = true
+volume = "rear"
+root = "/home/gilles/GRAPHISME/"
+full_delay = "4M"
+keep_last_full = 3
+
+[jobs.photos]
+active = true
+volume = "rear"
+root = "/home/gilles/PHOTOS/"
+full_delay = "6M"
+keep_last_full = 2
+
+[jobs.archive_photos]
+active = false
+volume = "rear"
+root = "/media/gilles/ARCHIVES/PHOTOS_B/"
+full_delay = "12M"
+keep_last_full = 1
+
+[jobs.archive_graphisme]
+active = false
+volume = "rear"
+root = "/media/gilles/ARCHIVES/GRAPHISME/"
+full_delay = "18M"
+keep_last_full = 1
+
+[jobs.osx]
+active = false
+volume = "rear"
+root = "/osx/"
+full_delay = "6M"
+keep_last_full = 1

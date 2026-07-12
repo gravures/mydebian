@@ -1,0 +1,664 @@
+##
+# LSP-AI
+[language-server.lsp-ai]
+command = "lsp-ai"
+
+[language-server.lsp-ai.config.memory]
+file_store = {}
+
+##
+# Models
+[language-server.lsp-ai.config.models.gemma2]
+type = "open_ai"
+chat_endpoint = "https://api.groq.com/openai/v1/chat/completions"
+model = "gemma2-9b-it"
+max_requests_per_second = 1
+auth_token_env_var_name = "GROQ_API_KEY"
+
+[language-server.lsp-ai.config.models.devstral]
+type = "open_ai"
+chat_endpoint = "https://openrouter.ai/api/v1/chat/completions"
+model = "mistralai/devstral-small-2505:free"
+auth_token_env_var_name = "OPENROUTER_API_KEY"
+
+[language-server.lsp-ai.config.models.gemini]
+type = "open_ai"
+chat_endpoint = "https://openrouter.ai/api/v1/chat/completions"
+model = "google/gemini-2.5-pro"
+auth_token_env_var_name = "OPENROUTER_API_KEY"
+
+[language-server.lsp-ai.config.models.pycoder]
+type = "open_ai"
+completions_endpoint = "http://localhost:9999/v1/completions"
+auth_token = ""
+model = "star-pycoder:164m"
+
+##
+# Auto-completion
+[language-server.lsp-ai.config.completion]
+model = "pycoder"
+
+[language-server.lsp-ai.config.completion.parameters]
+max_context = 128
+max_tokens = 64
+temperature = 0.5
+
+# [[language-server.lsp-ai.config.completion.parameters.messages]]
+# role = "system"
+# content = "Instructions:\n- You are an coding assistant.\n- Given a piece of code with the cursor location marked by \"<CURSOR>\", replace \"<CURSOR>\" with the correct code or comment.\n- First, think step-by-step.\n- Then output the code replacing the \"<CURSOR>\"\n\nRules:\n- Only respond with code or comments.\n- Only replace \"<CURSOR>\"; do not include any previously written code.\n- Never include \"<CURSOR>\" in your response."
+
+# [[language-server.lsp-ai.config.completion.parameters.messages]]
+# role = "user"
+# content = "{CODE}"
+
+##
+# Chat
+# [[language-server.lsp-ai.config.chat]]
+# trigger = "#>"
+# action_display_name = "Chat"
+# model = "devstral"
+# parameters = { temperature = 0.6, max_context = 16000, max_tokens = 4096, message = { role = "system", content = "You are a code assistant chatbot. The user will ask you for assistance coding and you will do you best to answer succinctly and accurately" } }
+
+# [[language-server.lsp-ai.config.chat]]
+# trigger = "!CC"
+# action_display_name = "Chat"
+# model = "deepseek"
+# parameters = { max_context = 32000, max_tokens = 4096, message = { role = "system", content = "You are a code assistant chatbot. The user will ask you for assistance coding and you will do you best to answer succinctly and accurately given the code context:\n\n{CONTEXT}" } }
+
+
+[[language-server.lsp-ai.config.actions]]
+action_display_name = "Complete"
+model = "gemma2"
+parameters = { max_context = 1024, max_tokens = 1024, messages = [
+  { role = "system", content = "You are an AI coding assistant. Your task is to complete code snippets. The user's cursor position is marked by \"<CURSOR>\". Follow these steps:\n\n1. Analyze the code context and the cursor position.\n2. Provide your chain of thought reasoning, wrapped in <reasoning> tags. Include thoughts about the cursor position, what needs to be completed, and any necessary formatting.\n3. Determine the appropriate code to complete the current thought, including finishing partial words or lines.\n4. Replace \"<CURSOR>\" with the necessary code, ensuring proper formatting and line breaks.\n5. Wrap your code solution in <answer> tags.\n\nYour response should always include both the reasoning and the answer. Pay special attention to completing partial words or lines before adding new lines of code.\n\n<examples>\n<example>\nUser input:\n--main.py--\n# A function that reads in user inpu<CURSOR>\n\nResponse:\n<reasoning>\n1. The cursor is positioned after \"inpu\" in a comment describing a function that reads user input.\n2. We need to complete the word \"input\" in the comment first.\n3. After completing the comment, we should add a new line before defining the function.\n4. The function should use Python's built-in `input()` function to read user input.\n5. We'll name the function descriptively and include a return statement.\n</reasoning>\n\n<answer>t\ndef read_user_input():\n    user_input = input(\"Enter your input: \")\n    return user_input\n</answer>\n</example>\n\n<example>\nUser input:\n--main.py--\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    else:\n        re<CURSOR>\n\n\nResponse:\n<reasoning>\n1. The cursor is positioned after \"re\" in the 'else' clause of a recursive Fibonacci function.\n2. We need to complete the return statement for the recursive case.\n3. The \"re\" already present likely stands for \"return\", so we'll continue from there.\n4. The Fibonacci sequence is the sum of the two preceding numbers.\n5. We should return the sum of fibonacci(n-1) and fibonacci(n-2).\n</reasoning>\n\n<answer>turn fibonacci(n-1) + fibonacci(n-2)</answer>\n</example>\n</examples>" },
+  { role = "user", content = "{CODE}" },
+] }
+post_process = { extractor = "(?s)<answer>(.*?)</answer>" }
+
+##
+# Helix lsp server
+[language-server.helix]
+command = "hx-lsp"
+
+##
+# Codebook spell checker
+[language-server.codebook]
+command = "codebook-lsp"
+args = ["serve"]
+
+##
+# BUG: can't make it works
+# textLSP
+# [language-server.text-lsp]
+# command = "textlsp"
+# args = ["--log-level", "INFO"]
+
+# [language-server.text-lsp.config.textlsp.analyzers.languagetool]
+# enabled = false
+# check_text = { on_open = true, on_save = true, on_change = true }
+
+# [language-server.text-lsp.config.textlsp.analyzers.gramformer]
+# enabled = true
+# gpu = false
+# check_text = { on_open = false, on_save = true, on_change = true }
+
+# [language-server.text-lsp.config.textlsp.documents]
+# language = "auto:en"
+# txt = { parse = true }
+
+
+##
+# BUG: can't make it works
+# Spelgud lsp spell check
+# [language-server.spelgud]
+# command = "spelgud"
+
+
+##
+# Rst - RestructuredText
+[language-server.esbonio]
+command = "esbonio"
+
+[[language]]
+name = "rst"
+scope = "source.rst"
+injection-regex = "rst"
+file-types = ["rst"]
+comment-token = ".."
+indent = { tab-width = 3, unit = "   " }
+roots = ["pyproject.toml", ".git"]
+language-servers = [{ name = "esbonio" }, { name = "helix" }]
+
+##
+# Rust
+[language-server.rust-analyzer.config.check]
+command = "clippy"
+
+[language-server.rust-analyzer.config.cargo]
+features = "all"
+
+##
+# Bash
+[language-server.bash-language-server.config]
+backgroundAnalysisMaxFiles = 1
+includeAllWorkspaceSymbols = true
+shellcheckExternalSources = true
+# shellcheckArguments = "-P PATH"
+
+[[language]]
+name = "bash"
+scope = "source.bash"
+file-types = ["bash", "sh", "bob", "pacstall", "pacscript", "conf"]
+language-servers = [
+  { name = "bash-language-server", except-features = [
+    "format",
+  ] },
+  { name = "helix" },
+  { name = "harper-ls" },
+]
+indent = { tab-width = 4, unit = "\t" }
+diagnostic-severity = "hint"
+formatter = { command = "shfmt" }
+auto-format = true
+
+
+##
+# SCSS & CSS
+# see https://wkillerud.github.io/some-sass/language-server/settings.html
+[language-server.some-sass]
+command = "some-sass-language-server"
+args = ["--stdio"]
+
+[language-server.some-sass.config.somesass.workspace]
+loadPaths = ["**/*.scss", "**/*.sass"]
+
+[language-server.some-sass.config.somesass.scss.completion]
+suggestFromUseOnly = true
+
+[[language]]
+name = "scss"
+scope = "source.scss"
+file-types = ["scss", "sass", "astro"]
+language-servers = [{ name = "some-sass", except-features = ["format"] }]
+indent = { tab-width = 2, unit = "  " }
+comment-tokens = ["//", "///"]
+diagnostic-severity = "hint"
+block-comment-tokens = { start = "/*", end = "*/" }
+formatter = { command = "prettier", args = ["--parser=scss"] }
+auto-format = false
+injection-regex = "scss"
+
+[[language]]
+name = "css"
+scope = "source.css"
+file-types = ["css"]
+language-servers = [
+  { name = "some-sass", except-features = [
+    "format",
+  ] },
+  { name = "helix" },
+  { name = "codebook" },
+]
+indent = { tab-width = 2, unit = "  " }
+diagnostic-severity = "hint"
+formatter = { command = "prettier", args = ["--parser=css"] }
+auto-format = true
+
+
+##
+# Typescript
+[language-server.biome]
+command = "npm"
+args = ["exec", "--no", "--", "biome", "lsp-proxy"]
+
+[language-server.typescript-language-server]
+command = "typescript-language-server"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.typescript-language-server.config.typescript.inlayHints]
+includeInlayEnumMemberValueHints = true
+includeInlayFunctionLikeReturnTypeHints = true
+includeInlayFunctionParameterTypeHints = true
+includeInlayParameterNameHints = "all"
+includeInlayParameterNameHintsWhenArgumentMatchesName = true
+includeInlayPropertyDeclarationTypeHints = true
+includeInlayVariableTypeHints = true
+
+[language-server.typescript-language-server.config.javascript.inlayHints]
+includeInlayEnumMemberValueHints = true
+includeInlayFunctionLikeReturnTypeHints = true
+includeInlayFunctionParameterTypeHints = true
+includeInlayParameterNameHints = "all"
+includeInlayParameterNameHintsWhenArgumentMatchesName = true
+includeInlayPropertyDeclarationTypeHints = true
+includeInlayVariableTypeHints = true
+
+[[language]]
+name = "typescript"
+scope = "source.ts"
+injection-regex = "(ts|typescript)"
+language-id = "typescript"
+file-types = ["ts", "mts", "cts"]
+shebangs = ["deno", "bun", "ts-node"]
+roots = ["package.json", "tsconfig.json"]
+comment-token = "//"
+block-comment-tokens = { start = "/*", end = "*/" }
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  { name = "biome" },
+  { name = "helix" },
+  { name = "codebook" },
+]
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+# formatter = { command = "prettier", args = ["--parser", "typescript"] }
+
+
+##
+# Astro
+[language-server.astro-ls]
+command = "astro-ls"
+args = ["--stdio"]
+
+[language-server.astro-ls.config]
+contentIntellisense = true
+
+[language-server.astro-ls.config.typescript]
+tsdk = "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib"
+environment = "node"
+
+[[language]]
+name = "astro"
+scope = "source.astro"
+injection-regex = "astro"
+file-types = ["astro"]
+roots = ["astro.config.mjs"]
+language-servers = [
+  { name = "astro-ls", except-features = [
+    "format",
+  ] },
+  { name = "helix" },
+  { name = "codebook" },
+]
+formatter = { command = "prettier", args = [
+  "--plugin",
+  "prettier-plugin-astro",
+  "--parser",
+  "--astro-allow-shorthand",
+  "--astro-skip-frontmatter",
+  "astro",
+] }
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+block-comment-tokens = { start = "<!--", end = "-->" }
+comment-token = "//"
+
+##
+# Ltex-ls-plus
+# see: https://ltex-plus.github.io/ltex-plus/settings.html for server options.
+#
+# NOTE: works with ltapiserv-rs too except the proper content
+# type is not sent in the requests.
+# (https://github.com/cpg314/ltapiserv-rs?tab=readme-ov-file#ltex-ls-language-server-protocol-for-markup)
+[language-server.ltex-ls-plus]
+command = "ltex-ls-plus"
+args = ["--no-endless"]
+
+[language-server.ltex-ls-plus.config.ltex]
+"ltex-ls" = { path = "/home/gilles/.local/app/ltex-ls-plus-18.6.1" }
+languageShortCode = "en-US"
+disabledRules = { "en-US" = ["PROFANITY"] }
+dictionary = { "en-US" = ["builtin"] }
+# languageToolHttpServerUri = "http://localhost:8875"
+completionEnabled = true
+checkFrequency = "edit"  # edit | save | manual
+trace.server = "verbose" # off | messages | verbose
+
+
+##
+# Harper
+[language-server.harper-ls]
+command = "harper-ls"
+args = ["--stdio"]
+
+[language-server.harper-ls.config.harper-ls]
+diagnosticSeverity = "warning"
+isolateEnglish = true
+dialect = "American"
+maxFileLength = 120000
+ignoredLintsPath = ""
+excludePatterns = []
+
+[language-server.harper-ls.config.harper-ls.linters]
+SpellCheck = true
+SpelledNumbers = false
+AnA = true
+UnclosedQuotes = true
+WrongQuotes = true
+LongSentences = false
+RepeatedWords = true
+Spaces = true
+Matcher = true
+CorrectNumberSuffix = true
+SentenceCapitalization = false
+TodoHypen = false
+OrthographicConsistency = false
+EllipsisLength = false
+
+[language-server.harper-ls.config.harper-ls.codeActions]
+ForceStable = true
+
+[language-server.harper-ls.config.harper-ls.markdown]
+IgnoreLinkTitle = false
+
+
+##
+# Markdown
+[[language]]
+name = "markdown"
+scope = "source.markdown"
+injection-regex = "md|markdown"
+file-types = [
+  "md",
+  "livemd",
+  "markdown",
+  "mkd",
+  "mkdn",
+  "mdwn",
+  "mdown",
+  "markdn",
+  "mdtxt",
+  "mdtext",
+  "workbook",
+  { glob = "PULLREQ_EDITMSG" },
+]
+language-servers = [
+  { name = "markdown-oxide" },
+  { name = "rumdl" },
+  { name = "harper-ls" },
+  { name = "helix" },
+]
+indent = { tab-width = 2, unit = "  " }
+block-comment-tokens = { start = "<!--", end = "-->" }
+word-completion.trigger-length = 3
+formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
+
+##
+# MDX
+[[grammar]]
+name = "mdx"
+# source = { git = "https://github.com/parmort/tree-sitter-mdx.git", rev = "413285231ce8fa8b11e7074bbe265b48aa7277f9" }
+source = { git = "https://github.com/srazzak/tree-sitter-mdx.git", rev = "3aa29e8de1bf0213948a04fe953039b6ab73777b" }
+
+[language-server.mdx-lsp]
+command = "mdx-language-server"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.mdx-lsp.config.typescript]
+tsdk = "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib"
+environment = "node"
+enabled = true
+
+[[language]]
+name = "mdx"
+scope = "source.mdx"
+injection-regex = "mdx"
+file-types = ["mdx"]
+language-servers = [
+  { name = "mdx-lsp" },
+  { name = "rumdl" },
+  { name = "harper-ls" },
+  { name = "helix" },
+  { name = "astro-ls" },
+]
+indent = { tab-width = 2, unit = "  " }
+block-comment-tokens = { start = "<!--", end = "-->" }
+word-completion.trigger-length = 3
+formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
+
+
+##
+# Yaml
+[language-server.yaml-language-server]
+command = "yaml-language-server"
+args = ["--stdio"]
+
+[language-server.yaml-language-server.config.yaml]
+validate = true
+hover = true
+completion = true
+schema = true
+format = { enable = true }
+
+[[language]]
+name = "yaml"
+language-servers = ["yaml-language-server", "helix"]
+
+##
+# Python
+[language-server.ty]
+command = "ty"
+environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
+args = ["server"]
+
+[language-server.pyrefly]
+command = "pyrefly"
+environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
+args = ["lsp"]
+
+[language-server.pyright]
+command = "basedpyright-langserver"
+environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
+args = ["--stdio"]
+
+[language-server.pyright.config]
+basedpyright.disableOrganizeImports = true
+basedpyright.disableTaggedHints = false
+basedpyright.analysis.autoImportCompletions = true
+basedpyright.analysis.autoSearchPaths = true
+basedpyright.analysis.diagnosticMode = "openFilesOnly"      # "workspace"
+basedpyright.analysis.inlayHints.genericTypes = true
+basedpyright.analysis.inlayHints.variableTypes = true
+basedpyright.analysis.inlayHints.callArgumentNames = true
+basedpyright.analysis.inlayHints.functionReturnTypes = true
+
+[language-server.mypy]
+command = "pylsp"
+environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US", "PYLSP_MYPY_ALLOW_DANGEROUS_CODE_EXECUTION" = "1" }
+args = []                                                                                                                       # ["--check-parent-process"]
+
+[language-server.mypy.config]
+pylsp.plugins.autopep8.enabled = false
+pylsp.plugins.flake.enabled = false
+'pylsp.plugins.autopep8.enabled' = false
+pylsp.plugins.jedi_completion.enabled = false
+pylsp.plugins.jedi_definition.enabled = false
+pylsp.plugins.jedi_hover.enabled = false
+pylsp.plugins.jedi_references.enabled = false
+pylsp.plugins.jedi_signature_help.enabled = false
+pylsp.plugins.jedi_symbols.enabled = false
+pylsp.plugins.jedi_type_definition.enabled = false
+pylsp.plugins.mccabe.enabled = false
+pylsp.plugins.preload.enabled = false
+pylsp.plugins.pycodestyle.enabled = false
+pylsp.plugins.pydocstyle.enabled = false
+pylsp.plugins.pyflakes.enabled = false
+pylsp.plugins.pylint.enabled = false
+pylsp.plugins.rope_autoimport.enabled = false
+pylsp.plugins.rope_autoimport.completions.enabled = false
+pylsp.plugins.rope_autoimport.code_actions.enabled = false
+pylsp.plugins.rope_completion.enabled = false
+pylsp.plugins.yapf.enabled = false
+pylsp.plugins.pylsp_mypy.enabled = false
+pylsp.plugins.pylsp_mypy.dmypy = false
+pylsp.plugins.pylsp_mypy.live_mode = false                 # documented as incompatible with dmypy
+pylsp.plugins.pylsp_mypy.report_progress = true
+pylsp.plugins.pylsp_mypy.follow-imports = "silent"
+
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+environment = { "RUFF_TRACE" = "messages" }
+
+[language-server.sourcery]
+command = "sourcery"
+args = ["lsp"]
+
+[language-server.sourcery.config]
+editor_version = "helix"
+extension_version = "helix"
+metricsEnabled = true
+
+[[language]]
+name = "python"
+scope = "source.python"
+injection-regex = "py(thon)?"
+file-types = [
+  "py",
+  { glob = "*.pyi" },
+  "py3",
+  "pyw",
+  "ptl",
+  "rpy",
+  "cpy",
+  "ipy",
+  "pyt",
+  { glob = ".python_history" },
+  { glob = ".pythonstartup" },
+  { glob = ".pythonrc" },
+  { glob = "*SConstruct" },
+  { glob = "*SConscript" },
+  { glob = "*sconstruct" },
+]
+shebangs = ["python", "uv"]
+roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [
+  { name = "pyright", except-features = [
+    "format",
+  ] },
+  # { name = "ty", except-features = [
+  #   "format",
+  # ] },
+  # { name = "pyrefly", except-features = [
+  #   "format",
+  # ] },
+  { name = "mypy", only-features = [
+    "diagnostics",
+  ] },
+  { name = "ruff" }, #, except-features = ["format"] },
+  { name = "harper-ls" },
+  { name = "helix" },
+]
+# formatter = { command = "ruff-format" }
+# formatter = { command = "black" }
+auto-format = true
+diagnostic-severity = "hint"
+
+# [language.debugger]
+# name = "trepan"
+# transport = "tcp"
+# command = "trepan3k"
+# args = ["--server", "--port", "3333", "--host", "localhost"]
+
+# port-arg = "--listen 127.0.0.1:{}"
+#
+# [language.debugger]
+# name = "debugpy"
+# transport = "tcp"
+# command = "debugpy"
+# args = []
+# port-arg = "--listen 127.0.0.1:{}"
+
+# [language.debugger]
+# name = "debugpy"
+# transport = "stdio"
+# command = "python3"
+# args = ["-m", "debugpy.adapter"]
+
+# [[language.debugger.templates]]
+# name = "source"
+# request = "launch"
+# completion = [{ name = "entrypoint", completion = "filename", default = "." }]
+# args = { mode = "debug", program = "{0}" }
+
+# [[language.debugger.templates]]
+# name = "Attach"
+# request = "attach"
+# completion = ["pid"]
+# args = { mode = "local", processId = "{0}" }
+
+# [[language.debugger.templates]]
+# name = "binary"
+# request = "launch"
+# completion = [{ name = "binary", completion = "filename" }]
+# args = { program = "{0}" }
+
+# [[language.debugger.templates]]
+# name = "binary (terminal)"
+# request = "launch"
+# completion = [{ name = "binary", completion = "filename" }]
+# args = { program = "{0}", runInTerminal = true }
+
+
+##
+# Cython
+#
+# [[grammar]]
+# name = "cython"
+# # source = { git = "https://github.com/b0o/tree-sitter-cython", rev = "62f44f5e7e41dde03c5f0a05f035e293bcf2bcf8" }
+# source = { git = "https://github.com/amaanq/tree-sitter-cython", rev = "8d429931cf345a9c88738ad0216d286346136f1c" }
+
+[[language]]
+name = "cython"
+scope = "source.cython"
+# injection-regex = "cython"
+file-types = ["pyx", "pxd", "pxi"]
+roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [{ name = "helix" }, { name = "harper-ls" }]
+
+
+##
+# TOML
+#
+[language-server.taplo]
+command = "taplo"
+args = ["lsp", "tcp"]
+
+[[language]]
+name = "toml"
+scope = "source.toml"
+file-types = ["toml"]
+auto-format = true
+comment-token = "#"
+language-servers = [{ name = "taplo" }, { name = "helix" }]
+formatter = { command = "taplo", args = ["format", "-"] }
+
+
+##
+# Json
+[language-server.vscode-json-language-server]
+command = "vscode-json-language-server"
+args = ["--stdio"]
+
+[language-server.vscode-json-language-server.config]
+provideFormatter = true
+json = { validate = { enable = true }, keepLines = { enable = true } }
+
+[[language]]
+name = "json"
+comment-token = "//"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [
+  { name = "vscode-json-language-server" },
+  { name = "helix" },
+  { name = "codebook" },
+]

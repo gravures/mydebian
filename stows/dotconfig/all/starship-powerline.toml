@@ -1,0 +1,86 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$character\
+[](#484848)\
+$username \
+$shell\
+[](bg:#5a5c60 fg:#484848)\
+$directory\
+[](fg:#5a5c60 bg:#6f6716)\
+$git_branch\
+$git_status\
+[](fg:#6f6716 bg:#d077c7)\
+$c\
+$python\
+$rust\
+[](fg:#d077c7 bg:#8a6d33)\
+$time\
+[ ](fg:#8a6d33)\
+"""
+
+command_timeout     = 5000
+add_newline         = true
+continuation_prompt = '↳ '
+
+[package]
+# disabled = true
+
+[character]
+success_symbol = '[●](bold green)'
+error_symbol   = '[●](bold red)'
+
+[username]
+show_always = true
+style_user  = "bg:#484848"
+style_root  = "bg:#701a04"
+format      = '[]($style)'
+
+[shell]
+disabled = false
+
+[directory]
+style             = "bg:#5a5c60"
+format            = "[  $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = " "
+style  = "bg:#6f6716"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style  = "bg:#6f6716"
+format = '[$all_status$ahead_behind ]($style)'
+
+[c]
+symbol = "  "
+style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = "  "
+style  = "bg:#d077c7"
+format = '[( ❰$virtualenv❱) ${symbol} ${version} ]($style)'
+
+[conda]
+symbol = " 🅒 "
+style  = "bg:#d077c7"
+format = '[${symbol}( ❰$environment) ]($style)'
+
+[nodejs]
+symbol = "  "
+style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = "  "
+style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[time]
+disabled    = false
+time_format = "%R"
+style       = "bg:#8a6d33"
+format      = '[ $time]($style)'

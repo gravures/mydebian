@@ -1,0 +1,70 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: how to copy last cell input content in ipython?
+- role: assistant
+  content: |-
+    In IPython (or Jupyter Notebook), you can copy the content of the last cell's input (or output) using keyboard shortcuts or built-in methods. Here are the common ways:
+
+    ### **1. Using Keyboard Shortcuts (Best for Quick Copying)**
+    - **Copy the last cell's input:**
+      - Press `Ctrl + C` (or `Cmd + C` on macOS) to copy the last input line.
+      - Then press `Ctrl + V` (or `Cmd + V`) to paste it.
+
+    - **Copy the last cell's output (if it's a string):**
+      - If the last cell's output is a string (e.g., `"Hello"`), you can copy it by:
+        - Right-clicking the output cell → **Copy** (or press `Ctrl + Shift + C`).
+        - Then paste (`Ctrl + V`).
+
+    ### **2. Using IPython's Built-in Methods (Programmatic Approach)**
+    If you want to programmatically copy the last cell's input/output in a script:
+
+    #### **For the Last Input:**
+    ```python
+    import ipywidgets as widgets
+    from IPython.display import display
+
+    # Get the last input cell's content
+    last_input = widgets.Output()
+    display(last_input)
+
+    # Simulate typing (for testing)
+    with last_input:
+        print("This is the last input")  # Replace with actual input
+
+    # Now, you can copy this content programmatically
+    content = str(last_input.value)  # Adjust based on actual output
+    print("Copied content:", content)
+    ```
+
+    #### **For the Last Output:**
+    ```python
+    from IPython.display import display, HTML
+
+    # Get the last output cell
+    last_output = display(HTML("<div>This is the last output</div>"))  # Replace with actual output
+
+    # Extract and copy the content
+    content = last_output.value  # Adjust based on actual output format
+    print("Copied content:", content)
+    ```
+
+    ### **3. Using `ipython` Magic Commands (Advanced)**
+    If you're working in a script, you can use:
+    ```python
+    from IPython.display import display, HTML
+
+    # Get the last cell's output
+    output = display(HTML("<div>Last output content</div>"))  # Replace with actual output
+    content = output.value
+    print("Copied:", content)
+    ```
+
+    ### **Best Practice for Jupyter Notebooks**
+    - **For quick copying:** Use `Ctrl + C` + `Ctrl + V` (keyboard shortcuts).
+    - **For automation:** Use `ipywidgets` or `IPython.display` to extract content programmatically.
+
+    Would you like help with a specific use case?

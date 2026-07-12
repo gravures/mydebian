@@ -1,0 +1,130 @@
+{// RestructuredText
+    // Cross ref.
+    "module": {
+        "prefix": "rst:module",
+        "body": ":py:mod:`${1:module}`",
+        "description": "Reference a module; a dotted name may be used. This should also be used for package names.",
+        "scope": "source.rst"
+    },
+    "function": {
+        "prefix": "rst:func",
+        "body": ":py:func:`${1:func}`",
+        "description": "Reference a Python function; dotted names may be used.",
+        "scope": "source.rst"
+    },
+    "decorator": {
+        "prefix": "rst:deco",
+        "body": ":py:deco:`${1:decorator}`",
+        "description": "Reference a Python decorator; dotted names may be used.",
+        "scope": "source.rst"
+    },
+    "const": {
+        "prefix": "rst:const",
+        "body": ":py:const:`${1:constant}`",
+        "description": "Reference a “defined” constant.",
+        "scope": "source.rst"
+    },
+    "class": {
+        "prefix": "rst:class",
+        "body": ":py:class:`${1:Class}`",
+        "description": "Reference a Python class.",
+        "scope": "source.rst"
+    },
+    "meth": {
+        "prefix": "rst:meth",
+        "body": ":py:meth:`${1:method}`",
+        "description": "Reference a Python method.",
+        "scope": "source.rst"
+    },
+    "attr": {
+        "prefix": "rst:attr",
+        "body": ":py:attr:`${1:attribute}`",
+        "description": "Reference an attrbute object.",
+        "scope": "source.rst"
+    },
+    "type": {
+        "prefix": "rst:type",
+        "body": ":py:type:`${1:type}`",
+        "description": "Reference a TypeAlias.",
+        "scope": "source.rst"
+    },
+    "exc": {
+        "prefix": "rst:exc",
+        "body": ":py:exc:`${1:Exception}`",
+        "description": "Reference an Exception.",
+        "scope": "source.rst"
+    },
+    "obj": {
+        "prefix": "rst:obj",
+        "body": ":py:obj:`${1:object}`",
+        "description": "Reference an object of unspecified type.",
+        "scope": "source.rst"
+    },
+    "label": {
+        "prefix": "rst:label",
+        "body": ".. _${1:label-name}:",
+        "description": "Label for cross reference",
+        "scope": "source.rst"
+    },
+    "ref": {
+        "prefix": "rst:ref",
+        "body": ":ref:`${1:Label-name}` $0",
+        "description": "Reference a label",
+        "scope": "source.rst"
+    },
+    "doc": {
+        "prefix": "rst:doc",
+        "body": ":doc:`${1:relative/path}` $0",
+        "description": "Link to the specified document",
+        "scope": "source.rst"
+    },
+    "keyword": {
+        "prefix": "rst:keyword",
+        "body": ":ref:`${1:keyword}` $0",
+        "description": "The name of a keyword in Python. This creates a link to a reference label with that name, if it exists.",
+        "scope": "source.rst"
+    },
+    "term": {
+        "prefix": "rst:term",
+        "body": ":ref:`${1:term}` $0",
+        "description": "Reference to a term in a glossary",
+        "scope": "source.rst"
+    },
+    "any": {
+        "prefix": "rst:any",
+        "body": ":any:`${1:something}` $0",
+        "description": "Try its best to find a valid target for its reference text.",
+        "scope": "source.rst"
+    },
+    //
+    "link": {
+    		"prefix": "rst:link",
+    		"body": "`${1:Title} <${2:http://link}>`_ $0",
+    		"description": "Inlined link",
+    		"scope": "source.rst"
+    },
+    "code": {
+        "prefix": "rst:code",
+        "body": ":code:`${1:expr}` $0",
+        "description": "An inline code example.",
+        "scope": "source.rst"
+    },
+    "command": {
+        "prefix": "rst:command",
+        "body": ":command:`${1:Title}` $0",
+        "description": "The name of an OS-level command, such as rm",
+        "scope": "source.rst"
+    },
+    "file": {
+        "prefix": "rst:file",
+        "body": ":file:`${1:path}` $0",
+        "description": "The name of a file or directory.",
+        "scope": "source.rst"
+    },
+    "kbd": {
+        "prefix": "rst:kbd",
+        "body": ":kbd:`${1:keybinds}` $0",
+        "description": "Mark a sequence of keystrokes.",
+        "scope": "source.rst"
+    }
+}

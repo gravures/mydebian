@@ -1,0 +1,111 @@
+git:
+  overrideGpg: true
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+gui:
+  nerdFontsVersion: 3
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 3
+  mainPanelSplitMode: flexible
+  screenMode: half
+  enlargedSideViewLocation: top
+  commandLogSize: 4
+  theme:
+    inactiveBorderColor:
+      - "#444"
+    activeBorderColor:
+      - green
+      - bold
+os:
+  openLink: "cha {{link}}"
+promptToReturnFromSubprocess: false
+customCommands:
+  ##
+  # Commit with Koji
+  - key: "k"
+    context: "files"
+    description: "Write commit message with Koji"
+    command: "koji --breaking-changes true --issues true --sign true --autocomplete true --hook"
+    loadingText: "opening Koji"
+    outputTitle: "commit message"
+    output: terminal
+  ##
+  # Retry commit
+  - key: "<c-x>"
+    context: "global"
+    description: "Redo the last failed commit with same message"
+    command: "git commit --gpg-sign -F .git/COMMIT_EDITMSG && rm .git/COMMIT_EDITMSG"
+    outputTitle: "commited message"
+    output: popup
+  ##
+  # Conventional commit with cocogitto.
+  # retrieved from: https://github.com/jesseduffield/lazygit/wiki/Custom-Commands-Compendium#conventional-commit
+  - key: "<c-c>"
+    context: "global"
+    description: "Commit with Cocogitto"
+    prompts:
+      - type: "menu"
+        key: "Type"
+        title: "Type of change"
+        options:
+          - name: "build"
+            description: "Changes that affect the build system or external dependencies"
+            value: "build"
+          - name: "feat"
+            description: "A new feature"
+            value: "feat"
+          - name: "fix"
+            description: "A bug fix"
+            value: "fix"
+          - name: "chore"
+            description: "Other changes that don't modify src or test files"
+            value: "chore"
+          - name: "ci"
+            description: "Changes to CI configuration files and scripts"
+            value: "ci"
+          - name: "docs"
+            description: "Documentation only changes"
+            value: "docs"
+          - name: "perf"
+            description: "A code change that improves performance"
+            value: "perf"
+          - name: "refactor"
+            description: "A code change that neither fixes a bug nor adds a feature"
+            value: "refactor"
+          - name: "revert"
+            description: "Reverts a previous commit"
+            value: "revert"
+          - name: "security"
+            description: "Changes that fix a security issue in the code"
+            value: "security"
+          - name: "style"
+            description: "Changes that do not affect the meaning of the code"
+            value: "style"
+          - name: "test"
+            description: "Adding missing tests or correcting existing tests"
+            value: "test"
+      - type: "input"
+        title: "Scope"
+        key: "Scope"
+        initialValue: ""
+      - type: "menu"
+        key: "Breaking"
+        title: "Breaking change"
+        options:
+          - name: "no"
+            value: ""
+          - name: "yes"
+            value: "!"
+      - type: "input"
+        title: "message"
+        key: "Message"
+        initialValue: ""
+      - type: "confirm"
+        key: "Confirm"
+        title: "Commit"
+        body: "Are you sure you want to commit?"
+    command: "cog commit {{.Form.Type}} --sign {{if .Form.Breaking}} -B {{end}} '{{.Form.Message}}' {{if .Form.Scope}} {{ .Form.Scope }} {{end}}"
+    loadingText: "Creating conventional commit..."
+    outputTitle: "commited message"
+    output: log

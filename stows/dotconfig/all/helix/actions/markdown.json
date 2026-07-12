@@ -1,0 +1,21 @@
+{
+    "blockquote": {
+        "title": "Block quote",
+        "filter": "",
+        "shell": [ "echo -n '> '\"${TM_SELECTED_TEXT}\"'\n\n'" ],
+        "description": "format as quoted block"
+        ,
+        "code": {
+            "title": "Code",
+            "filter": "",
+            "shell": [ "echo -n '\n```bash\n'\"${TM_SELECTED_TEXT}\"'```\n\n'" ],
+            "description": "format as code block"
+        }
+    },
+    "preview": {
+        "title": "Preview",
+        "filter": "",
+        "shell": [ "glow '\"${TM_FILENAME}\"'" ],
+        "description": "markdown preview"
+    }
+}

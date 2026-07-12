@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# Search for pattern in files.
+#
+# search in current drectory: File Previewer
+
+RG_OPTS=(--column --line-number --no-heading --color=always --smart-case)
+
+function main() {
+	rg "${RG_OPTS[@]}" 2>/dev/null |
+		fzf --ansi --disabled \
+			--query "${*:-}" \
+			--prompt='search> ' \
+			--header="[ctrl-space]:preview|[tab]:layout|[enter]:open|[esc]:quit" \
+			--header-first \
+			--bind "start:reload:rg ${RG_OPTS[*]} {q}" \
+			--bind "change:reload:sleep 0.1; rg ${RG_OPTS[*]} {q} || true" \
+			--bind "ctrl-space:toggle-preview" \
+			--bind "tab:change-preview-window(right|up)" \
+			--bind "enter:become(~/.config/helix/hx-open.sh {1} {2})" \
+			--delimiter : \
+			--preview-window right,66% \
+			--preview 'batcat --color=always {1} --highlight-line {2} --line-range {2}: --theme "Visual Studio Dark+"'
+}
+
+main "$@"

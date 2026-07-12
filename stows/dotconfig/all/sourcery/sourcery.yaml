@@ -1,0 +1,11 @@
+rule_settings:
+  rule_types:
+  - refactoring
+  - suggestion
+  - comment
+
+
+  disable:
+  - instance-method-first-arg-name
+coding_assistant:
+  enabled: true

@@ -1,0 +1,162 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$status\
+$sudo\
+$hostname\
+$username\
+$directory\
+$git_branch\
+$git_status\
+$c\
+$python\
+$conda\
+$rust\
+$jobs\
+$cmd_duration\
+$shell\
+$line_break\
+$character\
+"""
+
+command_timeout = 5000
+add_newline = true
+continuation_prompt = '↳ '
+palette = "catppuccin_macchiato"
+
+[line_break]
+disabled = false
+
+[sudo]
+disabled = false
+symbol = " "
+style = 'bold blue'
+
+[status]
+success_symbol = '[●](bold green)'
+symbol = '[●](bold red)'
+disabled = false
+format = '[$symbol](bold yellow) '
+
+[character]
+success_symbol = '[❯](bold green)'
+error_symbol = '[❯](bold green)'
+format = '$symbol '
+
+[username]
+show_always = false
+style_user = "fg:#777777"
+style_root = "fg:#701a04"
+format = '[$user]($style) in '
+
+[hostname]
+ssh_only = true
+format = '[$ssh_symbol$hostname]($style):'
+
+[cmd_duration]
+min_time = 1000
+show_milliseconds = false
+show_notifications = false
+disabled = false
+format = "[ $duration]($style)"
+style = "italic #87A752"
+
+[shell]
+disabled = false
+bash_indicator = "bash"
+fish_indicator = "fish"
+style = "italic #777777"
+format = '[$indicator]($style) '
+
+[package]
+# disabled = true
+
+[directory]
+# style             = "bg:#5a5c60"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+read_only = ""
+truncation_length = 3
+fish_style_pwd_dir_length = 2
+truncation_symbol = "…/"
+
+[jobs]
+threshold = 1
+number_threshold = 1
+symbol = ''
+style = 'fg:blue bg:#363a4f'
+format = '[ $number ]($style) '
+
+[custom.jobs]
+when = true
+command = "jobs | tr -s '[:alpha:]-+' ' '"
+symbol = '#'
+style = 'bold green'
+format = '[$symbol($output)]($style)'
+
+[git_branch]
+symbol = ""
+# style  = "bg:#6f6716"
+format = '[$symbol:$branch]($style)'
+
+[git_status]
+# style  = "bg:#6f6716"
+format = '[\($all_status$ahead_behind\)]($style) '
+
+[c]
+symbol = "  "
+# style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = " "
+# style  = "bg:#d077c7"
+format = '[(\[${virtualenv}\])](bold #ca96e8)[${symbol}${version} ]($style)'
+
+[conda]
+symbol = " 🅒 "
+# style  = "bg:#d077c7"
+format = '[${symbol} ]($style)[(\[${environment}\]) ](bold #ca96e8)'
+
+[nodejs]
+symbol = "  "
+# style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = "  "
+# style  = "bg:#d077c7"
+format = '[ $symbol ($version) ]($style)'
+
+[time]
+disabled = false
+time_format = "%R"
+# style       = "bg:#8a6d33"
+format = '[$time]($style) '
+
+[palettes.catppuccin_macchiato]
+rosewater = "#f4dbd6"
+flamingo = "#f0c6c6"
+pink = "#f5bde6"
+mauve = "#c6a0f6"
+red = "#ed8796"
+maroon = "#ee99a0"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+teal = "#8bd5ca"
+sky = "#91d7e3"
+sapphire = "#7dc4e4"
+blue = "#8aadf4"
+lavender = "#b7bdf8"
+text = "#cad3f5"
+subtext1 = "#b8c0e0"
+subtext0 = "#a5adcb"
+overlay2 = "#939ab7"
+overlay1 = "#8087a2"
+overlay0 = "#6e738d"
+surface2 = "#5b6078"
+surface1 = "#494d64"
+surface0 = "#363a4f"
+base = "#24273a"
+mantle = "#1e2030"
+crust = "#181926"

@@ -1,0 +1,61 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: how to copy last cell content in ipython?
+- role: assistant
+  content: |-
+    In **IPython**, you can copy the content of the **last cell's output** (e.g., a variable, plot, or result) using the following methods:
+
+    ### **1. Using `Ctrl + C` + `Ctrl + V` (Clipboard)**
+    - Run your cell normally.
+    - Press **`Ctrl + C`** to stop execution (if needed).
+    - Press **`Ctrl + V`** to paste into another cell or editor.
+
+    ### **2. Copying Output Directly (for Variables)**
+    If the last cell outputs a variable (e.g., `x = 5`), you can:
+    - **Manually copy** the variable name (`x`) and paste it into another cell.
+    - Use **`%%bash`** (if you want to copy to the system clipboard):
+      ```python
+      %%bash
+      echo "x = 5" | xclip -selection clipboard  # Linux/macOS
+      ```
+      (For Windows, use `clip.exe` or `powershell`)
+
+    ### **3. Copying Plot Outputs**
+    If the last cell displays a plot (e.g., `matplotlib`):
+    - Use **`%%html`** to render the plot in a browser and then copy it manually.
+    - Alternatively, use **`IPython.display.HTML`** to generate an embeddable HTML snippet:
+      ```python
+      from IPython.display import HTML
+      HTML("""
+      <img src="data:image/png;base64,..."> <!-- Base64-encoded plot -->
+      """)
+      ```
+      Then copy the HTML snippet.
+
+    ### **4. Using `%%write_file` to Save & Copy**
+    If you want to save the output to a file and then copy it:
+    ```python
+    %%write_file -a output.txt
+    print("Last cell output: ", x)
+    ```
+    Then manually copy from `output.txt`.
+
+    ### **5. Using `IPython.core.display` for Dynamic Copying**
+    For dynamic content (e.g., interactive widgets), you can use:
+    ```python
+    from IPython.display import display, HTML
+    display(HTML("<button onclick='copyToClipboard()'>Copy</button>"))
+    ```
+    (Requires JavaScript support in IPython.)
+
+    ### **Best Method for Variables**
+    If you just want to **copy the last variable** (e.g., `x = 5`), simply:
+    1. Run the cell.
+    2. Press **`Ctrl + C`** (if needed).
+    3. Press **`Ctrl + V`** in another cell or editor.
+
+    Would you like help with a specific type of output (e.g., plots, tables)?

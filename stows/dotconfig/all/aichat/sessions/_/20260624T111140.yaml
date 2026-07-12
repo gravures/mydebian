@@ -1,0 +1,64 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: in my last commit i forgot to stage a file how to use lazygit to add this file to the last commit?
+- role: assistant
+  content: |-
+    To add a previously forgotten file to your last commit using **LazyGit**, follow these steps:
+
+    ### **1. Check the Last Commit**
+    First, verify the changes in your last commit:
+    ```sh
+    git status
+    ```
+    or
+    ```sh
+    git log -1 --pretty=format:"%h - %an, %ar : %s"
+    ```
+
+    ### **2. Add the File to Staging**
+    Use **LazyGit** to stage the forgotten file:
+    ```sh
+    lazygit
+    ```
+    Inside **LazyGit**:
+    1. Press `Ctrl+Shift+S` (or `Cmd+Shift+S` on macOS) to open the **Staging** tab.
+    2. Find the file in the list and mark it as **staged** (checkmark).
+    3. Press `Ctrl+Shift+P` (or `Cmd+Shift+P`) and type `stage` to confirm staging.
+
+    ### **3. Amend the Last Commit**
+    Now, amend the last commit to include the staged file:
+    ```sh
+    git commit --amend
+    ```
+    - If you want to **keep the original commit message**, just press `Enter`.
+    - If you want to **edit the message**, type your new message and press `Enter`.
+
+    ### **4. Verify the Changes**
+    Check the new commit:
+    ```sh
+    git log --oneline
+    ```
+    or
+    ```sh
+    git show
+    ```
+
+    ### **Alternative: Using `git add` in LazyGit**
+    If you prefer using `git` commands directly in **LazyGit**:
+    1. Open **LazyGit**.
+    2. Press `Ctrl+Shift+G` (or `Cmd+Shift+G`) to open the **Git Commands** tab.
+    3. Run:
+       ```sh
+       git add <forgotten_file>
+       git commit --amend
+       ```
+
+    ### **Summary**
+    - **LazyGit** helps visualize staging and commit changes.
+    - **`git add`** + **`git commit --amend`** is the standard way to fix this.
+
+    This ensures the file is properly included in your last commit. 🚀

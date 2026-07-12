@@ -1,0 +1,316 @@
+{
+    "type.__new__": {
+        "prefix": "def.type.__new__",
+        "body": [
+            "def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any], **kwds: Any):",
+            "\treturn type.__new__(cls, name, bases, namespace, **kwds)"
+        ],
+        "description": "Type Constructor"
+    },
+    "__new__": {
+        "prefix": "def.__new__",
+        "body": [
+            "def __new__(cls, *args: object, **kwds: object) -> Self:",
+            "\treturn super().__new__(cls)"
+        ],
+        "description": "Class Constructor"
+    },
+    "__init__": {
+        "prefix": "def.__init__",
+        "body": [
+            "def __init__(self, *args: object, **kwds: object) -> None:",
+            "\t...$0"
+        ],
+        "description": "Init method"
+    },
+    "__del__": {
+        "prefix": "def.__del__",
+        "body": [
+            "def __del__(self) -> None:",
+            "\t...$0"
+        ],
+        "description": "called when the instance is about to be destroyed"
+    },
+    "__str__": {
+        "prefix": "def.__str__",
+        "body": [
+            "def __str__(self) -> str:",
+            "\t...$0"
+        ],
+        "description": "called by str(object)"
+    },
+    "__repr__": {
+        "prefix": "def.__repr__",
+        "body": [
+            "def __repr__(self) -> str:",
+            "\t...$0"
+        ],
+        "description": "called by repr(object)"
+    },
+    "__hash__": {
+        "prefix": "def.__hash__",
+        "body": [
+            "def __hash__(self) -> int:",
+            "\t...$0"
+        ],
+        "description": "called by hash(object)"
+    },
+    "__bool__": {
+        "prefix": "def.__bool__",
+        "body": [
+            "def __bool__(self) -> int:",
+            "\t...$0"
+        ],
+        "description": "called by bool(object)"
+    },
+    "__bytes__": {
+        "prefix": "def.__bytes__",
+        "body": [
+            "def __bytes__(self) -> bytes:",
+            "\t...$0"
+        ],
+        "description": "called by bytes(object)"
+    },
+    "__format__": {
+        "prefix": "def.__format__",
+        "body": [
+            "def __format__(self, format_spec: str) -> str:",
+            "\t...$0"
+        ],
+        "description": "called by format builtin"
+    },
+    "__setattr__": {
+        "prefix": "def.__setattr__",
+        "body": [
+            "def __setattr__(self, name: str, value: object, /) -> None:",
+            "\tobject.__setattr__(self, name, value)"
+        ],
+        "description": "called instead of normal assignment"
+    },
+    "__getattr__": {
+        "prefix": "def.__getattr__",
+        "body": [
+            "def __getattr__(self, name: str) -> Any:",
+            "\treturn object.__getattribute__(self, name)"
+        ],
+        "description": "called only after AttributeError"
+    },
+    "__getattribute__": {
+        "prefix": "def.__getattribute__",
+        "body": [
+            "def __getattribute__(self, name: str) -> Any:",
+            "\treturn object.__getattribute__(self, name)"
+        ],
+        "description": "called uncondionaly for attribute access"
+    },
+    "__delattr__": {
+        "prefix": "def.__delattr__",
+        "body": [
+            "def __delattr__(self, name: str) -> None:",
+            "\tobject.__delattr__(self, name)"
+        ],
+        "description": "called for attribute deleteion."
+    },
+    "__dir__": {
+        "prefix": "def.__dir__",
+        "body": [
+            "def __dir__(self) -> Iterable[str]:",
+            "\t...$0"
+        ],
+        "description": "called when dir() is called on the object.."
+    },
+    "__set_name__": {
+        "prefix": "def.__set_name__()",
+        "body": [
+            "def __set_name__(self, owner: type, name: str) -> None:",
+            "\tself.name = name",
+            "\tself.__objclass__ = owner"
+        ],
+        "description": "called at the time the owning class owner is created."
+    },
+    "__get__": {
+        "prefix": "def.__get__()",
+        "body": [
+            "def __get__(self, instance: object | None, owner: type) -> object:",
+            "\t...$0"
+        ],
+        "description": "called to get the attribute of the owner class."
+    },
+    "__set__": {
+        "prefix": "def.__set__()",
+        "body": [
+            "def __set__(self, instance: object, value: object) -> None:",
+            "\t...$0"
+        ],
+        "description": "called to set the attribute on an instance of the owner."
+    },
+    "__delete__": {
+        "prefix": "def.__delete__()",
+        "body": [
+            "def __delete__(self, instance: object) -> None:",
+            "\t...$0"
+        ],
+        "description": "called to delete the attribute on an instance of the owner."
+    },
+    "__iter__": {
+        "prefix": "__iter__",
+        "body": [
+            "def __iter__(self):",
+            "\tself.a = 1",
+            "\treturn self"
+        ],
+        "description": "__iter__ method"
+    },
+    "__next__": {
+        "prefix": "__next__",
+        "body": [
+            "def __next__(self):",
+            "\tx = self.a",
+            "\tself.a += 1",
+            "\treturn x"
+        ],
+        "description": "__next__ method"
+    },
+    "bytearray": {
+        "prefix": "bytearray",
+        "body": "bytearray(${1:integer|bytes_or_buffer|iterable_of_ints})",
+        "description": "Return an array of bytes"
+    },
+    "bytes": {
+        "prefix": "bytes",
+        "body": "bytes(${1:integer|bytes_or_buffer|iterable_of_ints})",
+        "description": "Return a bytes object"
+    },
+    "callable": {
+        "prefix": "callable",
+        "body": "callable(${1:object})",
+        "description": "Return True if object is callable"
+    },
+    "chr": {
+        "prefix": "chr",
+        "body": "chr(${1:ascii_value})",
+        "description": "Return a character from Unicode code."
+    },
+    "compile": {
+        "prefix": "compile",
+        "body": "compile(${1:source}, ${2:filename}, ${3:mode}, ${4:flag}, ${5:dont_inherit}, ${6:optimize})",
+        "description": "Return the specified source as an object, ready to be executed"
+    },
+    "eval": {
+        "prefix": "eval",
+        "body": "eval(${1:expression}, ${2:globals}, ${3:locals})",
+        "description": "Evaluates and executes an expression"
+    },
+    "exec": {
+        "prefix": "exec",
+        "body": "exec(${1:object}, ${2:globals}, ${3:locals})",
+        "description": "Executes the code (or object)"
+    },
+    "locals": {
+        "prefix": "locals",
+        "body": "locals($0)",
+        "description": "Return updated dict of the current local"
+    },
+    "memoryview": {
+        "prefix": "memoryview",
+        "body": "memoryview(${1:obj})",
+        "description": "Return a memoryview"
+    },
+    "open with variable": {
+        "prefix": "open",
+        "body": "with open('${1:pyfile.txt}', ${2:'r'}) as f:\n\tprint(f.read())",
+        "description": "Open context manager"
+    },
+    "type": {
+        "prefix": "type",
+        "body": "type(\"${1:name}\", (${2}), {${3}})",
+        "description": "Create new type"
+    },
+    "unichr": {
+        "prefix": "unichr",
+        "body": "unichr(${1:ascii_value})",
+        "description": "Return the Unicode string of one character whose Unicode code is the integer i."
+    },
+    "vars": {
+        "prefix": "vars",
+        "body": "vars(${1:object})",
+        "description": "Return the __dict__ property of an object"
+    },
+    "lambda": {
+        "prefix": "lambda",
+        "body": "lambda ${1:args}: ${2:expr}",
+        "description": "lambda function."
+    },
+    "def main": {
+        "prefix": "def.main()",
+        "body": "def main() -> int:\n\t\"\"\"Main entry point.\"\"\"\n\tcode: int = 0\n\tpass\n\treturn code\n",
+        "descriptiion": "main function"
+    },
+    "__main__": {
+        "prefix": "if.__name__",
+        "body": "if __name__ == \"__main__\":\n\tsys.exit(main())\n",
+        "description": "Script entry point"
+    },
+    "metaclass": {
+        "prefix": "metaclass",
+        "body": [
+            "metaclass=$0"
+        ],
+        "description": "metaclass type"
+    },
+    "class": {
+        "prefix": "class",
+        "body": [
+            "class MyClass:",
+            "\tpass"
+        ],
+        "description": "python class"
+    },
+    "match.switch": {
+        "prefix": "match.switch",
+        "body": "match (${1:object}):\n\tcase ($2):\n\t\t# comment: $3\n\tcase (${4:_}):\n\t\t# comment: $0\n# end match",
+        "description": "match aka switch statement"
+    },
+    "try:except:else:finally": {
+        "prefix": "TryEF.try-e-f",
+        "body": "try:\n\t# comment: $1\nexcept${2:${3:Exception} as ${4:e}}:\n\t${5:raise}\nelse:\n\t# comment: $6\nfinally:\n\t# comment: $0\n# end try",
+        "description": "Code Snippet for a try/except/finally with else statement."
+    },
+    "for=>for_else": {
+        "prefix": "for=>for_else",
+        "body": [
+            "for x in range(2, 6):\n\tprint(x)",
+            "else:\n\tprint('Finally finished!')"
+        ],
+        "description": "An example for using for"
+    },
+    "while-else": {
+        "prefix": "while-else",
+        "body": "while ($1):\n\t# comment: $2\nelse:\n\t# comment: $0\n# end while",
+        "description": "while statement"
+    },
+    "file.listFiles": {
+        "prefix": "withFile-listFiles",
+        "body": "for item in os.listdir(\"${1:path/*.py}\"):  # import os\n\t# Comment: $0\n\tprint(item)\n# end file item",
+        "description": "List files in that path"
+    },
+    "file.listFilesWithPath": {
+        "prefix": "withFile-listFilesWithPath",
+        "body": "for item in glob.glob(\"${1:path\\*.py}\"):  # import glob\n\t# Comment: $0\n\tprint(item)\n# end file item with path",
+        "description": "List files with path"
+    },
+    "list.sort": {
+        "prefix": "list-sort",
+        "body": [
+            "def myFunc(e):",
+            "\treturn len(e)",
+            "list_.sort(key=myFunc)"
+        ],
+        "description": "An example for using sort"
+    },
+    "comprehensions": {
+        "prefix": ".comprehensions -list",
+        "body": "[ {$1:expression} for {$2:item} in {$3:list} if {$4:conditional} ]",
+        "description": "List Comprehensions"
+    }
+}

@@ -1,0 +1,36 @@
+model: openrouter:mistralai/mistral-nemo:free
+save_session: true
+role_name: '%explain-shell%'
+messages:
+- role: system
+  content: |-
+    Provide a terse, single sentence description of the given shell command.
+    Describe each argument and option of the command.
+    Provide short responses in about 80 words.
+    APPLY MARKDOWN formatting when possible.
+- role: user
+  content: in bash how access dynamically to variable
+- role: assistant
+  content: |-
+    **Command:** `echo ${VARIABLE}`
+
+    **Description:** Prints the value of the variable `VARIABLE` in bash.
+
+    **Arguments:**
+    - `${VARIABLE}`: The variable whose value is to be printed.
+
+    **Options:**
+    - None.
+- role: user
+  content: no this is a static access, i want the name VARIABLE to be a variable itself
+- role: assistant
+  content: |-
+    **Command:** `echo ${!VARIABLE_NAME}`
+
+    **Description:** Prints the value of the variable whose name is stored in `VARIABLE_NAME`.
+
+    **Arguments:**
+    - `${!VARIABLE_NAME}`: The variable containing the name of the variable to access.
+
+    **Options:**
+    - None.

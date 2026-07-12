@@ -1,0 +1,56 @@
+##
+# Shell
+command=zsh
+
+##
+# Window
+window-padding-x = 4,4
+window-decoration=false
+unfocused-split-opacity=0.9
+split-divider-color=#505050
+cursor-opacity=0.8
+
+# background-opacity=0.8
+# background-blur=20
+# custom-shader = ~/.config/ghostty/ghostty-shaders/in-game-crt-cursor.glsl
+
+##
+# Links
+link-previews=true
+
+##
+# Colors
+# theme=catppuccin-mocha
+# foreground=#d1d1d1
+theme=franky
+
+##
+# Fonts
+# font-family=Test
+# font-family=Inconsolata Nerd Font Mono
+# font-family=FiraCode Nerd Font Mono
+# font-family=Red Hat Mono
+# font-family-italic=Red Hat Mono Light Normal
+# font-family-bold=Red Hat Mono Regular
+# font-family-bold-italic=Red Hat Mono Regular Normal
+# font-family=SourceCodeVF
+# font-family=Lekton Nerd Font Mono
+
+##
+# Spacing
+font-size=11.8
+adjust-cell-height=3%
+adjust-cell-width=0%
+adjust-font-baseline=0%
+alpha-blending=linear-corrected
+
+##
+# Key binding
+keybind = shift+ctrl+f=toggle_fullscreen
+keybind = shift+right=esc:[4~
+keybind = shift+left=esc:[1~
+keybind = shift+up=esc:[5~
+keybind = shift+down=esc:[6~
+keybind = super+y=text:yazi\n
+keybind = super+\=clear_screen
+keybind = global:super+q=toggle_quick_terminal

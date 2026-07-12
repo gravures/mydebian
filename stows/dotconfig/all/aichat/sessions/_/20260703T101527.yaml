@@ -1,0 +1,68 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: in lazgit i want to reword a commit, i need not only to rewrite the body but also the title who has wrong conventionnal scope
+- role: assistant
+  content: |-
+    In **Lazgit**, you can rewrite a commit message (including both the **title** and **body**) while ensuring the new title follows proper commit message conventions (e.g., using the **scope** correctly). Here's how to do it:
+
+    ---
+
+    ### **Steps to Reword a Commit in Lazgit**
+    1. **Open the commit in Lazgit**
+       - Navigate to the commit using Lazgit's search (`:Grep` or `:Find`).
+       - Right-click the commit and select **"Edit Commit"**.
+
+    2. **Modify the Title & Body**
+       - In the editor, update:
+         - **Title**: Ensure it follows the [Conventional Commits](https://www.conventionalcommits.org/) format:
+           ```
+           <type>(<scope>): <description>
+           ```
+           Example:
+           - Wrong: `Fix bug in login`
+           - Correct: `fix(login): fix incorrect password validation`
+         - **Body**: Add details (optional but recommended).
+
+    3. **Save & Amend the Commit**
+       - After editing, save the file.
+       - Lazgit will prompt you to **amend** the commit (replace the existing one).
+       - Confirm the changes.
+
+    ---
+
+    ### **Alternative: Use `git commit --amend` Directly**
+    If you prefer not to use Lazgit's editor:
+    1. Open the commit in Lazgit (`:Grep` + select commit).
+    2. Run:
+       ```sh
+       git commit --amend -m "NEW_TITLE\n\nNEW_BODY"
+       ```
+       Example:
+       ```sh
+       git commit --amend -m "fix(auth): correct token expiration check\n\nThe token now expires after 1 hour instead of 5 minutes."
+       ```
+
+    ---
+
+    ### **Key Notes**
+    - **Scope**: Use a meaningful scope (e.g., `auth`, `ui`, `backend`) to clarify the change's context.
+    - **Type**: Common types include `fix`, `feat`, `docs`, `refactor`, etc.
+    - **Body**: Add details like motivation, related issues, or breaking changes.
+
+    ---
+    ### **Example Before/After**
+    **Before:**
+    ```sh
+    fix: bug in login
+    ```
+    **After:**
+    ```sh
+    fix(login): correct password validation logic
+    The old code was using `isValid()` instead of `validatePassword()`.
+    ```
+
+    This ensures your commits follow best practices.

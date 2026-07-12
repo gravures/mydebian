@@ -1,0 +1,57 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: what is the purpose of SiG_USR1 in unix signals
+- role: assistant
+  content: |-
+    In Unix-like systems, **`SIG_USR1`** (User-defined Signal 1) is a **customizable signal** that can be used to send a signal to a process from another process (typically a user-defined signal handler).
+
+    ### **Purpose of `SIG_USR1`:**
+    1. **User-defined Signal Mechanism**
+       - Unlike standard signals like `SIGINT` (Ctrl+C) or `SIGTERM`, `SIG_USR1` is not predefined by the system. It allows developers to define their own signal handlers for specific purposes.
+       - It is often used for **custom event notifications** (e.g., restarting a service, logging a message, or triggering a function).
+
+    2. **Common Use Cases:**
+       - **Process Restart/Reload** (e.g., `systemd` uses `SIGUSR1` to reload a service).
+       - **Logging & Debugging** (e.g., sending a signal to log a message).
+       - **Custom Event Handling** (e.g., triggering a function when a specific event occurs).
+       - **Graceful Shutdown** (e.g., sending a signal to a background process to exit cleanly).
+
+    3. **Signal Handler Example:**
+       ```c
+       #include <signal.h>
+       #include <stdio.h>
+
+       void handle_sigusr1(int sig) {
+           printf("Received SIGUSR1 (User-defined Signal 1)\n");
+           // Custom logic here
+       }
+
+       int main() {
+           signal(SIG_USR1, handle_sigusr1); // Register handler
+           printf("Waiting for SIGUSR1...\n");
+           pause(); // Wait for a signal
+           return 0;
+       }
+       ```
+       - To send `SIG_USR1` from another process:
+         ```bash
+         kill -USR1 <PID>
+         ```
+
+    ### **Key Differences from Standard Signals:**
+    | Signal | Description | Default Action |
+    |--------|------------|----------------|
+    | `SIGINT` (2) | Interrupt (Ctrl+C) | Terminate process |
+    | `SIGTERM` (15) | Termination request | Terminate process |
+    | `SIGUSR1` (10) | User-defined signal | Ignored by default (can be customized) |
+
+    ### **Why Use `SIG_USR1`?**
+    - **Flexibility**: Unlike standard signals, it can be used for custom purposes.
+    - **Non-Destructive**: Unlike `SIGTERM`, it can be caught and handled gracefully.
+    - **Common in Systemd & Daemons**: Many Linux services (e.g., `nginx`, `postgresql`) use `SIGUSR1` for reload/restart.
+
+    Would you like an example of how to use it in a real-world scenario?

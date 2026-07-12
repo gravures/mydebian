@@ -1,0 +1,77 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: how to restart gnome shell
+- role: assistant
+  content: |-
+    Restarting **GNOME Shell** (the default desktop environment in Ubuntu, Fedora, Debian, etc.) can be done in several ways, depending on your needs. Here are the most common methods:
+
+    ---
+
+    ### **1. Restart GNOME Shell via Terminal (Recommended)**
+    Open a terminal (`Ctrl + Alt + T`) and run one of these commands:
+
+    #### **For GNOME 3.38+ (Recommended)**
+    ```bash
+    killall gnome-shell
+    ```
+    or (if using Wayland):
+    ```bash
+    killall gnome-shell
+    ```
+    Then press `Alt + F2`, type `r`, and press `Enter` to restart the session.
+
+    #### **For Older GNOME Versions (3.28 or earlier)**
+    ```bash
+    killall gnome-shell
+    ```
+    or (if using X11):
+    ```bash
+    killall -9 gnome-shell
+    ```
+
+    ---
+
+    ### **2. Restart via Keyboard Shortcut**
+    - Press **`Alt + F2`**, type `r`, and press **`Enter`** to restart the entire session (including GNOME Shell).
+
+    ---
+
+    ### **3. Restart via GNOME Tweaks (GUI Method)**
+    1. Open **GNOME Tweaks** (`gnome-tweaks`).
+    2. Go to **Extensions** (if available).
+    3. Look for **"Restart GNOME Shell"** (if available) or manually restart via terminal.
+
+    ---
+
+    ### **4. Restart via Systemd (For Advanced Users)**
+    If you're using **systemd** (common in Ubuntu 22.04+), you can restart GNOME Shell with:
+    ```bash
+    systemctl --user restart gnome-shell
+    ```
+
+    ---
+
+    ### **5. Force Restart (If GNOME Shell is Frozen)**
+    If GNOME Shell is unresponsive:
+    1. Press **`Alt + F2`**, type `r`, and press **`Enter`**.
+    2. If that doesn't work, log out and log back in.
+
+    ---
+
+    ### **6. Reset GNOME Shell (Clear Cache & Restart)**
+    To clear GNOME Shell cache and restart:
+    ```bash
+    rm -rf ~/.cache/gnome-shell/ ~/.local/share/gnome-shell/
+    killall gnome-shell
+    ```
+
+    ---
+
+    ### **Which Method Should You Use?**
+    - **For a quick fix:** `killall gnome-shell` (Terminal) or `Alt + F2` → `r`.
+    - **For a full session restart:** Log out and log back in.
+    - **For troubleshooting:** Reset cache (`rm -rf ~/.cache/gnome-shell/`) and restart.

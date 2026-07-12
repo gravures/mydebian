@@ -1,0 +1,59 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: in lazy git how to show diff between 2 branches
+- role: assistant
+  content: |-
+    In **Lazy Git**, you can show the difference between two branches using the following commands:
+
+    ### **1. Show Diff Between Two Branches (Staged & Unstaged Changes)**
+    ```sh
+    lazy diff <branch1> <branch2>
+    ```
+    Example:
+    ```sh
+    lazy diff main feature-branch
+    ```
+
+    ### **2. Show Only Unstaged Changes**
+    ```sh
+    lazy diff --staged <branch1> <branch2>
+    ```
+    or
+    ```sh
+    lazy diff --unstaged <branch1> <branch2>
+    ```
+
+    ### **3. Show Diff for a Specific File**
+    ```sh
+    lazy diff <branch1> <branch2> -- <file-path>
+    ```
+    Example:
+    ```sh
+    lazy diff main feature-branch -- README.md
+    ```
+
+    ### **4. Show Diff Between Two Commits (Instead of Branches)**
+    If you want to compare two commits (not branches), use:
+    ```sh
+    lazy diff <commit1> <commit2>
+    ```
+    Example:
+    ```sh
+    lazy diff abc123 def456
+    ```
+
+    ### **5. Show Diff in a Different View (e.g., Side-by-Side)**
+    ```sh
+    lazy diff --side-by-side <branch1> <branch2>
+    ```
+
+    ### **Notes:**
+    - Lazy Git will automatically detect the current branch if you omit it.
+    - If you want to compare a branch with itself, use `--` to exclude the current branch:
+      ```sh
+      lazy diff -- <branch> <branch>
+      ```

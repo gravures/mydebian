@@ -1,0 +1,64 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: in lazygit how to show diff between 2 branches
+- role: assistant
+  content: |-
+    In **LazyGit**, you can show the diff between two branches using the following command:
+
+    ### **Method 1: Using `lg diff` with branch names**
+    ```sh
+    lg diff <branch1> <branch2>
+    ```
+    Example:
+    ```sh
+    lg diff main feature-branch
+    ```
+    This will show the changes between the two branches.
+
+    ---
+
+    ### **Method 2: Using `lg show` with a commit hash (if you know one)**
+    If you want to see the diff between two branches at a specific commit (e.g., the latest commit of one branch):
+    ```sh
+    lg show <commit-hash>..<branch2>
+    ```
+    Example:
+    ```sh
+    lg show abc123..feature-branch
+    ```
+    (Replace `abc123` with the actual commit hash.)
+
+    ---
+
+    ### **Method 3: Using `lg blame` (if you want line-by-line changes)**
+    If you want to see who modified each line in the diff:
+    ```sh
+    lg blame <branch1> <branch2>
+    ```
+    Example:
+    ```sh
+    lg blame main feature-branch
+    ```
+
+    ---
+
+    ### **Bonus: Showing a Specific File's Diff**
+    If you want to see only a specific file's changes:
+    ```sh
+    lg diff <branch1> <branch2> -- <file-path>
+    ```
+    Example:
+    ```sh
+    lg diff main feature-branch -- src/app.js
+    ```
+
+    ---
+
+    ### **Notes:**
+    - LazyGit requires Git to be installed.
+    - Ensure you have the latest version of LazyGit (`lg` command).
+    - If you're using a different Git client (like GitKraken), the method may vary.

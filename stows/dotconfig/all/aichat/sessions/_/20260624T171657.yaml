@@ -1,0 +1,77 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: is there an environment variable i could query to determin if i'm in an github worklow exection context?
+- role: assistant
+  content: |-
+    Yes! In a GitHub Actions workflow, you can check if you're running in a workflow execution context using the following environment variables:
+
+    ### **Key Environment Variables for GitHub Actions:**
+    1. **`GITHUB_WORKFLOW`**
+       - Returns the name of the workflow (e.g., `CI` or a custom workflow name).
+       - Example: `GITHUB_WORKFLOW = "CI"`
+
+    2. **`GITHUB_ACTION`**
+       - Returns the name of the workflow step (e.g., `main` for a workflow file named `main.yml`).
+       - Example: `GITHUB_ACTION = "main"`
+
+    3. **`GITHUB_EVENT_NAME`**
+       - Returns the GitHub event triggering the workflow (e.g., `push`, `pull_request`, `workflow_dispatch`).
+       - Example: `GITHUB_EVENT_NAME = "push"`
+
+    4. **`GITHUB_REPOSITORY`**
+       - Returns the repository name (e.g., `owner/repo`).
+       - Example: `GITHUB_REPOSITORY = "octocat/Hello-World"`
+
+    5. **`GITHUB_WORKSPACE`**
+       - Returns the path to the workspace (usually `/github/workspace`).
+       - Example: `GITHUB_WORKSPACE = /github/workspace`
+
+    ### **How to Check if You're in a GitHub Workflow Execution**
+    You can use a script (e.g., Bash, PowerShell, Python) to verify this:
+
+    #### **Bash Example:**
+    ```bash
+    if [ "$GITHUB_WORKFLOW" != "" ]; then
+        echo "Running in GitHub Actions workflow!"
+    else
+        echo "Not in GitHub Actions workflow."
+    fi
+    ```
+
+    #### **PowerShell Example:**
+    ```powershell
+    if ($env:GITHUB_WORKFLOW -ne "") {
+        Write-Host "Running in GitHub Actions workflow!"
+    } else {
+        Write-Host "Not in GitHub Actions workflow."
+    }
+    ```
+
+    #### **Python Example:**
+    ```python
+    import os
+
+    if os.getenv("GITHUB_WORKFLOW"):
+        print("Running in GitHub Actions workflow!")
+    else:
+        print("Not in GitHub Actions workflow.")
+    ```
+
+    ### **Alternative: Check `GITHUB_EVENT_NAME`**
+    If you want to ensure it's a **workflow run** (not a scheduled job), you can check:
+    ```bash
+    if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+        echo "Running in a GitHub Actions workflow!"
+    fi
+    ```
+
+    ### **Conclusion**
+    The most reliable way to confirm you're in a GitHub Actions workflow is by checking:
+    - `GITHUB_WORKFLOW` (non-empty)
+    - `GITHUB_EVENT_NAME` (e.g., `workflow_dispatch`, `push`, etc.)
+
+    Would you like help with a specific use case? 🚀

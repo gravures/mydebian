@@ -1,0 +1,32 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+blacklist = ["scratch"]
+dir_length = 1
+cache = false
+
+[[session]]
+name = "standard-deluxe"
+path = "~/DEVELOPPEMENT/REPOS/standard-deluxe"
+preview_command = "sh -c uname -a"
+# startup_command = "hx {}"
+# preview_command = "batcat --color=always /home/gilles/DEVELOPPEMENT/REPOS/standard-deluxe/pyproject.toml"
+# preview_command = "lsd --tree --depth 3 {}"
+
+# [default_session]
+# startup_command = "hx {}"
+# preview_command = "ls --tree {}"
+
+# [[wildcard]]
+# pattern = "~/DEVELOPPEMENT/REPOS/*"
+# startup_command = "hx {}"
+# preview_command = "lsd --tree --depth 3 {}"
+
+# [[wildcard]]
+# pattern = "~/DEVELOPPEMENT/REPOS/**"
+# startup_command = "hx {}"
+# preview_command = "lsd --tree --depth 3 {}"
+
+[[session]]
+name = "tmux"
+path = "~/.config/tmux"
+startup_command = "hx tmux.conf"
+preview_command = "bat --color=always ~/.config/tmux/tmux"

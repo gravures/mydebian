@@ -1,0 +1,46 @@
+model: ollama:ministral-3:3b-cloud
+temperature: 0.2
+use_tools: fs.web_search
+save_session: true
+messages:
+- role: user
+  content: what lazygit amend command do?
+- role: assistant
+  content: |-
+    In **LazyGit**, the `amend` command is used to modify the most recent commit in your Git history. It is similar to the standard Git `git commit --amend` command but provides a more interactive and user-friendly experience.
+
+    ### **LazyGit `amend` Command Usage**
+    The `amend` command in LazyGit can be used in two main ways:
+
+    #### **1. Amend the Last Commit (Soft Reset)**
+    ```sh
+    lazygit amend
+    ```
+    - This performs a **soft reset** of the last commit, allowing you to modify the commit message and staged changes before finalizing it.
+    - If you have staged changes, they will be kept in the staging area.
+    - If you have unstaged changes, they will be discarded (unless you use `--no-commit` or `--no-dry-run`).
+
+    #### **2. Amend the Last Commit with a New Message (Hard Reset)**
+    ```sh
+    lazygit amend --no-commit
+    ```
+    - This performs a **hard reset** (discarding all changes) and lets you modify the commit message.
+    - Useful when you want to completely rewrite the last commit.
+
+    #### **3. Amend with a New Commit Message (Dry Run)**
+    ```sh
+    lazygit amend --dry-run
+    ```
+    - Shows what would happen without actually modifying the commit.
+
+    ### **Key Differences from Standard Git**
+    - LazyGit provides a **GUI-based** way to edit commit messages and staged changes.
+    - You can also **discard changes** before amending if needed.
+    - The `--no-commit` flag ensures changes are not permanently committed.
+
+    ### **Example Workflow**
+    1. Make some changes and stage them.
+    2. Run `lazygit amend` to modify the commit message.
+    3. Save and commit to update the history.
+
+    Would you like more details on any specific part?

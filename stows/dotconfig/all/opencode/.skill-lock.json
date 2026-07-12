@@ -1,0 +1,100 @@
+{
+  "version": 3,
+  "skills": {
+    "grepai-search-advanced": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-advanced/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:56.355Z",
+      "updatedAt": "2026-03-25T09:10:56.355Z"
+    },
+    "grepai-search-basics": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-basics/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:56.780Z",
+      "updatedAt": "2026-03-25T09:10:56.780Z"
+    },
+    "grepai-search-boosting": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-boosting/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:57.214Z",
+      "updatedAt": "2026-03-25T09:10:57.214Z"
+    },
+    "grepai-search-tips": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-tips/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:57.630Z",
+      "updatedAt": "2026-03-25T09:10:57.630Z"
+    },
+    "grepai-trace-callees": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-callees/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:58.057Z",
+      "updatedAt": "2026-03-25T09:10:58.057Z"
+    },
+    "grepai-trace-callers": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-callers/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:58.460Z",
+      "updatedAt": "2026-03-25T09:10:58.460Z"
+    },
+    "grepai-trace-graph": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-graph/SKILL.md",
+      "skillFolderHash": "",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-03-25T09:10:58.872Z",
+      "updatedAt": "2026-03-25T09:10:58.872Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-03-25T09:11:35.253Z",
+      "updatedAt": "2026-03-25T09:11:35.253Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode",
+    "warp"
+  ]
+}
