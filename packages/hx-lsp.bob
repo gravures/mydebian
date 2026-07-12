@@ -1,0 +1,13 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/erasin/hx-lsp.git
+PKG_NAME='hx-lsp'
+PROGRAM='hx-lsp'
+DESC='lsp for helix , support snippets, actions'
+LICENSE=(MIT)
+
+unset LOCK
+
+# FIXME: problem with output of hx-lsp --version, rust panic

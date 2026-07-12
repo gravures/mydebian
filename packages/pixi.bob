@@ -1,0 +1,24 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_forward_package.sh
+source github_tarball_installer.sh
+
+REPO='https://github.com/prefix-dev/pixi.git'
+PKG_NAME='pixi'
+PROGRAM='pixi'
+DESC='Powerful system-level package manager for Linux, macOS and Windows written in Rust – building on top of the Conda ecosystem. '
+LICENSE=(BSD-3-Clause)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+TARGET_SUFFIX=tar.gz
+RELEASE_PATTERN="x86_64-unknown-linux-musl.tar.gz"
+RELEASE_EXCLUDE_PATTERN='sha256|attestation'
+
+# pixi-x86_64-unknown-linux-musl.tar.gz
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mv -t "${PKG_DIR}${PREFIX}"/bin ./pixi
+}
+
+function clean() {
+	return 0
+}

@@ -1,0 +1,88 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO="https://github.com/akinomyoga/ble.sh.git"
+PROGRAM="ble.sh"
+PKG_NAME='blesh'
+DESC='Bash Line Editor ― a line editor written in pure Bash with syntax highlighting, auto suggestions, vim modes, etc. for Bash interactive sessions.'
+LICENSE=(BSD-3-Clause)
+BUILD_DEPS=(gawk)
+RUNTIME_DEPS=(bash mawk)
+
+function get_version() {
+  if [ -e "$PREFIX/share/blesh/version" ]; then
+    cat "$PREFIX/share/blesh/version"
+  else
+    return 1
+  fi
+}
+
+function clone() {
+  local repo=$1
+  local directory=$2
+  # git clone --recursive "$repo" "$directory"
+  git clone --recursive --depth 1 --shallow-submodules "$repo" "$directory"
+}
+
+function checkout() {
+  local tag=$1
+  git fetch --tags --quiet &&
+    git checkout "$tag" &&
+    git submodule update --recursive --remote
+}
+
+function prepare() { return 0; }
+
+function build() {
+  make
+}
+
+function package() {
+  make install DESTDIR="${PKG_DIR}" PREFIX="${PREFIX}"
+
+  # tell ble.sh the way to update the package for ble-update
+  cat <<EOF >"${PKG_DIR}${PREFIX}/share/blesh/lib/_package.bash"
+_ble_base_package_type=deb
+function ble/base/package:deb/update {
+  echo "no self update available"
+  return 1
+}
+EOF
+
+  mkdir "${PKG_DIR}${PREFIX}/share/blesh/default"
+  cp blerc.template "${PKG_DIR}${PREFIX}/share/blesh/default/init.sh"
+
+  read -rp pause
+}
+
+function clean() {
+  make clean
+}
+
+function post_install() {
+  echo "a default configuration is available at <${PREFIX}/share/blesh/default/init.sh>"
+  read -rp "Do you want a copy to be installed into your home directory? [y/N]" confirm
+  if [[ ${confirm} != [nN] ]]; then
+    mkdir -p "${HOME}/.config/blesh"
+    cp -i "${PREFIX}/share/blesh/default/init.sh" "${HOME}/.config/blesh/init.sh" &&
+      chown "${USER}":"${USER}" "${HOME}/.config/blesh/init.sh"
+  fi
+
+  cat <<"EOF"
+# If you want to load ble.sh in interactive sessions of bash,
+# add this line at the top of your .bashrc:
+  [[ $- == *i* ]] && source /path/to/blesh/ble.sh --noattach
+
+  < ... your bashrc settings come here ... >
+
+# Add this line at the end of .bashrc:
+  [[ ${BLE_VERSION-} ]] && ble-attach
+EOF
+}
+
+function post_remove() {
+  echo "remember to remove the added lines in your .bashrc file."
+  rm -rf "${HOME}"/.local/state/blesh
+  rm -rf "${HOME}"/.cache/blesh
+}

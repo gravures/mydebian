@@ -1,0 +1,17 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_forward_package.sh
+source github_forward_package.sh
+
+REPO='https://github.com/pacstall/pacstall.git'
+PROGRAM='pacstall'
+PKG_NAME='pacstall'
+DESC='An AUR-inspired package manager for Ubuntu'
+LICENSE=(GPL-3.0)
+
+FORWARD_MATCH_PATTERN="_all.deb"
+FORWARD_EXCLUDE_PATTERN=
+
+function forward() {
+	# ex: pacstall_6.3.7-pacstall1_all.deb
+	echo "${PKG_NAME}_${PKG_VER}-${PKG_NAME}1_all.deb"
+}

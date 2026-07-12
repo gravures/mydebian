@@ -1,0 +1,27 @@
+# NOTE: This script not handle installations of GPU needed component.
+#
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_tarball_installer.sh
+source github_tarball_installer.sh
+
+REPO=https://github.com/yoanbernabeu/grepai.git
+PKG_NAME=grepai
+PROGRAM=grepai
+DESC='Semantic Search & Call Graphs for AI Agents (100% Local).'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+TARGET_SUFFIX=tar.gz
+RELEASE_PATTERN=linux_amd64
+RELEASE_EXCLUDE_PATTERN=
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mv -t "${PKG_DIR}${PREFIX}"/bin ./grepai
+}
+
+function clean() {
+	rm ./README.md
+	rm ./CHANGELOG.md
+	rm ./LICENSE
+}

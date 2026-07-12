@@ -1,0 +1,37 @@
+# NOTE: This script not handle installations of GPU needed component.
+#
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_tarball_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/joshmedeski/sesh.git
+PKG_NAME=sesh
+PROGRAM=sesh
+DESC='Smart tmux session manager.'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+TARGET_SUFFIX=tar.gz
+RELEASE_PATTERN=Linux_x86_64
+RELEASE_EXCLUDE_PATTERN=
+
+# sesh_Linux_x86_64.tar.gz
+function prepare() {
+	return
+}
+
+function build() {
+	go build -buildvcs=false -ldflags "-X 'main.version=${PKG_VER}'" -o ./sesh
+	mkdir -p share/man/man1
+	sesh man >share/man/man1/sesh.1
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mv -t "${PKG_DIR}${PREFIX}"/bin ./sesh
+	mv -t "${PKG_DIR}${PREFIX}" ./share
+}
+
+function clean() {
+	return
+}

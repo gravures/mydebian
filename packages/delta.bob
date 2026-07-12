@@ -1,0 +1,16 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_forward_package.sh
+source github_forward_package.sh
+
+REPO='https://github.com/dandavison/delta.git'
+PROGRAM='delta'
+PKG_NAME='git-delta'
+DESC='A syntax-highlighting pager for git, diff, grep, and blame output '
+LICENSE=(MIT)
+
+FORWARD_MATCH_PATTERN="amd64.deb"
+FORWARD_EXCLUDE_PATTERN="musl"
+
+function forward() {
+	echo "git-${PROGRAM}_${PKG_VER}_amd64.deb"
+}

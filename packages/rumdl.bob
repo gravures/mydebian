@@ -1,0 +1,9 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/rvben/rumdl.git'
+PKG_NAME=rumdl
+PROGRAM=rumdl
+DESC='Markdown Linter and Formatter written in Rust.'
+LICENSE=(MIT)

@@ -1,0 +1,31 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/plp13/qman.git
+PKG_NAME=qman
+PROGRAM=qman
+DESC='A more modern man page viewer for our terminals.'
+LICENSE=(BSD-2-Clause)
+RUNTIME_DEPS=()
+BUILD_DEPS=(python3-cogapp liblzma-dev libbzip3-dev)
+PATCH_PR=()
+
+function prepare() {
+	# sed -i "52c\\    bzip2 = dependency('bzip3', required: true)" ./src/meson.build
+	# sed -i "38c\\#include <libbz3.h>" ./src/lib.h
+	meson setup --prefix "${PREFIX}" -Dtests=disabled -Dbzip2=disabled build/
+}
+
+function build() {
+	meson compile -C build
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	meson install -C build --destdir "${PKG_DIR}"
+}
+
+function clean() {
+	meson compile -C build --clean
+}

@@ -1,0 +1,13 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+# FIXME: version handling
+#        finish convertion to new bob
+
+REPO='https://github.com/SilasMarvin/lsp-ai.git'
+PKG_NAME='lsp-ai'
+PROGRAM='lsp-ai'
+DESC='LSP-AI is an open-source language server that serves as a backend for AI-powered functionality, designed to assist and empower software engineers, not replace them.'
+LICENSE=(MIT)
+
+unset LOCKED

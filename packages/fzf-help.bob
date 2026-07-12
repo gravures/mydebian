@@ -1,0 +1,40 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/BartSte/fzf-help.git'
+PKG_NAME='fzf-help'
+PROGRAM='fzf-help'
+DESC='Use fzf to select command line options from `--help`'
+LICENSE=(MIT)
+
+function list_versions {
+	git::remote_ref "$REPO" tags
+}
+
+# function get_latest_version() {
+# 	local tag
+# 	tag=$(git::remote_ref "$REPO" tags)
+# 	echo "${tag#"refs/tags/"}"
+# }
+
+function prepare() { return 0; }
+function configure() { return 0; }
+function build() { return 0; }
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}/bin"
+	mkdir -p "${PKG_DIR}${PREFIX}/share/fzf-help"
+	cp --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/share/fzf-help" ./src/*
+
+	cat <<EOF >>"${PKG_DIR}${PREFIX}/bin/fzf-help"
+#!/usr/bin/env bash
+echo ${PKG_VER}
+EOF
+
+	chmod +x "${PKG_DIR}${PREFIX}/bin/fzf-help"
+}
+
+function clean() { return 0; }
+
+function finish() { return 0; }

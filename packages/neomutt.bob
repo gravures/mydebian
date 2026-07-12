@@ -1,0 +1,46 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/neomutt/neomutt'
+PKG_NAME=neomutt
+PROGRAM=neomutt
+DESC='Tui email reader based on Mutt with extended functionality.'
+LICENSE=(GPL-2.0)
+
+BUILD_DEPS=(dh-lua docbook-xml docbook-xsl jimsh xsltproc libgpgme-dev libgsasl-dev libsasl2-dev liblua5.4-dev libnotmuch-dev libidn2-dev libgnutls28-dev libgpg-error-dev libkrb5-dev liblmdb-dev liblz4-dev libncurses-dev libpcre2-dev libsqlite3-dev libtokyocabinet-dev libxml2-utils libzstd-dev zlib1g-dev)
+RUNTIME_DEPS=(sensible-utils libc6 libgnutls30t64 libgpgme11t64 libgsasl18 libgssapi-krb5-2 libidn2-0 liblmdb0 liblua5.4-0 liblz4-1 libncursesw6 libnotmuch5t64 libpcre2-8-0 libsqlite3-0 libtinfo6 libtokyocabinet9t64 libzstd1 zlib1g locales mailcap aspell ca-certificates)
+
+function prepare() {
+	./configure \
+		--prefix="${PREFIX}" \
+		--mandir="$(PREFIX)"/share/man \
+		--autocrypt \
+		--disable-paths-in-cflags \
+		--full-doc \
+		--gnutls \
+		--gpgme \
+		--gsasl \
+		--gss \
+		--lmdb \
+		--lua \
+		--lz4 \
+		--notmuch \
+		--pcre2 \
+		--sqlite \
+		--tokyocabinet \
+		--zlib \
+		--zstd
+}
+
+function build() {
+	make
+}
+
+function package() {
+	make install DESTDIR="${PKG_DIR}"
+}
+
+function clean() {
+	make clean
+}

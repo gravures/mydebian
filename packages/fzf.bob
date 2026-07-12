@@ -1,0 +1,37 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/junegunn/fzf.git'
+PKG_NAME=fzf
+DESC='A command-line fuzzy finder.'
+LICENSE=(MIT)
+PROGRAM=fzf
+
+function prepare() {
+	return
+}
+
+function clone() {
+	return
+}
+
+function checkout() {
+	local target_url
+
+	target_url=$(find_github_release_target linux_amd64) || return 1
+	checkout_release_target "$target_url" clean
+}
+
+function configure() { return 0; }
+
+function build() { return 0; }
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}/bin"
+	cp -r --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/bin" ${PROGRAM}
+}
+
+function clean() {
+	rm ${PROGRAM}
+}

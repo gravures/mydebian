@@ -1,0 +1,9 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/ajeetdsouza/zoxide'
+PKG_NAME='zoxide'
+PROGRAM='zoxide'
+DESC='A smarter cd command. Supports all major shells.'
+LICENSE=(MIT)

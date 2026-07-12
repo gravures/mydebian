@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/astral-sh/uv.git
+PKG_NAME=uv
+PROGRAM=uv
+DESC='An extremely fast Python package and project manager, written in Rust.'
+LICENSE=(MIT Apache-2.0)
+
+unset LOCKED

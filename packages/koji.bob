@@ -1,0 +1,12 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/cococonscious/koji.git'
+PKG_NAME=koji
+PROGRAM=koji
+DESC='An interactive CLI for creating conventional commits.'
+LICENSE=(MIT)
+
+BUILD_DEPS=(libssl-dev)
+RUNTIME_DEPS=(openssl)

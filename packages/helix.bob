@@ -1,0 +1,44 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/helix-editor/helix.git'
+PKG_NAME='helix'
+DESC='A post-modern modal text editor.'
+LICENSE=(MPL-2.0)
+PROGRAM=hx
+PATCH_PR=(14629)
+
+function prepare() {
+	rustup override set stable
+	rustup update stable
+}
+
+function build() {
+	export HELIX_DEFAULT_RUNTIME=${PREFIX}/lib/helix/runtime
+	cargo build --profile opt --locked
+
+	cat <<EOF >>./runtime/queries/python/injections.scm
+
+((expression_statement (string (string_content) @injection.content))
+ (#set! injection.language "rst"))
+
+((expression_statement (assignment (string (string_content) @injection.content)))
+ (#set! injection.language "rst"))
+EOF
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	mkdir -p "${PKG_DIR}${PREFIX}/bin"
+	mkdir -p "${PKG_DIR}${PREFIX}/lib/helix"
+
+	cp --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/bin" target/opt/hx
+	cp -r --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/lib/helix" runtime
+	rm -f "${PKG_DIR}${PREFIX}/lib/helix/runtime/grammars/.gitkeep"
+	rm -rf "${PKG_DIR}${PREFIX}/lib/helix/runtime/grammars/sources"
+}
+
+function clean() {
+	cargo clean
+}

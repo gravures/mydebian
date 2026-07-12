@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/XAMPPRocky/tokei.git
+PKG_NAME=tokei
+PROGRAM=tokei
+DESC='Count your code, quickly.'
+LICENSE=(MIT)
+
+unset LOCKED

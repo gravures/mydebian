@@ -1,0 +1,35 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO="https://github.com/devskale/chawan.git"
+PROGRAM="cha"
+PKG_NAME='chawan'
+DESC='A text-mode web browser and pager for Unix-like systems'
+LICENSE=(Unlicense)
+BUILD_DEPS=(libssh2-1-dev libssl-dev libbrotli-dev)
+RUNTIME_DEPS=(libssh2-1 libssl3 libbrotli1)
+
+pkg-config make
+
+export PATH=${PATH}:"${HOME}/.nimble/bin"
+
+function list_versions() {
+	git::tags ${REPO}
+}
+
+function prepare() {
+	return
+}
+
+function build() {
+	make
+}
+
+function package() {
+	make install PREFIX="${PKG_DIR}${PREFIX}"
+}
+
+function clean() {
+	make clean
+}

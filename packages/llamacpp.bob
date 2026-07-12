@@ -1,0 +1,253 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/abetlen/llama-cpp-python.git
+PKG_NAME=llamacpp
+DESC='The llamacpp server via llama-cpp-python with huggingface_hub cli integration.'
+LICENSE=(MIT Apache-2.0)
+PROGRAM=llamacpp-server
+BOB_DEPS=(uv)
+BUILD_DEPS=(libvulkan-dev spirv-headers libopenblas-dev libopenblas64-dev)
+RUNTIME_DEPS=(libopenblas0 libopenblas64-0 glslc)
+
+UV_DIR=$(uv tool dir)/llama-cpp-python
+LLAMACPP_HOME=${PREFIX}/share/llamacpp
+
+function get_version() {
+	"$LLAMACPP_HOME/bin/python3" -c 'import llama_cpp; print(llama_cpp.__version__)' 2>/dev/null
+	return $?
+}
+
+function list_versions {
+	while IFS= read -r line; do
+		line=${line#"refs/tags/"}
+		# filter out version tag like v0.2.30-metal
+		if [[ $line =~ ^v[0-9]+\.[0-9]+.[0-9]+$ ]]; then
+			echo "$line"
+		fi
+	done < <(git::remote_ref $REPO tags)
+}
+
+# for debugging
+# function checkout() { return 0; }
+# function reset() { return 0; }
+
+function clone() {
+	local repo=$1
+	local directory=$2
+
+	# git clone --recurse-submodules "$repo" "$directory"
+	git clone "$repo" "$directory"
+}
+
+function prepare() {
+	# use a llamacpp clone with support
+	# for prism-ml 1-bit model (actually only bonzai models)
+	# url = https://github.com/Mintplex-Labs/prism-ml-llama.cpp.git
+	rm .gitmodules
+	cat <<EOF >".gitmodules"
+[submodule "vendor/llama.cpp"]
+	path = vendor/llama.cpp
+	url = https://github.com/PrismML-Eng/llama.cpp.git
+	branch = prism
+EOF
+	git submodule update --init --recursive || exit 1
+	(
+		cd vendor/llama.cpp || exit 1
+		git switch prism
+	)
+
+	# Add a custom script to launch llamacpp-python server
+	git restore pyproject.toml
+	sed -i ' $a \\n[project.scripts]' pyproject.toml &&
+		sed -i '$a llamacpp-server = "llama_cpp.server.__main__:main"' pyproject.toml
+}
+
+function build() {
+	# make a self contained virtual env linked to system python interpreter
+	uv venv --link-mode copy --no-managed-python \
+		--no-python-downloads # --relocatable
+
+	# install huggingface cli program for model download feature inside venv
+	uv pip install --compile-bytecode --link-mode copy "huggingface_hub" #[cli]"
+
+	# build llamacpp with vulkan support installing it in venv
+	# -DGGML_NATIVE=0 -DGGML_BACKEND_DL=1 -DGGML_CPU_ALL_VARIANTS=1
+	ncores=$(nproc --ignore 2)
+	CMAKE_ARGS="-DCMAKE_JOB_THREADS=${ncores} -Wno-dev -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS -DGGML_NATIVE=1 -DGGML_VULKAN=1" \
+		uv sync --inexact --compile-bytecode --no-editable \
+		--link-mode copy --verbose --extra 'server'
+
+	# relocate shebang of python launchers filtering out unneeded ones
+	local esc
+	esc=${LLAMACPP_HOME//\//\\\/}
+
+	for file in .venv/bin/*; do
+		name=$(basename "$file")
+		case $name in
+		llamacpp-server | hf | tiny-agents | uvicorn | tqdm)
+			sed -i "1 s/^.*\$/\#\!$esc\/bin\/python3/" "$file"
+			;;
+		python*)
+			continue
+			;;
+		*)
+			rm "$file"
+			;;
+		esac
+	done
+}
+
+function package() {
+	# install all venv contents in PREFIX/share/llamacpp (which will be the home of llamacpp user)
+	mkdir -p "${PKG_DIR}${LLAMACPP_HOME}" # PREFIX/share/llamacpp
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mkdir -p "${PKG_DIR}"/etc/systemd/system
+
+	cp -r --preserve=mode,timestamp -t "${PKG_DIR}${LLAMACPP_HOME}" .venv/*
+
+	# pretty launchers
+	cat <<EOF >"${PKG_DIR}${PREFIX}/bin/hf"
+#!/usr/bin/env bash
+
+HF_HOME=${LLAMACPP_HOME}/huggingface \
+${LLAMACPP_HOME}/bin/hf \$@
+EOF
+
+	# ln -s "${LLAMACPP_HOME}/bin/llamacpp-server" "${PKG_DIR}${PREFIX}/bin/llamacpp-server"
+
+	# create llamacpp-server config
+	cat <<EOF >"${PKG_DIR}${LLAMACPP_HOME}/config.json"
+{
+    "host": "localhost",
+    "port": 9999,
+    "models": [
+    ]
+}
+EOF
+
+	# create huggingface cache repo where models will be downloaded
+	mkdir --parent "${PKG_DIR}${LLAMACPP_HOME}/huggingface"
+
+	# create service
+	# see: https://www.baeldung.com/linux/ulimit-limits-systemd-units
+	cat <<EOF >"${PKG_DIR}/etc/systemd/system/llamacpp.service"
+[Unit]
+Description=Llamacpp service
+After=network-online.target
+
+[Service]
+type=exec
+ExecStart=${LLAMACPP_HOME}/bin/llamacpp-server --config_file ${LLAMACPP_HOME}/config.json
+User=llamacpp
+Group=llamacpp
+Restart=always
+RestartSec=3
+MemoryHigh=50%
+MemoryMax=75%
+LimitMEMLOCK=600M
+Environment="PATH=${LLAMACPP_HOME}/bin:\$PATH"
+Environment="HF_HOME=${LLAMACPP_HOME}/huggingface"
+Environment="GGML_VK_DISABLE_F16=1"
+Environment="GGML_VK_DISABLE_COOPMAT=1"
+
+[Install]
+WantedBy=default.target
+EOF
+
+}
+
+function clean() {
+	make clean
+	rm -rf .venv
+}
+
+function post_install() {
+	LLAMACPP_HOME=${PREFIX}/share/llamacpp
+
+	# Add llamacpp system user and group
+	if ! id llamacpp >/dev/null 2>&1; then
+		adduser --system --group --shell /bin/false --home "${LLAMACPP_HOME}" llamacpp
+	fi
+
+	# add llamacpp to render group allowing access to gpu
+	if getent group render >/dev/null 2>&1; then
+		adduser llamacpp render
+	fi
+
+	# add llamacpp to video group allowing access to gpu
+	if getent group video >/dev/null 2>&1; then
+		adduser llamacpp video
+	fi
+
+	adduser "${USER}" llamacpp
+
+	if [[ -d ${LLAMACPP_HOME} ]]; then
+		if [[ ! -e ${PREFIX}/bin/llamacpp-server ]]; then
+			ln -s "${LLAMACPP_HOME}/bin/llamacpp-server" \
+				"${PREFIX}"/bin/llamacpp-server
+		fi
+
+		# set owners & permissions
+		chown -R llamacpp:llamacpp "${LLAMACPP_HOME}"
+		chown llamacpp:llamacpp "${LLAMACPP_HOME}/huggingface"
+		chmod 775 "${LLAMACPP_HOME}/huggingface"
+		chmod g+s "${LLAMACPP_HOME}/huggingface"
+		setfacl -R -m g::rwx "${LLAMACPP_HOME}/huggingface"
+		setfacl -R -m o::rx "${LLAMACPP_HOME}/huggingface"
+		chmod +x "${PREFIX}/bin/hf"
+		chmod 664 "${LLAMACPP_HOME}/config.json"
+	fi
+
+	# enable service
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl daemon-reload
+		systemctl enable llamacpp
+		systemctl start llamacpp
+		;;
+	*) ;;
+	esac
+
+}
+
+post_upgrade() {
+	SERVICE_ENABLED="$(systemctl is-enabled llamacpp || true)"
+	case ${SERVICE_ENABLED} in
+	enabled | enabled-runtime)
+		systemctl restart llamacpp
+		;;
+	*) ;;
+	esac
+}
+
+function pre_remove() {
+	LLAMACPP_HOME=${PREFIX}/share/llamacpp
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl stop llamacpp
+		systemctl disable llamacpp
+		;;
+	*) ;;
+	esac
+
+	if [[ -e "$LLAMACPP_HOME/config.json" ]]; then
+		echo "making a server config backup in <$HOME/.config/llamacpp>"
+		mkdir --parents "$HOME/.config/llamacpp"
+		cp -i "$LLAMACPP_HOME/config.json" "$HOME/.config/llamacpp/config.json.bak"
+	fi
+
+	if id llamacpp >/dev/null 2>&1; then
+		echo "do yo want to suppress llamacpp system user,"
+		read -rp "be careful this will delete all previously huggingface downloaded models ? [y/N]: " confirm
+		if [[ $confirm != [yY] ]]; then
+			return
+		fi
+	fi
+
+	echo "suppressing llamacpp user, wiping out all its data..."
+	deluser --group --remove-home llamacpp
+}

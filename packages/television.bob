@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/alexpasmantier/television.git
+PROGRAM=tv
+PKG_NAME=television
+DESC='A very fast, portable and hackable fuzzy finder.'
+LICENSE=(MIT)
+
+unset LOCKED

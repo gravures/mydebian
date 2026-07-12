@@ -1,0 +1,9 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/lsd-rs/lsd.git'
+PKG_NAME=lsd
+PROGRAM=lsd
+DESC='The next gen ls command.'
+LICENSE=(Apache-2.0)

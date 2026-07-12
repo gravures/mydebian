@@ -1,0 +1,30 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/tmux/tmux.git
+PKG_NAME=tmux
+PROGRAM=tmux
+DESC='Terminal multiplexer.'
+LICENSE=(ISC)
+RUNTIME_DEPS=(libjemalloc2 libtinfo6 libsystemd0 libevent-core-2.1-7 libc6 libutf8proc3)
+BUILD_DEPS=(libevent-dev ncurses-dev libutf8proc-dev)
+PATCH_PR=()
+
+function prepare() {
+	sh autogen.sh
+	./configure --prefix "${PREFIX}" --enable-utf8proc
+}
+
+function build() {
+	make
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	make install DESTDIR="${PKG_DIR}"
+}
+
+function clean() {
+	make clean
+}

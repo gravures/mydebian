@@ -1,0 +1,9 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/Feel-ix-343/markdown-oxide.git'
+PKG_NAME=markdown-oxide
+PROGRAM=markdown-oxide
+DESC='PKM Markdown Language Server'
+LICENSE=(Apache-2.0)

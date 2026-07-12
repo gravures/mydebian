@@ -1,0 +1,34 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/sxyazi/yazi.git'
+PROGRAM='ya'
+PKG_NAME='yazi'
+DESC='Blazing fast terminal file manager written in Rust, based on async I/O.'
+LICENSE=(MIT)
+
+RUNTIME_DEPS=(ffmpegthumbnailer ffmpeg 7zip unar jq poppler-utils wl-clipboard xclip fd-find ripgrep imagemagick)
+
+function prepare() {
+	rustup override set stable
+	rustup update stable
+}
+
+function build() {
+	# NOTE: temporary rename bob pkg dir because cargo
+	# think it's a yazi worspace to build.
+	mv "${PKG_DIR}" "./tmp"
+	cargo build --release --locked
+	mv "./tmp" "${PKG_DIR}"
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}/bin"
+	cp --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/bin" target/release/ya
+	cp --preserve=mode,timestamp -t "${PKG_DIR}${PREFIX}/bin" target/release/yazi
+}
+
+function clean() {
+	cargo clean
+}

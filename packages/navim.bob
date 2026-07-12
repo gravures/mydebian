@@ -1,0 +1,14 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/areofyl/navim.git'
+PKG_NAME=navim
+PROGRAM=navim
+DESC='A full terminal-based web browser with vim-style navigation. Search the web and view pages without ever leaving your terminal.'
+LICENSE=(MIT)
+
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+unset LOCKED

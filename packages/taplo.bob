@@ -1,0 +1,9 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/tamasfe/taplo.git'
+PKG_NAME=taplo-cli
+PROGRAM=taplo
+DESC='A TOML toolkit written in Rust.'
+LICENSE=(MIT)

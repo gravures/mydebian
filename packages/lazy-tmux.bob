@@ -1,0 +1,34 @@
+# NOTE: This script not handle installations of GPU needed component.
+#
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_tarball_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/alchemmist/lazy-tmux.git
+PKG_NAME=lazy-tmux
+PROGRAM=lazy-tmux
+DESC='Lazy tmux it is a fast session manager and saver for tmux. You can save all your session and lazy restore it.'
+LICENSE=(MIT)
+BUILD_DEPS=(just)
+RUNTIME_DEPS=()
+TARGET_SUFFIX=tar.gz
+RELEASE_PATTERN=Linux_x86_64
+RELEASE_EXCLUDE_PATTERN=
+
+# sesh_Linux_x86_64.tar.gz
+function prepare() {
+	return
+}
+
+function build() {
+	make build
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	mv -t "${PKG_DIR}${PREFIX}" ./bin
+}
+
+function clean() {
+	return
+}

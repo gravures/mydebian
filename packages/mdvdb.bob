@@ -1,0 +1,14 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO='https://github.com/geckse/markdown-vdb.git'
+PKG_NAME=mdvdb
+PROGRAM=mdvdb
+DESC='A filesystem-native vector database built around Markdown files. For AGENTS and MEMORY in mind. CLI first, folder based, no servers, no containers. Build with Rust for Performance.'
+LICENSE=(MIT)
+
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+unset LOCKED

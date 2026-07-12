@@ -1,0 +1,126 @@
+# NOTE: This script not handle installations of GPU needed component.
+#
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_tarball_installer.sh
+source github_tarball_installer.sh
+
+REPO=https://github.com/ollama/ollama.git
+PKG_NAME=ollama
+PROGRAM=ollama
+DESC='ollama programm and service'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+TARGET_SUFFIX=tar.zst
+RELEASE_PATTERN=linux-amd64
+RELEASE_EXCLUDE_PATTERN=rocm
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	mkdir -p "${PKG_DIR}"/etc/systemd/system
+
+	# removes nvidia cuda libs
+	rm -rf ./lib/ollama/cuda_v12
+	rm -rf ./lib/ollama/cuda_v13
+
+	mv -t "${PKG_DIR}${PREFIX}" ./bin
+	mv -t "${PKG_DIR}${PREFIX}" ./lib
+
+	# create ollama service
+	# For doc on environment variables,
+	# see: https://github.com/ollama/ollama/blob/main/docs/faq.md
+	cat <<EOF >"${PKG_DIR}/etc/systemd/system/ollama.service"
+[Unit]
+Description=Ollama service
+After=network-online.target
+
+[Service]
+ExecStart=${PREFIX}/bin/ollama serve
+User=ollama
+Group=ollama
+Restart=always
+RestartSec=3
+Environment="PATH=\$PATH"
+Environment="OLLAMA_HOST=127.0.0.1:11434"
+Environment="OLLAMA_MODELS=${PREFIX}/share/ollama/models"
+Environment="OLLAMA_KEEP_ALIVE=15m"
+Environment="OLLAMA_VULKAN=1"
+Environment="OLLAMA_CONTEXT_LENGTH=1024"
+Environment="OLLAMA_KV_CACHE_TYPE=q8_0"
+Environment="OLLAMA_MAX_LOADED_MODELS=3"
+Environment="OLLAMA_NUM_PARALLEL=2"
+Environment="OLLAMA_FLASH_ATTENTION=1"
+
+[Install]
+WantedBy=default.target
+EOF
+}
+
+function clean() {
+	return
+}
+
+function post_install() {
+	OLLAMA_HOME=$PREFIX/share/ollama
+
+	# Add ollama user and group
+	if ! id ollama >/dev/null 2>&1; then
+		adduser --system --group --shell /bin/false --home "${OLLAMA_HOME}" ollama
+	fi
+
+	# add llamacpp to render group allowing access to gpu
+	if getent group render >/dev/null 2>&1; then
+		adduser ollama render
+	fi
+
+	# add llamacpp to video group allowing access to gpu
+	if getent group video >/dev/null 2>&1; then
+		adduser ollama video
+	fi
+
+	adduser "${USER}" ollama
+
+	# enable service
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl daemon-reload
+		systemctl enable ollama
+		systemctl start ollama
+		;;
+	*) ;;
+	esac
+}
+
+post_upgrade() {
+	SERVICE_ENABLED="$(systemctl is-enabled ollama || true)"
+	case ${SERVICE_ENABLED} in
+	enabled | enabled-runtime)
+		systemctl restart ollama
+		;;
+	*) ;;
+	esac
+}
+
+function pre_remove() {
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl stop ollama
+		systemctl disable ollama
+		;;
+	*) ;;
+	esac
+
+	if id ollama >/dev/null 2>&1; then
+		echo "do yo want to suppress ollama system user,"
+		read -rp "be careful this will delete all previously downloaded models ? [y/N]: " confirm
+		if [[ $confirm != [yY] ]]; then
+			return
+		fi
+	fi
+
+	echo "suppressing ollama user, wiping out all its data..."
+	deluser --group --remove-home ollama
+}

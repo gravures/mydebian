@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/cocogitto/cocogitto.git
+PROGRAM=cog
+PKG_NAME='cocogitto'
+DESC='The Conventional Commits toolbox'
+LICENSE=(MIT)
+
+unset LOCKED

@@ -1,0 +1,17 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_forward_package.sh
+source github_forward_package.sh
+
+REPO='https://github.com/charmbracelet/glow.git'
+PKG_NAME=glow
+PROGRAM=glow
+DESC='Render markdown on the CLI, with pizzazz!'
+LICENSE=(MIT)
+
+FORWARD_MATCH_PATTERN="amd64.deb"
+FORWARD_EXCLUDE_PATTERN=
+
+function forward() {
+	# ex:  glow_2.1.1_amd64.deb
+	echo "${PKG_NAME}_${PKG_VER}_amd64.deb"
+}

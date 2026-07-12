@@ -1,0 +1,11 @@
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+# shellcheck disable=SC2034
+REPO=https://github.com/blopker/codebook.git
+PROGRAM='codebook-lsp'
+PKG_NAME='codebook-lsp'
+DESC='Spell Checker for Code'
+LICENSE=(MIT)
+
+unset LOCK
