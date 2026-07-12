@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# if [[ $1 == "--version" ]]; then
+#   echo 128.8.0esr
+#   exit 0
+# fi
+nohup ~/zen/zen "${@}" >/dev/null 2>&1 &

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# Search in man pages.
+#
+# interactive search in manual name or description.
+
+main() {
+	man -k . | sort | fzf --ansi --disabled \
+		--header='[ctrl-space] toggle preview - [tab] switch layout - [enter] quit' --header-first --prompt='man> ' \
+		--query "${*:-}" \
+		--bind "start:reload:man -k {q} | sort" \
+		--bind "change:reload:sleep 0.1; man -k {q} | sort || true" \
+		--bind "ctrl-space:toggle-preview" \
+		--bind "enter:close" \
+		--bind "tab:change-preview-window(right|up)" \
+		--delimiter '\s+' \
+		--preview-window up,66%,wrap \
+		--preview $'man --nh --nj {1}{2} | batcat -l man -p --color always'
+}
+main "$@"

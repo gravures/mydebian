@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Better journalctl view
+
+if [[ -z ${1} ]]; then
+	since=yesterday
+else
+	since=${1}
+	shift
+fi
+
+unit=()
+[[ -n ${1} ]] && unit=(--unit "${1}")
+
+sudo journalctl \
+	--reverse \
+	--since "${since}" \
+	--until "now" \
+	--truncate-newline \
+	--no-tail \
+	--no-hostname \
+	--catalog \
+	"${unit[@]}" \
+	--no-pager |
+	bat -n -f -l log --paging never |
+	fzf --ansi --wrap word --gap 1 \
+		--bind 'enter,double-click:execute(wl-copy {2..})+abort'

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# List foreign installed packages
+echo Non-debian installed packages:
+aptitude search '?narrow(?installed, ?not(?origin(Debian)))' -F '%p %M %O'
+echo
+
+# List debian-backports packages
+echo List debian-backports packages:
+aptitude search '?narrow(~i, ~Abackports)'
+
+# Clean up leftover configuration files
+echo Leftover configuration files:
+sudo find /etc -name '*.dpkg-*' -o -name '*.ucf-*' -o -name '*.merge-error'
+echo
+
+# Check package status consistency
+echo Packages status consistency:
+dpkg --audit
+echo
+
+# Check hold package
+echo Hold packages:
+apt-mark showhold
+echo
+
+# TODO: Check APT pinning
+
+# Check we have a kernel meta-package installed
+echo check for installed kernel meta-packages:
+dpkg -l 'linux-image*' | grep ^ii | grep -i meta
+echo
+
+# Check we have a kernel meta-package installed
+echo check gpgv is installed:
+aptitude search '~igpgv'
+echo
+
+# Purging config files from removed packages
+echo Orphan config files:
+apt list '~c'
+# sudo apt purge '-c'
+echo
+
+# obsolete packages
+echo Obsolete packages:
+apt list '~o'
+# sudo apt purge '~o'
+echo
+
+# list dev packages
+echo installed dev packages:
+aptitude search -F '%p' '~i-dev$ !~M' # > pkglist

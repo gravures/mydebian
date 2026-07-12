@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+
+##
+# Extracts any archive(s).
+#
+# Args:
+#  (1): input filename archive or http url of an archive
+#  (2): output directory, optional
+#       (default to working directory)
+#
+# TODO: - some program do not allow specifying output directory
+#       - testing piping with all programs
+#       - unified option for updating fiies if output exist
+#       - more unarchivers
+#
+extract() {
+	local file_path file_name where
+	local regex="http?(s)://?(www.)"
+
+	if [ $# -eq 0 ]; then
+		usage
+		exit 1
+	fi
+
+	if [ -n "$1" ]; then
+		restore="$(shopt -p extglob)"
+		shopt -s extglob
+		file_path=$1
+		file_name=$(basename "$file_path")
+		where=${2:-$(pwd)}
+
+		if [[ "$file_path" == ${regex}* ]]; then
+			# we have an url
+			stdin="curl -L $file_path"
+			file_path=""
+		elif [ -f "$file_path" ]; then
+			# we have a valid file path
+			stdin=""
+		else
+			echo "'$file_path' is not a valid file!"
+			return 1
+		fi
+
+		where=$(realpath "$where")
+		mkdir -p "$where" # creating output directory
+
+		local flags
+		declare -a flags
+		flags=()
+
+		case $file_name in
+		*.tar.bz2 | *.tar.zst | *.tar.gz | *.tar.xz | *.tar | *.tbz2 | *.tbz | *.txz)
+			if [[ -n "$file_path" ]]; then
+				flags+=(-f "${file_path}" --directory "${where}")
+			else
+				flags+=(--directory "${where}")
+			fi
+			;;
+		*.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim | *.xar | *.vhd)
+			if [[ -n "$file_path" ]]; then
+				flags+=(x -o "${where}" "${file_path}")
+			else
+				flags+=(x -o "${where}" -si)
+			fi
+			;;
+		*.xz | *.lzma | *.bz2 | *.bz | *.gz | *.z | *.Z | *.zip)
+			if [[ -n "$file_path" ]]; then
+				flags+=("${file_path}")
+			fi
+			;;
+		esac
+
+		# echo "extracting <$file_name> to <$where>... "
+		# echo debug: "${flags[@]}"
+
+		case $file_name in
+		*.tar.bz2) eval "$stdin" | tar xj "${flags[@]}" ;;
+		*.tar.gz) eval "$stdin" | tar xz "${flags[@]}" ;;
+		*.tar.xz) eval "$stdin" | tar xJ "${flags[@]}" ;;
+		*.tar.zst) eval "$stdin" | tar -x -I zstd "${flags[@]}" ;;
+		*.tar) eval "$stdin" | tar x "${flags[@]}" ;;
+		*.tbz2) eval "$stdin" | tar xj "${flags[@]}" ;;
+		*.tbz) eval "$stdin" | tar xj "${flags[@]}" ;;
+		*.tgz) eval "$stdin" | tar xz "${flags[@]}" ;;
+		*.txz) eval "$stdin" | tar xJ "${flags[@]}" ;;
+		#
+		*.7z | *.apk | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim | *.xar | *.vhd)
+			eval "$stdin" | 7z "${flags[@]}"
+			;;
+		*.xz) eval "$stdin" | unxz "${flags[@]}" ;;
+		*.lzma) eval "$stdin" | unlzma "${flags[@]}" ;;
+		*.bz2 | *.bz) eval "$stdin" | bunzip2 "${flags[@]}" ;;
+		*.gz | *.z | *.Z)
+			if [ -n "$stdin" ]; then
+				# gunzip do not support pipe
+				# nor settings output dir
+				(
+					cd "$where" || exit 1
+					eval "$stdin" --output "$file_name"
+					gunzip "$file_name"
+					# rm "$file_name"
+				)
+			else
+				gunzip "$file_path"
+			fi
+			;;
+		*.zip)
+			if [ -n "$stdin" ]; then
+				# unzip do not support pipe
+				file_path="$HOME/tmp/$file_name"
+				eval "$stdin" --output "$file_path"
+				unzip "$file_path" -d"$where"
+				rm "$file_path"
+			else
+				unzip "$file_path" -d"$where"
+			fi
+			;;
+		#
+		# *.cbt|
+		# *.cbr|*.rar) unrar x -ad ./"$n" ;;
+		# *.rar)       rar x "$archive"       ;;  unrar-free
+		# *.exe)       cabextract ./"$n"  ;;
+		# *.cpio)      cpio -id < ./"$n"  ;;
+		# *.cba|*.ace) unace x ./"$n"     ;;
+		# *.zpaq)      zpaq x ./"$n"      ;;
+		# *.arc)       arc e ./"$n"       ;;
+		# *.cso)       ciso 0 ./"$n" ./"$n.iso" && \
+		#                 extract "$n.iso" && \rm -f "$n" ;;
+		# *.zlib)      zlib-flate -uncompress < ./"$n" > ./"$n.tmp" && \
+		#                 mv ./"$n.tmp" ./"${n%.*zlib}" && rm -f "$n"   ;;
+		# *.dmg)
+		#             hdiutil mount ./"$n" -mountpoint "./$n.mounted" ;;
+		# *.zst)      zstd -d ./"$n"  ;;
+		*)
+			echo "don't know how to extract $file_name ..."
+			$restore
+			exit 1
+			;;
+		esac
+
+		$restore
+	else
+		# missing arguments
+		echo "unroll: missing arguments!"
+		usage
+		exit 1
+	fi
+}
+
+function usage() {
+	echo "Usage: unroll <path/file_name> | <url> [where]"
+	echo ""
+	echo "Extracts any archive."
+	echo
+	echo "Supported archives formats:"
+	echo "   *.tar.bz2|*.tar.zst|*.tar.gz|*.tar.xz|*.tar|*.tbz2|*.tbz|*.txz|*.7z|"
+	echo "   *.apk|*.arj|*.cab|*.cb7|*.chm|*.deb|*.iso|*.lzh|*.msi|*.pkg|"
+	echo "   *.rpm|*.udf|*.wim|*.xar|*.vhd|*.xz|*.lzma|*.bz2|*.bz|*.gz|"
+	echo "   *.z|*.Z|*.zip "
+}
+
+extract "$@"

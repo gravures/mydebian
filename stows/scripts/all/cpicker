@@ -1,0 +1,252 @@
+#!/usr/bin/env python3
+# /usr/bin/env -S uv run --script --python-preference=system
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "PyGObject>=3.46.0",
+# ]
+# ///
+#
+# Copyright (c) 2025 - Gilles Coissac
+# This file is part of cpicker program.
+#
+# cpicker is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or (at your option) any later version.
+#
+# cpicker is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty
+# of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with cyright-python. If not, see <https://www.gnu.org/licenses/>
+#
+# ruff: noqa: E402, D101, D102, D103
+"""A minimal Gtk4 color picker."""
+
+from __future__ import annotations
+
+import fileinput
+import re
+import sys
+from base64 import b16encode
+
+# from ctypes import (
+#     CDLL,
+#     CFUNCTYPE,
+#     POINTER,
+#     Structure,
+#     _Pointer,  # _pyright: ignore[reportPrivateUsage]
+#     c_char_p,
+#     c_int,
+#     c_uint,
+#     c_void_p,
+# )
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from ctypes import _CFunctionType as CFunc  # pyright: ignore[reportPrivateUsage]
+
+import gi
+
+
+gi.require_version("Gdk", "4.0")
+gi.require_version("Gtk", "4.0")
+from gi.repository import Gdk, Gio, Gtk  # pyright: ignore[reportMissingModuleSource]
+
+
+# TODO: keep always on top if we were in gnome
+# TODO: copy to clipboard current picked color
+# TODO: make window show near mouse pointer position (gnome only?)
+# TODO: something if unparsable color was feed into stdin
+# TODO: handle other color kinds
+# TODO: handle alpha channelnor
+# TODO: unfocus pipette after pickng a color to free <Enter> accelerrator.
+
+
+# CClass = type("CClass", (Structure,), {})
+# Handle = POINTER(CClass)
+
+
+# class Meta:
+#     T_None: type[CFunc] = CFUNCTYPE(Handle)
+#     T_Generic: type[CFunc] = CFUNCTYPE(Handle, Handle)
+
+#     # Glib
+#     glib: CDLL = CDLL("libglib-2.0.so.0")
+#     T_glist_length: type[CFunc] = CFUNCTYPE(c_uint, Handle)
+#     glist_length: CFunc = T_glist_length(("g_list_length", glib))
+
+#     # mutter.Meta
+#     mutter: CDLL = CDLL("libmutter-11.so.0")
+#     T_Context: type[CFunc] = CFUNCTYPE(Handle, c_char_p)
+
+#     create_context: CFunc = T_Context(("meta_create_context", mutter))
+#     context_get_display: CFunc = T_Generic(("meta_context_get_display", mutter))
+#     display_get_compositor: CFunc = T_Generic(("meta_display_get_compositor", mutter))
+#     display_list_windows: CFunc = T_Generic(("meta_display_list_all_windows", mutter))
+#     get_window_actors: CFunc = T_None(("meta_get_window_actors", mutter))
+
+#     @staticmethod
+#     def is_wayland() -> bool:
+#         return bool(Meta.mutter.meta_is_wayland_compositor())
+
+#     def get_window(self, _pid: int):
+#         # display: _Pointer[Structure] = Meta.context_get_display(self._context)
+#         # print(display)
+#         actors: Handle = Meta.get_window_actors()
+#         print(actors)
+#         print(Meta.glist_length(actors))
+#         # if display:
+#         # windows: _Pointer[Structure] = Meta.display_list_windows(display)
+#         # count: int = Meta.glist_length(windows)
+#         # sys.stdout.write(f"we have {count} windows dsplayed\n")
+
+
+class PickerWindow(Gtk.ApplicationWindow):
+    def __init__(self, color: Gdk.RGBA | None = None) -> None:
+        super().__init__(
+            decorated=False,
+            hide_on_close=True,
+            resizable=False,
+            focus_visible=False,
+            focusable=False,
+            sensitive=True,
+            visible=True,
+        )
+        self.set_default_size(300, 300)
+
+        handle = Gtk.WindowHandle()
+        self.set_child(handle)
+
+        self.box: Gtk.Box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.box.set_margin_top(10)
+        self.box.set_margin_bottom(10)
+        self.box.set_margin_start(10)
+        self.box.set_margin_end(10)
+        handle.set_child(self.box)
+
+        self.picker: Gtk.ColorChooserWidget = Gtk.ColorChooserWidget()
+        self.picker.props.show_editor = True
+        if color:
+            self.picker.set_rgba(color)
+        self.box.append(self.picker)
+
+        # meta = Meta()
+        # meta.get_window(0)
+
+
+class HexParser:
+    __slots__: tuple[str, ...] = ("_color", "_post", "_pre")
+    hex: re.Pattern[str] = re.compile(r"(^.*)?(#[0-9A-Fa-f]{3,12})(.*$)?")
+
+    def __init__(self, text: str | None) -> None:
+        self._pre: str | None = None
+        self._post: str | None = None
+        self._color: Gdk.RGBA | None = None
+        if not text or not (match_ := self.hex.match(text)):
+            return
+
+        self._pre, color, self._post = match_.groups()
+        rgb = Gdk.RGBA()
+        if color and rgb.parse(color):
+            self._color = rgb
+
+    @property
+    def color(self) -> Gdk.RGBA | None:
+        return self._color
+
+    def output(self, color: Gdk.RGBA) -> str:
+        return f"{self._pre or ''}#{self.rgba_to_hex(color).decode()}{self._post or ''}"
+
+    @staticmethod
+    def rgba_to_hex(color: Gdk.RGBA) -> bytes:
+        return b16encode(
+            bytes((
+                round(color.red * 255),
+                round(color.green * 255),
+                round(color.blue * 255),
+            ))
+        )
+
+    @staticmethod
+    def rgb_to_gdk(rgb: tuple[int, ...]) -> Gdk.RGBA:
+        c = Gdk.RGBA()
+        c.red = rgb[0] / 255
+        c.green = rgb[1] / 255
+        c.blue = rgb[2] / 255
+        return c
+
+    @staticmethod
+    def hex_to_rgb(hexcode: bytes):
+        return tuple(map(ord, hexcode[1:].decode("hex")))
+
+
+class ColorPicker(Gtk.Application):
+    def __init__(self, stdin: str | None) -> None:
+        super().__init__(
+            application_id="org.example.cpicker",
+            flags=Gio.ApplicationFlags.FLAGS_NONE,
+        )
+        self.window: PickerWindow
+        self.stdin: str | None = stdin
+        self.parser: HexParser
+
+    def do_startup(self):
+        """This function is called when the application is first started.
+
+        All initialization should be done here, to prevent doing
+        duplicate work in case another window is opened.
+        """
+        Gtk.Application.do_startup(self)
+        self.evk: Gtk.EventControllerKey = Gtk.EventControllerKey()
+        self.evk.connect("key-pressed", self.on_key_pressed)
+
+        # FIXME: app don't quit
+        action = Gio.SimpleAction.new("quit", None)
+        action.connect("activate", self.quit)
+        self.add_action(action)
+
+    def do_activate(self) -> None:
+        if self.props.active_window:
+            self.window.present()
+            return
+
+        self.parser = HexParser(self.stdin)
+        self.window = PickerWindow(self.parser.color)
+        self.window.set_application(self)
+        self.window.add_controller(self.evk)
+        self.window.present()
+
+    def quit(self) -> None:
+        for window in self.get_windows():
+            window.destroy()
+        super().quit()
+
+    def on_key_pressed(self, _event: Gdk.Event, keyval: int, _keycode: int, _state: int) -> None:
+        match keyval:
+            case Gdk.KEY_Escape | Gdk.KEY_q:
+                self.quit()
+                return
+            case Gdk.KEY_a | Gdk.KEY_v | Gdk.KEY_p:
+                color = self.window.picker.get_rgba()
+                sys.stdout.write(f"{self.parser.output(color)}\n")
+                self.quit()
+            case _:
+                return
+
+
+def read_stdin() -> str | None:
+    """Returns input from stdin."""
+    if not sys.stdin.isatty():
+        with fileinput.input(files="-", mode="r") as _file:
+            return "".join(list(_file))
+    return None
+
+
+if __name__ == "__main__":
+    app = ColorPicker(stdin=read_stdin())
+    sys.exit(app.run(sys.argv))

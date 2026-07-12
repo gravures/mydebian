@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+result=$(cat | ruff check --select "$@" I --fix  --stdin-filename _ 2> /dev/null)
+if [ "$?" -eq 0 ]; then
+  echo "$result" | ruff format --stdin-filename _ "$@"
+  exit 0
+else
+  echo "$result"
+  exit 1
+fi

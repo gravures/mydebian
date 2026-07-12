@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rofi -show-icons -show drun -p "Apps: " -steal-focus -location 0

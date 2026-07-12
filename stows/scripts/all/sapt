@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Search for a package (name or description)
+
+APT_FORMAT=(--display-format "%c\ %p\ %s\ %l\ %t\ %d")
+
+# search which packages owns <file(s)>
+function saptf() {
+	motif="${*:-}"
+	dpkg-query --search "$motif" | grep -P "/(?:.*\/)*($motif)$"
+}
+
+DPKG_LIST="enter:become(dpkg-query --listfiles {3} | fzf --exact --prompt=\"file's package> \")"
+
+APT_INSTALL='enter:become(sudo aptitude install {+2})'
+
+function main() {
+	fzf --ansi --disabled \
+		--query "${*:-}" \
+		--exact \
+		--prompt='apt search> ' \
+		--header-first \
+		--header="[/] pview [tab] layout [ins] fzf [back] apt [enter] install [esc] quit" \
+		--bind "start:reload:aptitude search ${APT_FORMAT[*]} {q} 2>/dev/null | column -t -l6" \
+		--bind "change:reload:sleep 0.1; aptitude search ${APT_FORMAT[*]} {q} 2>/dev/null | column -t -l6" \
+		--bind "/:toggle-preview" \
+		--bind "shift-tab:change-preview-window(right|up)" \
+		--bind "insert:enable-search+unbind(change)+change-prompt(fzf search> )" \
+		--bind "del:disable-search+rebind(change)+change-prompt(apt search> )" \
+		--bind "${APT_INSTALL}" \
+		--multi \
+		--no-mouse \
+		--track \
+		--delimiter '\s+' \
+		--preview-window 'up,55%,wrap' \
+		--preview $'apt show {3} 2>/dev/null | batcat -l toml -p --color always' \
+		--bind "]:preview-down" \
+		--bind "[:preview-up" \
+		--bind "tab:toggle"
+
+}
+
+main "$@"

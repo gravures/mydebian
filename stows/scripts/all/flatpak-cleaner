@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+##
+# flatpak cleanup script
+
+USER_NAME="${SUDO_USER:-${USER}}"
+USER_DIR="/home/${USER_NAME}"
+
+if [ -n "$(command -v flatpak)" ]; then
+  # Remove unused flatpak runtimes
+  if [ -n "$(flatpak list --runtime)" ]; then
+    echo removing unused runtimes...
+    flatpak uninstall --unused
+  fi
+
+  # Remove unused ref in /var/lib/flatpak/repo/object
+  echo cleaning flatpak repos...
+  sudo flatpak repair
+
+  # Remove flatpak cache
+  echo removing flatpak caches...
+  sudo rm -rf /var/tmp/flatpak-cache-*
+  sudo -u "${USER_NAME}" rm -rf "${USER_DIR}"/.cache/flatpak/*
+fi

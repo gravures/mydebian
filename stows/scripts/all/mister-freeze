@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+FREEZE_DIR=~/.mrfreeze
+TIME_STAMP=$(date +%s)
+SAVE_DIR=${FREEZE_DIR}/debian-${TIME_STAMP}
+
+mkdir -p "$SAVE_DIR"
+
+cp -r --parents --preserve /etc "$SAVE_DIR" >/dev/null 2>&1
+rm -r "$SAVE_DIR"/etc/alternatives
+rm -r "$SAVE_DIR"/etc/libreoffice
+
+cp --parents --preserve /var/lib/apt/extended_states "$SAVE_DIR" >/dev/null 2>&1
+cp -r --parents --preserve /var/lib/dpkg "$SAVE_DIR" >/dev/null 2>&1
+cp --parents --preserve /var/lib/aptitude/pkgstates "$SAVE_DIR" >/dev/null 2>&1
+dpkg --get-selections '*' >"$SAVE_DIR"/dpkg_selections
+
+zip -r -q "${FREEZE_DIR}/debian-${TIME_STAMP}.zip" "$SAVE_DIR"
+rm -r "$SAVE_DIR"

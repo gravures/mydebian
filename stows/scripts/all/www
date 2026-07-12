@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+BOOKMARKS=${BOOKMARKS:-'~/.config/browsh/bookmarks-2025-02-19.json'}
+
+function expand_path() {
+  eval echo "$BOOKMARKS"
+}
+# function bookmarks() {
+#   script=(
+#     '.children[0].children[] |'
+#     '..|'
+#     '[ (.title?), (['
+#     ' .children?[] | .title, .uri? '
+#     ']| tojson ) ]'
+#     '| join(";") '
+#   )
+#   jq "${script[*]:0}" --raw-output <"$(expand_path)" #| sed 's/\\"/"/g; s/"//1; s/"$//'
+# }
+# RG_OPTS=(--column --line-number --no-heading --color=always --smart-case)
+
+function bookmarks() {
+  script=(
+    # '.children[0].children[] |'
+    # 'walk('
+    # ' {children: .}'
+    # ')'
+
+    '.children[0].children |'
+    'recurse(.[]?) | .'
+
+    # 'walk('
+    # ' if type=="object" then (select(.title), .) else'
+    # ' if type=="array" then . else empty end'
+    # 'end'
+    # ')'
+
+    # '.title?'
+    # '.title?, ('
+    #' objects |'
+    #' { uri: .uri?} '
+    # ')'
+    # '[ (.title?), (['
+    # ' .children?[] | .title, .uri? '
+    # ']| tojson ) ]'
+    # '| join(";") '
+  )
+  jq "${script[*]:0}" --raw-output <"$(expand_path)"
+}
+
+function main {
+  bookmarks | fzf --ansi \
+    --query "${*:-}" \
+    --exit-0 \
+    --exact \
+    --prompt='> ' \
+    --header-first \
+    --header="[/] pview [tab] layout [ins] fzf [back] apt [enter] ls [esc] quit" \
+    --layout=reverse-list \
+    --delimiter ';' \
+    --with-nth '{1}' --bind "enter:reload:echo {2..} | sed 's/,/\\n/g'"
+}
+
+bookmarks
+# main "${@}"
