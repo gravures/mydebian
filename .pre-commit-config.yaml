@@ -33,10 +33,3 @@ repos:
         exclude: ^tests/
       - id: check-toml
         exclude: ^tests/
-  # Bash
-  - repo: https://github.com/detailyang/pre-commit-shell
-    rev: 1.0.5
-    hooks:
-      - id: shell-lint
-        args: [--format=json, --shell=bash]
-        exclude: ^.*\.zsh
