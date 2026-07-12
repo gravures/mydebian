@@ -1,0 +1,29 @@
+##
+# Xonsh + Xontribs Auto Upgrade
+uv tool install 'xonsh[full]' --upgrade --no-managed-python --with xontrib-fzf-widgets --with xontrib-fish-completer
+
+##
+# Fzf
+xontrib load fzf-widgets
+# $fzf_history_binding = "c-r"
+# $fzf_ssh_binding = None
+$fzf_file_binding = "c-t"
+$fzf_dir_binding = "c-g"
+
+##
+# Auto completions
+xontrib load fish_completer
+
+##
+# Theme
+$XONSH_COLOR_STYLE = 'one-dark'
+
+##
+# Hooks
+execx($(starship init xonsh))
+execx($(zoxide init xonsh --hook pwd))
+execx($(atuin init xonsh --disable-up-arrow))
+
+##
+# Python XONSH_SHOW_TRACEBACK
+$XONSH_SHOW_TRACEBACK = False

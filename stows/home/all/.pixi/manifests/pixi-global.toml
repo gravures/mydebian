@@ -1,0 +1,40 @@
+version = 1
+
+[envs.rich-cli]
+channels = ["conda-forge"]
+dependencies = { rich-cli = "*" }
+exposed = { rich = "rich" }
+
+[envs.ipython]
+channels = ["conda-forge"]
+dependencies = { ipython = "*", python = "3.13.5", docrepr = "*" }
+exposed = { ipython = "ipython", ipython3 = "ipython3" }
+
+[envs.marimo]
+channels = ["conda-forge"]
+exposed = { marimo = "marimo" }
+
+[envs.marimo.dependencies]
+python = "3.14.*"
+marimo = "*"
+basedpyright = "*"
+pytest = "*"
+pytest-benchmark = "*"
+ruff = "*"
+openai = "*"
+icecream = "*"
+
+[envs.py14]
+channels = ["conda-forge"]
+dependencies = { python = "3.14.*" }
+exposed = { py14 = "python3" }
+
+[envs.pylsp]
+channels = ["conda-forge"]
+dependencies = { pylsp-mypy = "*", python = "3.14.*" }
+exposed = { pylsp = "pylsp" }
+
+[envs.black]
+channels = ["conda-forge"]
+dependencies = { black = "*", python = "3.14.*" }
+exposed = { black = "black" }
