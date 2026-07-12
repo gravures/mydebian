@@ -1,0 +1,364 @@
+# WISH LIST:
+#   - a fast markdown WYGIWYD editor
+#
+# TAKE A LOOK AT THOSE:
+#   - hexyl (nice hex viewer)
+#   - nomino (batch renaming)
+#   - sd (intuitive string find+replace tool)
+#   - eva (cmd calculator replacement for bc)
+#   - nushell
+#   - Inlyne : a GPU powered, browserless, markdown + html viewer (gui app)
+#   - surfraw
+#
+#   ---------------- The Cli Must Have ---------------------------------
+#   starship  - prompt with indicators for git, docker, python etc
+#   procs     - process manager, ps replacement
+#   zoxide    - smart replacement for cd
+#   lsd       - ls replacement with colors
+#   fd        - find replacement with better performance
+#   bat       - cat replacement with syntax highlighting
+#   btop      - C++ top replacement with better output and features
+#   fzf       - fuzzy finder
+#   ripgrep   - grep replaecment with colors and better performance
+#   tldr      - simplified and community-driven man pages
+#   thefuck   - Python script to correct mistyped console commands
+#   delta     - diff pager
+#   tokei     - utility that displays statistics about your code
+#   yazi      - Tui File Browser
+#   glow      - Markdown viewer/editor
+#   frogmouth - Python Markdown viewer
+#   zellij    - Terminal multiplexer
+#   helix     - code editor
+#   ruff      - python linter and formatter
+#   uv        - pip replacement
+#   w3m       - webBrowser
+#   links2    - webBrowser
+#   awrit     - webBrowser
+#
+# TODO: uninstall section
+origin:
+  id: debian
+  codename: trixie
+
+packagers:
+  apt:
+    sources:
+      extrepo:
+        - deb-multimedia
+        - debian_backports
+        - xanmod
+        - vscodium
+        - griffo
+        - github-cli
+      wezterm:
+        Types: deb
+        URIs: https://apt.fury.io/wez/
+        Suites: \*
+        Components: \*
+        Signed-By: /usr/share/keyrings/wezterm-fury.gpg
+        Enabled: yes
+  flatpak:
+    enabled: yes
+    sources:
+      flathub:
+        name: flathub
+        options: "--system"
+        url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      gnome:
+        name: gnome-nightly
+        options: "--system"
+        url: https://nightly.gnome.org/gnome-nightly.flatpakrepo
+  bob:
+    enabled: yes
+  uv:
+    enabled: yes
+  pixi:
+    enabled: yes
+  npm:
+    enabled: yes
+
+steps:
+  setup:
+    doc: System base configuration
+    tasks:
+      - dpkg_eternal_log
+
+  packaging:
+    doc: Utilities for software installation
+    apt:
+      - aptitude
+      - gnome-software-plugin-flatpak
+      - debian-goodies
+      - libfuse2t64 # needed by some AppImage
+    flatpak:
+      - com.github.tchx84.Flatseal
+
+  services:
+    doc: System services
+    apt:
+      - systemd-timesyncd
+      - zram-tools
+
+  cliSys:
+    doc: Various command line utilities
+    apt:
+      - gpm
+      - btop
+      - inxi
+      - stow
+      - libsecret-tools
+      - pass
+      - rofi
+      - dpigs
+      - reportbug
+      - reportbug-gtk
+      - tealdeer
+      - unrar
+    bob:
+      - procs
+
+  cliFile:
+    doc: Collections of command line tools related to file system
+    apt:
+      - tree
+      - mc
+      - ncdu
+      - fd-find
+      - trash-cli
+    bob:
+      - lsd
+      - dua-cli
+      - ouch
+
+  cliText:
+    doc: Collections of command line tools related to text file editing
+    apt:
+      - ne
+      - micro
+      - bat
+      - ripgrep
+
+  cliNet:
+    doc: Collections of command line tools related to network
+    apt:
+      - wget
+      - axel
+      - links2
+      - w3m
+      - surfraw
+      - ddgr
+    bob:
+      - browsh
+      - chawan
+      - neomutt
+
+  terminal:
+    doc: Terminal environment
+    apt:
+      - zsh
+      - ghostty
+      - atuin
+      - wl-clipboard
+      - tmux
+      - ptyxis
+      - wezterm
+    bob:
+      - libsixel-bin
+      - starship
+      - zoxide
+      - blesh
+      - yazi
+      - fzf
+      - fzf-help
+      - television
+      - sesh
+      - lazy-tmux
+      - zellij
+
+  devGui:
+    doc: Software Development
+    apt:
+      - gnome-authenticator
+      - gedit
+      - gedit-plugin-word-completion
+      - gedit-plugins-common
+      - gedit-plugin-terminal
+      - gedit-plugin-bracket-completion
+      - gedit-plugin-character-map
+      - gedit-plugin-code-comment
+      - gedit-plugin-smart-spaces
+      - gedit-plugin-text-size
+      - vscodium
+      - lldb
+    flatpak:
+      - com.github.marktext.marktext
+
+  devCli:
+    doc: Software Development TUI
+    apt:
+      - lazygit
+      - gh
+      - mise
+      - just
+      - pandoc
+      - texlive-latex-base
+      - texlive-fonts-recommended
+      - texlive-extra-utils
+      - texlive-latex-extra
+    bob:
+      - helix
+      - tokei
+      - glow
+      - delta
+      - diffnav
+      - cocogitto
+      - koji
+      - qman
+    uv:
+      - pre-commit
+      - frogmouth
+      - buku
+      - mojo
+
+  devAi:
+    npm:
+      - opencode-ai
+    bob:
+      - llamacpp
+      - ollama
+      - grepai
+      - mdvdb
+      - pixi
+
+  devLsp:
+    doc: Language Servers
+    bob:
+      - color-lsp
+      - typo-lsp
+      - codebook-lsp
+      - hx-lsp
+      - lsp-ai
+      - markdown-oxide
+      - rumdl
+      - harper-ls
+    npm:
+      - bash-language-server
+      - typescript-language-server
+      - some-sass-language-server
+      - "@astrojs/language-server"
+      - vscode-langservers-extracted
+      - "@mdx-js/language-server"
+      - yaml-language-server
+    uv:
+      - basedpyright
+      - "pyrefly --no-managed-python"
+      - "ty --no-managed-python"
+      - ruff
+
+  devBash:
+    doc: Bash Development
+    apt:
+      - bash-doc
+      - shellcheck
+      - shfmt
+
+  devPython:
+    # TODO: - micromamba
+    doc: Python Development
+    apt:
+      - python3-dev
+      - python3-icecream
+    uv:
+      # - virtualenvwrapper
+      # - argcomplete
+      - "xonsh[full] --no-managed-python --with xontrib-fzf-widgets --upgrade"
+      - mypy
+      - pdm
+      - "debugpy --no-managed-python"
+      - "trepan3k --no-managed-python"
+      - "sphinx --no-managed-python"
+      - "--prerelease allow esbonio"
+      - rich-cli
+      - "https://github.com/davidbrochart/jpterm.git"
+      - righttyper
+      - "py-spy --no-managed-python"
+      - "scalene --no-managed-python"
+      - conda-lock
+      - cython
+    pixi:
+      - ipython
+      - marimo
+      - python=3.14.*
+
+  devWeb:
+    doc: Web Development
+    npm:
+      - typescript
+      - prettier
+      - prettier-plugin-astro
+
+  web:
+    doc: Web Browsing
+    apt:
+      - filezilla
+      - thunderbird
+      - torbrowser-launcher
+    bob:
+      - nyxt
+      # TODO: - zen
+
+  # TODO: security, firewall
+
+  gnome:
+    doc: Gnome Environment
+    apt:
+      - gnome-shell-extension-gamemode
+      - gnome-shell-extension-autohidetopbar
+      - gnome-shell-extension-dashtodock
+      - gnome-shell-extension-hide-activities
+      - gnome-shell-extension-weather
+      - color-picker
+      - zim
+      - input-remapper-gtk
+    flatpak:
+      - org.gnome.NautilusDevel
+      - com.usebottles.bottles
+    # TODO: gnome-rander(rust)
+
+  dtp:
+    doc: Desktop Publishing Applications
+    apt:
+      - displaycal
+      - font-manager
+      - printer-driver-cups-pdf
+      - mupdf
+      - pdfchain
+      - origami-pdf
+      - qtqr
+    flatpak:
+      - org.kde.okular
+      - org.inkscape.Inkscape
+    bob:
+      - scribus
+
+  photo:
+    # TODO: ART, SilverEffect
+    doc: Photo Editing
+    flatpak:
+      - org.gimp.GIMP
+      - org.kde.digikam
+    bob:
+      - krita
+
+  games:
+    doc: Gaming
+    bob:
+      - libstrangle
+    apt:
+      - linux-xanmod-lts-x64v3
+      - gamemode
+      - vkbasalt
+      - jstest-gtk
+      - piper
+    flatpak:
+      - com.valvesoftware.Steam
