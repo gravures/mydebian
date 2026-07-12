@@ -39,3 +39,4 @@ repos:
     hooks:
       - id: shell-lint
         args: [--format=json, --shell=bash]
+        exclude: ^.*\.zsh
