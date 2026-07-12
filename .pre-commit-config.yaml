@@ -38,4 +38,4 @@ repos:
     rev: 1.0.5
     hooks:
       - id: shell-lint
-        args: [--format=json]
+        args: [--format=json, --shell=bash]
