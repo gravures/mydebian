@@ -1,0 +1,13 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/sassman/t-rec-rs.git
+PROGRAM=t-rec
+PKG_NAME='t-rec'
+DESC='Blazingly fast terminal recorder that generates animated gif images for the web written in rust'
+LICENSE=(GPL-3.0)
+BUILD_DEPS=(libx11-dev)
+RUNTIME_DEPS=(imagemagick)
+
+unset LOCKED

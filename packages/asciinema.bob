@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/asciinema/asciinema.git
+PROGRAM=asciinema
+PKG_NAME='asciinema'
+DESC='Terminal session recorder, streamer and player'
+LICENSE=(GPL-3.0)
+BUILD_DEPS=()
+RUNTIME_DEPS=()

@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/asciinema/agg.git
+PROGRAM=agg
+PKG_NAME='agg'
+DESC='asciinema gif generator'
+LICENSE=(GPL-3.0)
+BUILD_DEPS=()
+RUNTIME_DEPS=()

@@ -214,6 +214,8 @@ steps:
       - cocogitto
       - koji
       - qman
+      - asciinema
+      - agg
     uv:
       - pre-commit
       - frogmouth
