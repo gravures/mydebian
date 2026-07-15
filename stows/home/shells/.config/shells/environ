@@ -41,6 +41,11 @@ PATH="$HOME/.cargo/bin:$PATH"
 ######################################################
 # NVM
 export NVM_DIR="$HOME/.nvm"
+_nvm_current="$(nvm current 2>/dev/null)"
+if [ -n "$_nvm_current" ] && [ "$_nvm_current" != "N/A" ]; then
+  export PATH="$NVM_DIR/versions/node/$_nvm_current/bin:$PATH"
+fi
+unset _nvm_current
 
 ######################################################
 # Bun
