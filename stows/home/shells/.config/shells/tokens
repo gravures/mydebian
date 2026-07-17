@@ -1,5 +1,6 @@
 export SRC_ACCESS_TOKEN="$(pass Tokens/SrcAccess)"
 export PYPI_TOKEN="$(pass Tokens/PyPi)"
+export UV_PUBlISH_TOKEN=${PYPI_TOKEN}
 export OPENROUTER_API_KEY="$(pass Tokens/OpenRouter)"
 export GEMINI_API_KEY="$(pass Tokens/Gemini)"
 export GROQ_API_KEY="$(pass Tokens/Groq)"
