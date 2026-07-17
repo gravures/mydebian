@@ -1,0 +1,22 @@
+[user]
+	name = Gilles Coissac
+	email = gilles@ideographe.fr
+	signingkey = 43776EC38B7144498FF9F27995952C6529058A26
+[core]
+	editor = hx
+	autocrlf = input
+	safecrlf = warn
+[status]
+	submoduleSummary = true
+[diff]
+	submodule = log
+[credential]
+	helper = store
+[commit]
+	gpgsign = true
+[pager]
+	diff = diffnav
+[include]
+	path = ~/.config/delta/themes/franky.gitconfig
+[delta]
+	features = franky
