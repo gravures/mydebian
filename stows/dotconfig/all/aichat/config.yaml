@@ -1,6 +1,6 @@
 ##
 # LLM
-model: ollama:ministral-3:3b-cloud # llamacpp:bonsai:1.7b
+model: zen:mimo-v2.5-free # llamacpp:bonsai:1.7b
 temperature: 0.2 # Set default temperature parameter (0, 1)
 top_p: null # default top-p, with a range of (0, 1) or (0, 2) depending on the model
 
@@ -123,19 +123,30 @@ clients:
   #   api_key: xxx
   #   organization_id: org-xxx                          # Optional
 
+  # OpenCode-Zen
+  - type: openai-compatible
+    name: zen
+    api_base: https://opencode.ai/zen/v1
+    api_Key: ZEN_API_KEY
+    models:
+      - name: mimo-v2.5-free
+        supports_function_calling: true
+        supports_reasoning: true
+        max_input_token: 202752
+
   # Llamacpp-python
   - type: openai-compatible
     name: ollama
     api_base: http://localhost:11434/v1
-    api_Key: OLLAMA_API_KEY,
+    api_Key: OLLAMA_API_KEY
     models:
       - name: glm-5:cloud
         supports_function_calling: true
         supports_reasoning: true
         max_input_token: 202752
-      - name: ministral-3:3b-cloud
+      - name: kimi-k2.5:cloud
         supports_function_calling: true
-        supports_reasoning: false
+        supports_reasoning: true
         max_input_token: 262144
       - name: all-minilm
         type: embedding

@@ -1,5 +1,4 @@
 ---
-model: ollama:ministral-3:3b-cloud
 temperature: 0.1
 use_tools: web_search,fs_ls
 ---
