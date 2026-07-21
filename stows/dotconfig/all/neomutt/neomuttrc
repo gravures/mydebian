@@ -1,0 +1,57 @@
+# Caching
+# Going out to the network to download each email as the user scrolls down the
+# Index view can be slow. Consequently, the first thing to do is to add caching
+# to the top of ~/.config/neomutt/neomuttrc:
+set header_cache     = ~/.cache/neomutt/cache/  # where to store headers
+set message_cachedir = ~/.cache/neomutt/cache/  # where to store bodies
+set header_cache_compress_method = "zstd"
+set header_cache_compress_level = 3
+set message_cache_clean = yes                   # not recommended to set this!
+set tmpdir           = /tmp
+
+# Settings
+set from  = gilles@ideographe.fr
+set real_name = "Gilles Coissac"
+
+# Theme
+source ~/.config/neomutt/catppuccin
+
+# Reading
+set use_threads = yes       # show email in threads in the Index
+set pager_index_lines = 6   # show this many lines of the Index when reading email
+set pager_context = 3       # lines of context between pages
+set pager_stop = yes        # don't scroll of the end of one message onto the next
+unset markers               # don't show + for wrapped lines in the pager
+unset mark_old           # Only mark read/new
+set sort = reverse-last-date-received
+set sort_aux = reverse-last-date-received
+
+# Editing
+set edit_headers = yes    # allow user to edit message headers
+set editor       = "hx"   # define which editor to use
+set fast_reply   = yes    # skip initial prompts when replying
+set include      = yes    # include the message we're replying to
+
+# Sidebar
+set sidebar_visible       = yes
+set sidebar_width         = 15   # width in screen columns
+set sidebar_next_new_wrap = yes  # wrap around the list when scrolling
+
+# Check 4 mails
+set mail_check_stats      = yes  # check for new email and show statsunset confirmappend
+set mail_check = 120                 # time in seconds between mail checks
+set timeout    = 30                  # time to wait for user input
+set mail_check_stats_interval = 120  # calculate every 120 secs
+set imap_idle = yes
+
+#
+set quit                 # No additional prompt asking for confirmation
+set beep_new             # Bell on new mails
+set pipe_decode          # strip headers and eval mimes when piping
+set thorough_search      # strip headers and eval mimes before searching
+
+# Lang
+# source ~/.config/neomutt/languages
+
+# Accounts
+source ~/.config/neomutt/accounts

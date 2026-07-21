@@ -1,0 +1,25 @@
+# https://www.futurile.net/2025/05/18/neomutt-email-native-imap-tutorial/
+
+set imap_user = "gilles@ideographe.fr"
+set imap_pass = "`pass Emails/ideographe.fr`"
+
+set folder = "imaps://mail.infomaniak.com:993"
+set spoolfile = "+INBOX"
+set record = "+Sent"
+set trash = "+Trash"
+set postponed = "+Draft"
+
+set smtp_url = "smtp://mail.infomaniak.com:465/"
+set smtp_user = "gilles@ideographe.fr"
+set smtp_pass = "`pass Emails/ideographe.fr`"
+# set smtp_authenticators
+
+# mailboxes =INBOX =Sent =Trash =Draft
+mailboxes -label Inbox -notify -poll ! \
+          -label Drafts -nonotify -nopoll =Drafts \
+          -label Sent -nonotify -nopoll =Sent \
+          -label Junk -nonotify -nopoll =Junk \
+		  -label Trash -nonotify -nopoll =Trash
+
+# set new_mail_command="notify-send --app-name=Neomutt --icon='~/.config/neomutt/NeoMutt.png' \
+#    --urgency=low --expire-time=3000 'New Email in %D' &"
