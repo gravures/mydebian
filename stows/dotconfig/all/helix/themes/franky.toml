@@ -1,6 +1,6 @@
-
-##
-# Helix Franky Theme
+# Author: Franky Theme <https://github.com/gravures/franky>
+# License: GPL-3.0
+# Franky - A GitHub-Dark-inspired coding palette fused with the UI flavor of Catppuccin-Mocha
 
 # LANGUAGE
 attribute = { fg = "#c9c9c9" }
