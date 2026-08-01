@@ -18,7 +18,7 @@ set smtp_pass = "`pass Emails/ideographe.fr`"
 mailboxes -label Inbox -notify -poll ! \
           -label Drafts -nonotify -nopoll =Drafts \
           -label Sent -nonotify -nopoll =Sent \
-          -label Junk -nonotify -nopoll =Junk \
+          -label Spam -nonotify -nopoll =Spam \
 		  -label Trash -nonotify -nopoll =Trash
 
 # set new_mail_command="notify-send --app-name=Neomutt --icon='~/.config/neomutt/NeoMutt.png' \

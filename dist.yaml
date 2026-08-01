@@ -10,32 +10,8 @@
 #   - Inlyne : a GPU powered, browserless, markdown + html viewer (gui app)
 #   - surfraw
 #
-#   ---------------- The Cli Must Have ---------------------------------
-#   starship  - prompt with indicators for git, docker, python etc
-#   procs     - process manager, ps replacement
-#   zoxide    - smart replacement for cd
-#   lsd       - ls replacement with colors
-#   fd        - find replacement with better performance
-#   bat       - cat replacement with syntax highlighting
-#   btop      - C++ top replacement with better output and features
-#   fzf       - fuzzy finder
-#   ripgrep   - grep replaecment with colors and better performance
-#   tldr      - simplified and community-driven man pages
-#   thefuck   - Python script to correct mistyped console commands
-#   delta     - diff pager
-#   tokei     - utility that displays statistics about your code
-#   yazi      - Tui File Browser
-#   glow      - Markdown viewer/editor
-#   frogmouth - Python Markdown viewer
-#   zellij    - Terminal multiplexer
-#   helix     - code editor
-#   ruff      - python linter and formatter
-#   uv        - pip replacement
-#   w3m       - webBrowser
-#   links2    - webBrowser
-#   awrit     - webBrowser
-#
 # TODO: uninstall section
+
 origin:
   id: debian
   codename: trixie

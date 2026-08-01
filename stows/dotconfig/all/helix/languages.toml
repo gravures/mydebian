@@ -256,6 +256,35 @@ auto-format = true
 indent = { tab-width = 4, unit = "    " }
 # formatter = { command = "prettier", args = ["--parser", "typescript"] }
 
+[[language]]
+name = "javascript"
+scope = "source.js"
+injection-regex = "(js|javascript)"
+language-id = "javascript"
+file-types = [
+  "js",
+  "mjs",
+  "cjs",
+  "rules",
+  "es6",
+  "pac",
+  "gs",
+  { glob = ".node_repl_history" },
+  { glob = "jakefile" },
+]
+shebangs = ["node"]
+roots = ["package.json", "jsconfig.json"]
+comment-token = "//"
+block-comment-tokens = { start = "/*", end = "*/" }
+language-servers = [
+  { name = "typescript-language-server", except-features = [
+    "format",
+  ] },
+  { name = "biome" },
+  { name = "helix" },
+  { name = "codebook" },
+]
+indent = { tab-width = 4, unit = "  " }
 
 ##
 # Astro
@@ -267,7 +296,7 @@ args = ["--stdio"]
 contentIntellisense = true
 
 [language-server.astro-ls.config.typescript]
-tsdk = "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib"
+tsdk = "/home/gilles/.nvm/versions/node/v26.5.0/lib/node_modules/typescript/lib"
 environment = "node"
 
 [[language]]
@@ -450,6 +479,17 @@ command = "pyrefly"
 environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
 args = ["lsp"]
 
+[language-server.zuban]
+command = "zuban"
+environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
+args = ["server"]
+
+[language-server.zuban.config]
+typeCheckingMode = "default"
+disableLanguageServices = false
+diagnosticMode = "open-files-only" # "workspace"
+# zuban.pythonExecutable = ""
+
 [language-server.pyright]
 command = "basedpyright-langserver"
 environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
@@ -499,20 +539,10 @@ pylsp.plugins.pylsp_mypy.live_mode = false                 # documented as incom
 pylsp.plugins.pylsp_mypy.report_progress = true
 pylsp.plugins.pylsp_mypy.follow-imports = "silent"
 
-
 [language-server.ruff]
 command = "ruff"
 args = ["server"]
 environment = { "RUFF_TRACE" = "messages" }
-
-[language-server.sourcery]
-command = "sourcery"
-args = ["lsp"]
-
-[language-server.sourcery.config]
-editor_version = "helix"
-extension_version = "helix"
-metricsEnabled = true
 
 [[language]]
 name = "python"
@@ -540,19 +570,17 @@ roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
 comment-token = "#"
 indent = { tab-width = 4, unit = "    " }
 language-servers = [
-  { name = "pyright", except-features = [
-    "format",
-  ] },
+  # { name = "pyright", except-features = [
+  #   "format",
+  # ] },
   # { name = "ty", except-features = [
   #   "format",
   # ] },
-  # { name = "pyrefly", except-features = [
-  #   "format",
+  { name = "zuban", except-features = ["format"] },
+  # { name = "mypy", only-features = [
+  #   "diagnostics",
   # ] },
-  { name = "mypy", only-features = [
-    "diagnostics",
-  ] },
-  { name = "ruff" }, #, except-features = ["format"] },
+  { name = "ruff" },
   { name = "harper-ls" },
   { name = "helix" },
 ]

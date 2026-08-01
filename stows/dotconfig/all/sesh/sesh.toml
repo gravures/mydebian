@@ -3,27 +3,19 @@ blacklist = ["scratch"]
 dir_length = 1
 cache = false
 
+# [[wildcard]]
+# pattern = "~/DEVELOPPEMENT/REPOS/*"
+# startup_command = "tmux split-pane -h; tmux split-pane -v"
+# preview_command = "lsd --tree --depth 3 {}"
+
+[default_session]
+startup_command = "tmux split-pane -h; tmux split-pane -v; tmux next; clear; hx"
+preview_command = "lsd --tree --depth 3 {}"
+
 [[session]]
 name = "standard-deluxe"
 path = "~/DEVELOPPEMENT/REPOS/standard-deluxe"
 preview_command = "sh -c uname -a"
-# startup_command = "hx {}"
-# preview_command = "batcat --color=always /home/gilles/DEVELOPPEMENT/REPOS/standard-deluxe/pyproject.toml"
-# preview_command = "lsd --tree --depth 3 {}"
-
-# [default_session]
-# startup_command = "hx {}"
-# preview_command = "ls --tree {}"
-
-# [[wildcard]]
-# pattern = "~/DEVELOPPEMENT/REPOS/*"
-# startup_command = "hx {}"
-# preview_command = "lsd --tree --depth 3 {}"
-
-# [[wildcard]]
-# pattern = "~/DEVELOPPEMENT/REPOS/**"
-# startup_command = "hx {}"
-# preview_command = "lsd --tree --depth 3 {}"
 
 [[session]]
 name = "tmux"

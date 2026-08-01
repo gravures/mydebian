@@ -7,7 +7,7 @@ exposed = { rich = "rich" }
 
 [envs.ipython]
 channels = ["conda-forge"]
-dependencies = { ipython = "*", python = "3.13.5", docrepr = "*" }
+dependencies = { ipython = "*", python = "==3.13.5", docrepr = "*" }
 exposed = { ipython = "ipython", ipython3 = "ipython3" }
 
 [envs.marimo]
