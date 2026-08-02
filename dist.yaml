@@ -208,6 +208,7 @@ steps:
       - ollama
       - grepai
       - mdvdb
+      - rtk
     uv:
       - graphifyy
 
