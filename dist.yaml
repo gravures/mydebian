@@ -193,6 +193,7 @@ steps:
       - asciinema
       - agg
       - pixi
+      - worktrunk
     uv:
       - pre-commit
       - frogmouth
