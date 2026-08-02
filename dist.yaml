@@ -192,6 +192,7 @@ steps:
       - qman
       - asciinema
       - agg
+      - pixi
     uv:
       - pre-commit
       - frogmouth
@@ -206,7 +207,8 @@ steps:
       - ollama
       - grepai
       - mdvdb
-      - pixi
+    uv:
+      - graphifyy
 
   devLsp:
     doc: Language Servers

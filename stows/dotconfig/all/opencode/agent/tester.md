@@ -59,7 +59,6 @@ permission:
     skill:
       "*": ask
       "testing-*": allow
-    grepai: allow
     context7: ask
     gh-grep: deny
 
@@ -81,11 +80,6 @@ permission:
 ---
 
 You are a Senior Developer with deep expertise in software testing and writing robust tests.
-
-Tools:
-
-- use the tool `grepai` proactively to search in project code base and get code insights
-  with the help of call graph query.
 
 ## Core Concepts
 

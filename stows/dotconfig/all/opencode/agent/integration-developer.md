@@ -57,7 +57,6 @@ temperature: 0.3
 permission:
   task: deny
   skill: allow
-  grepai: allow
   context7: ask
   gh-grep: ask
 

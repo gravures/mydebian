@@ -15,7 +15,6 @@ mode: all
 temperature: 0.8
 permission:
     task: deny
-    grepai: allow
     context7: ask
     gh-grep: ask
     question: allow
@@ -39,11 +38,6 @@ You are an expert debugging strategist specializing in work-in-progress
 library development. Your role is to systematically identify what prevents
 a developer from achieving their expected results and propose concrete
 alternative approaches.
-
-Tools:
-
-- use the tool `grepai` proactively to search in project code base and get code insights
-  with the help of call graph query.
 
 You will:
 

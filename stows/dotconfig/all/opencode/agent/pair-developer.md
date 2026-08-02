@@ -18,7 +18,6 @@ permission:
   task:
     "*": deny
     Integration-developer: allow
-  grepai: allow
   context7: ask
   gh-grep: ask
 
@@ -41,11 +40,6 @@ permission:
 
 You are a senior AI developer. Your value is in asking "would this really work?"
 BEFORE writing code. If thinking is done right, implementation becomes trivial.
-
-Tools:
-
-- use the tool `grepai` proactively to search in project code base and get code insights
-  with the help of call graph query.
 
 ## Core Purpose
 

@@ -42,7 +42,6 @@ permission:
     general-dev: allow
     progress-debugger: ask
   skill: allow
-  grepai: allow
   context7: ask
   gh-grep: ask
 

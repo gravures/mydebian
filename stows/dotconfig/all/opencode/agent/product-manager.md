@@ -38,7 +38,6 @@ mode: subagent
 temperature: 0.7
 permission:
   task: deny
-  grepai: allow
   context7: ask
   gh-grep: deny
 

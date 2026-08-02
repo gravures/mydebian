@@ -129,11 +129,6 @@
         }
     },
     "mcp": {
-        "grepai": {
-            "type": "local",
-            "enabled": true,
-            "command": [ "grepai", "mcp-serve" ]
-        },
         "astro": {
             "type": "remote",
             "url": "https://mcp.docs.astro.build/mcp",
