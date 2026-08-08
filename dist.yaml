@@ -74,6 +74,7 @@ steps:
     apt:
       - systemd-timesyncd
       - zram-tools
+      - dictd
 
   cliSys:
     doc: Various command line utilities
@@ -113,6 +114,14 @@ steps:
       - micro
       - bat
       - ripgrep
+      - dict
+      - dict-foldoc
+      - dict-jargon
+      - dict-wn
+      - dict-gcide
+      - dict-vera
+      - dict-freedict-fra-eng
+      - dict-freedict-eng-fra
 
   cliNet:
     doc: Collections of command line tools related to network
