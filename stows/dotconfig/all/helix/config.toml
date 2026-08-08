@@ -176,12 +176,15 @@ C-down = ["delete_selection", "paste_after"]
 "H" = ":set-option end-of-line-diagnostics error"
 "s" = ":lsp-stop"
 "r" = ":lsp-restart"
-"/" = [ # Zen Mode
+"z" = [ # Zen Mode
   ":set bufferline never",
   ':set gutters.layout ["spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer"]',
   ":set soft-wrap.wrap-at-text-width true",
   ":set end-of-line-diagnostics disable",
   # ":theme franky_bak",
+]
+"d" = [ # dict
+  ":sh dict %{selection}",
 ]
 
 [keys.normal."'"]
