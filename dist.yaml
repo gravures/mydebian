@@ -10,6 +10,9 @@
 #   - Inlyne : a GPU powered, browserless, markdown + html viewer (gui app)
 #   - surfraw
 #
+# NOTE: Understand-Anything
+# curl -fsSL https://raw.githubusercontent.com/Egonex-AI/Understand-Anything/main/install.sh | bash -s opencode
+#
 # TODO: uninstall section
 
 origin:
@@ -212,6 +215,7 @@ steps:
   devAi:
     npm:
       - opencode-ai
+      - free-coding-models
     bob:
       - llamacpp
       - ollama
@@ -252,6 +256,7 @@ steps:
       - bash-doc
       - shellcheck
       - shfmt
+      - bats
 
   devPython:
     # TODO: - micromamba
