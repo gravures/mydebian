@@ -233,14 +233,13 @@ C-down = ["delete_selection", "paste_after"]
 ]
 "p" = [ # Markdown Preview
   ":write-all",
-  ":sh tmux display-popup -d %{current_working_directory} -w 44%% -h 94%% -E 'streamdown %{buffer_name} | less -R'",
+  ":sh tmux display-popup -d %{current_working_directory} -w 44%% -h 94%% -E 'mdless %{buffer_name}'",
 ]
 "P" = [ # Markdown Inplace Preview
   ":write-all",
-  ":sh export HX_BUFFER_NAME=%{buffer_name}",
+  ":sh echo %{buffer_name} >/tmp/hx_buffer",
   ":new",
-  ":insert-output frogmouth ${HX_BUFFER_NAME}",
-  # ":insert-output streamdown ${HX_BUFFER_NAME} | bat",
+  ":insert-output mdless $(cat /tmp/hx_buffer)",
   ":set mouse false",
   ":set mouse true",
   ":buffer-close!",
