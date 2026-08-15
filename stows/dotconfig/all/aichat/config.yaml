@@ -1,6 +1,9 @@
 ##
 # LLM
-model: zen:mimo-v2.5-free # llamacpp:bonsai:1.7b
+# model: llamacpp:prism-bonzai-1.7B
+# model: llamacpp:granite-4:3b
+# model: zen:mimo-v2.5-free
+model: requesty:nvidia/muse-glimmer-30b
 temperature: 0.2 # Set default temperature parameter (0, 1)
 top_p: null # default top-p, with a range of (0, 1) or (0, 2) depending on the model
 
@@ -133,6 +136,20 @@ clients:
         supports_function_calling: true
         supports_reasoning: true
         max_input_token: 202752
+
+  - type: openai-compatible
+    name: requesty
+    api_base: https://router.requesty.ai/v1
+    api_Key: REQUESTY_API_KEY
+    models:
+      - name: google/gemma-4-31b-it
+        supports_function_calling: true
+        supports_reasoning: true
+        max_input_token: 130000
+      - name: nvidia/muse-glimmer-30b
+        supports_function_calling: true
+        supports_reasoning: true
+        max_input_token: 262144
 
   # Llamacpp-python
   - type: openai-compatible
