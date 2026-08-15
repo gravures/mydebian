@@ -50,7 +50,7 @@ open_gimp = [
   { run = 'flatpak run  org.gimp.GIMP "$@"', desc = "Open with Gimp", orphan = true, for = "linux" },
 ]
 read_md = [
-  { run = 'frogmouth "$@"', desc = "Open markdown reader", block = true, for = "linux" },
+  { run = 'mdless "$1"', desc = "Open markdown reader", block = true, for = "linux" },
 ]
 view_html = [
   { run = 'links2 "$1"', desc = "Open in terminal web browser", block = true, for = "linux" },
