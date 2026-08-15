@@ -6,47 +6,63 @@
 
 set -euo pipefail
 
-CacheDir="$HOME/.cache/unpass"
-CacheFile="$CacheDir/cached"
-CacheTTL="${UNPASS_CACHE_TTL:-3600}"
+CACHE_DIR="${HOME}/.cache/unpass"
+CACHE_TTL="${UNPASS_CACHE_TTL:-3600}"
+CACHE_FILE=
+CACHED_B64_VALUE=
 
-mkdir -p "$CacheDir"
+# load cached value if ttl has not yet expired
+function load_cache() {
+	local now timestamp
 
-path="${1:?Usage: unpass <pass-path>}"
-
-# Read existing cache into associative array
-declare -A cache
-if [[ -f "$CacheFile" ]]; then
-	while IFS=: read -r p ts b64; do
-		[[ -n "$p" ]] && cache["$p"]="${ts}:${b64}"
-	done <"$CacheFile"
-fi
-
-# Check for fresh cache entry
-now=$(date +%s)
-if [[ -n "${cache[$path]:-}" ]]; then
-	IFS=: read -r ts b64 <<<"${cache[$path]}"
-	age=$((now - ts))
-	if ((age < CacheTTL)); then
-		echo "$b64" | base64 -d
-		exit 0
+	if [[ -f "${CACHE_FILE}" ]]; then
+		now=$(date +%s)
+		timestamp=$(stat --format '%Y' "${CACHE_FILE}")
+		if (($((now - timestamp)) < CACHE_TTL)); then
+			CACHED_B64_VALUE=$(<"${CACHE_FILE}")
+			return
+		else
+			rm "${CACHE_FILE}" || :
+		fi
 	fi
-fi
-
-# Cache miss — decrypt via pass
-value=$(pass show "$path") || exit 1
-
-# Update cache
-ts=$(date +%s)
-b64=$(echo -n "$value" | base64)
-cache["$path"]="${ts}:${b64}"
+	return 1
+}
 
 # Write cache file atomically
-tmpfile=$(mktemp "$CacheDir/.cached.XXXXXX")
-for key in "${!cache[@]}"; do
-	echo "${key}:${cache[$key]}"
-done >"$tmpfile"
-chmod 600 "$tmpfile"
-mv "$tmpfile" "$CacheFile"
+function write_cache() {
+	local value=${1:?missing <value> parameter}
 
-echo "$value"
+	CACHED_B64_VALUE="$(printf '%s' "${value}" | base64)"
+	printf '%b' "${CACHED_B64_VALUE}" >"${CACHE_FILE}"
+	chmod 600 "${CACHE_FILE}"
+}
+
+# encode path to cache fileneme
+function encode_path() {
+	local path="${1:?missing <path> parameter}"
+	CACHE_FILE=${CACHE_DIR}/$(printf '%b' "${path//\//\x0}" | base64)
+}
+
+function print_value() {
+	printf '%s\n' "$(printf '%b' "${CACHED_B64_VALUE}" | base64 -d)"
+}
+
+function main() {
+	local path="${1:?Usage: unpass <pass-path>}"
+
+	mkdir -p "${CACHE_DIR}"
+	encode_path "${path}"
+	if load_cache; then
+		print_value
+		exit
+	fi
+
+	# Cache miss — decrypt via pass
+	local value
+	value=$(pass show "${path}") || exit 1
+	write_cache "${value}"
+	print_value
+	exit
+}
+
+main "${@}"
