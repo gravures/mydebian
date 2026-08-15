@@ -146,6 +146,19 @@
         }
     },
     "provider": {
+        "requesty": {
+            "name": "Requesty AI",
+            "npm": "@ai-sdk/openai-compatible",
+            "api": "https://router.requesty.ai/v1",
+            "models": {
+                "google/gemma-4-31b-it": {
+                    "name": "Gemma-4[free]"
+                },
+                "nvidia/muse-glimmer-30b": {
+                    "name": "Muse-glimmer[free]"
+                }
+            }
+        },
         "google": {
             "name": "Google",
             "npm": "@ai-sdk/openai-compatible",

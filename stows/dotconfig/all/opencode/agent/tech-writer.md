@@ -1,5 +1,5 @@
 ---
-description: Writes and maintain python project documentation
+description: Writes and maintain project documentation
 mode: all
 temperature: 0.3
 permission:
