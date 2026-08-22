@@ -22,7 +22,7 @@ function load_cache() {
 			CACHED_B64_VALUE=$(<"${CACHE_FILE}")
 			return
 		else
-			rm "${CACHE_FILE}" || :
+			rm "${CACHE_FILE}" 2>/dev/null || :
 		fi
 	fi
 	return 1
