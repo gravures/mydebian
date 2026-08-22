@@ -13,6 +13,10 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export LG_CONFIG_FILE='/home/gilles/.config/lazygit/config.yml,/home/gilles/.config/lazygit/franky.yml'
 
 ######################################################
+# PASS & UNPASS
+export UNPASS_CACHE_TTL=$((3600 * 24))
+
+######################################################
 # KiD
 export KID_HOME_DIR=~/DEVELOPPEMENT/REPOS/mydebian
 export BOB_REPOS_DIR=~/DEVELOPPEMENT/BUILD
