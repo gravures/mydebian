@@ -2,7 +2,7 @@
 # shellcheck source=../libs/bob/base_installer.sh
 source base_installer.sh
 
-REPO="https://github.com/devskale/chawan.git"
+REPO="https://github.com/sourcehut-mirrors/chawan.git"
 PROGRAM="cha"
 PKG_NAME='chawan'
 DESC='A text-mode web browser and pager for Unix-like systems'
