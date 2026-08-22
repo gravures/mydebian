@@ -1,0 +1,13 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/agavra/tuicr.git
+PROGRAM=tuicr
+PKG_NAME='tuicr'
+DESC='a code review TUI with vim keybindings'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+unset LOCKED
