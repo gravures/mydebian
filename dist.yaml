@@ -199,6 +199,7 @@ steps:
       - glow
       - delta
       - diffnav
+      - tuicr
       - cocogitto
       - koji
       - qman
