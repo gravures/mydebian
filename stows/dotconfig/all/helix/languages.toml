@@ -161,6 +161,13 @@ diagnostic-severity = "hint"
 formatter = { command = "shfmt" }
 auto-format = true
 
+[language.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+"'" = "'"
+'`' = '`'
 
 ##
 # SCSS & CSS
