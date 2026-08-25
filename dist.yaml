@@ -145,6 +145,7 @@ steps:
     apt:
       - zsh
       - ghostty
+      - fastfetch
       - atuin
       - wl-clipboard
       - tmux
