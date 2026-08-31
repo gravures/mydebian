@@ -1,3 +1,4 @@
+skip-shell-integration-prompt = true
 ## Hooks
 [pre-start]
 tmux = """
@@ -8,5 +9,7 @@ connect-rendez-vous "$WORKTREE_PATH"
 [pre-remove]
 tmux = """
 SESSION={{ worktree_name }}
-close-rendez-vous --kill --yes "$SESSION"
+close-rendez-vous --kill "$SESSION"
 """
+
+[projects]
