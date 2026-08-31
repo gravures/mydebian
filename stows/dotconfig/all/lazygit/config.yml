@@ -8,7 +8,7 @@ gui:
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 3
   mainPanelSplitMode: flexible
-  screenMode: half
+  screenMode: normal
   enlargedSideViewLocation: top
   commandLogSize: 4
   theme:
