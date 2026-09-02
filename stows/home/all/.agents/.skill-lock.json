@@ -1,0 +1,110 @@
+{
+  "version": 3,
+  "skills": {
+    "create-agent-skills": {
+      "source": "glittercowboy/taches-cc-resources",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/glittercowboy/taches-cc-resources.git",
+      "skillPath": "skills/create-agent-skills/SKILL.md",
+      "skillFolderHash": "4588725ca35086bd5d577dfbe06faa54689cdfd3",
+      "installedAt": "2026-04-13T09:53:24.821Z",
+      "updatedAt": "2026-04-13T09:53:24.821Z"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "98a510d1cfef9f82c3b1eec200229ca68725e613",
+      "pluginName": "example-skills",
+      "installedAt": "2026-04-13T10:24:41.261Z",
+      "updatedAt": "2026-04-13T10:46:38.294Z"
+    },
+    "opencode-agent-creator": {
+      "source": "family3253/skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/family3253/skill.git",
+      "skillPath": "skills/opencode-agent-creator/SKILL.md",
+      "skillFolderHash": "5edd1cbb5dde5f497ec0c017a39afb82207824cb",
+      "installedAt": "2026-04-13T11:40:00.187Z",
+      "updatedAt": "2026-04-13T11:40:00.187Z"
+    },
+    "grepai-search-basics": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-basics/SKILL.md",
+      "skillFolderHash": "bed391a012676991b84616cc877bd9e8c117ba1c",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:31:32.098Z",
+      "updatedAt": "2026-09-02T09:31:32.098Z"
+    },
+    "grepai-search-advanced": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-advanced/SKILL.md",
+      "skillFolderHash": "0801e57c70706a900f8a2ea9f04b75899215cc59",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:32:52.656Z",
+      "updatedAt": "2026-09-02T09:32:52.656Z"
+    },
+    "grepai-search-tips": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/search/grepai-search-tips/SKILL.md",
+      "skillFolderHash": "a7d80e7e366ffdab5f53a136a5fb39d195a8a931",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:33:44.098Z",
+      "updatedAt": "2026-09-02T09:33:44.098Z"
+    },
+    "grepai-trace-callers": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-callers/SKILL.md",
+      "skillFolderHash": "ce73f84944173504513837bdcbd9b278f76e1375",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:34:08.673Z",
+      "updatedAt": "2026-09-02T09:34:08.673Z"
+    },
+    "grepai-trace-callees": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-callees/SKILL.md",
+      "skillFolderHash": "6c360b21366ddfcd3047625097715179b73e2599",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:34:33.698Z",
+      "updatedAt": "2026-09-02T09:34:33.698Z"
+    },
+    "grepai-trace-graph": {
+      "source": "yoanbernabeu/grepai-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/yoanbernabeu/grepai-skills.git",
+      "skillPath": "skills/trace/grepai-trace-graph/SKILL.md",
+      "skillFolderHash": "c8e304eb6b9f390cd3c14fe1f1439c7ce3d44de9",
+      "pluginName": "grepai-complete",
+      "installedAt": "2026-09-02T09:35:04.337Z",
+      "updatedAt": "2026-09-02T09:35:04.337Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "firebender",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode",
+    "warp"
+  ]
+}
