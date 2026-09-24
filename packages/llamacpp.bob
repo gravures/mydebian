@@ -41,7 +41,7 @@ function clone() {
 	git clone "$repo" "$directory"
 }
 
-function prepare() {
+function use_prism_llamacpp() {
 	# use a llamacpp clone with support
 	# for prism-ml 1-bit model (actually only bonzai models)
 	# url = https://github.com/Mintplex-Labs/prism-ml-llama.cpp.git
@@ -57,6 +57,11 @@ EOF
 		cd vendor/llama.cpp || exit 1
 		git switch prism
 	)
+}
+
+function prepare() {
+	# use_prism_llamacpp
+	git submodule update --init --recursive || exit 1
 
 	# Add a custom script to launch llamacpp-python server
 	git restore pyproject.toml
@@ -77,7 +82,7 @@ function build() {
 	ncores=$(nproc --ignore 2)
 	CMAKE_ARGS="-DCMAKE_JOB_THREADS=${ncores} -Wno-dev -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS -DGGML_NATIVE=1 -DGGML_VULKAN=1" \
 		uv sync --inexact --compile-bytecode --no-editable \
-		--link-mode copy --verbose --extra 'server'
+		--link-mode copy --extra 'server' # --verbose
 
 	# relocate shebang of python launchers filtering out unneeded ones
 	local esc
