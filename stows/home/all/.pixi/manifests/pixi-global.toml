@@ -38,3 +38,8 @@ exposed = { pylsp = "pylsp" }
 channels = ["conda-forge"]
 dependencies = { black = "*", python = "3.14.*" }
 exposed = { black = "black" }
+
+[envs.mojo]
+channels = ["conda-forge", "https://conda.modular.com/max/"]
+dependencies = { python = "3.14.*", mojo = "*" }
+exposed = { mojo = "mojo", mojo-lldb = "mojo-lldb", mojo-lldb-dap = "mojo-lldb-dap", mojo-lsp-server = "mojo-lsp-server" }
