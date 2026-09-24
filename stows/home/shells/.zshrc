@@ -1,12 +1,13 @@
-#######################################################
+# shellcheck shell=zsh
+#######################################################O
 # CUSTOM SHELL FUNCTIONS
 #######################################################
 source "$HOME"/.config/zsh/plugin.zsh
 source "$HOME"/.config/zsh/transient-prompt.zsh
 
 function refresh() {
-  echo "refreshing shell..."
-  source "$HOME/.zshrc"
+	echo "refreshing shell..."
+	source "$HOME/.zshrc"
 }
 
 #######################################################
@@ -82,12 +83,12 @@ zle -N fzf-help-widget
 bindkey "^H" fzf-help-widget
 
 plugins=(
-  romkatv/zsh-defer
-  zsh-users/zsh-completions
-  # multirious/zsh-helix-mode
-  zdharma-continuum/fast-syntax-highlighting
-  zsh-users/zsh-history-substring-search
-  zsh-users/zsh-autosuggestions
+	romkatv/zsh-defer
+	zsh-users/zsh-completions
+	# multirious/zsh-helix-mode
+	zdharma-continuum/fast-syntax-highlighting
+	zsh-users/zsh-history-substring-search
+	zsh-users/zsh-autosuggestions
 )
 plugin::load $plugins
 

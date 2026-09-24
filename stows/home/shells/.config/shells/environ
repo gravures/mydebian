@@ -1,7 +1,7 @@
 # shellcheck disable=SC1090
 # shellcheck disable=SC2148
 
-export PATH="$HOME/.local/bin:$HOME/.pixi/bin:$PATH:/games/"
+export PATH="$HOME/DEVELOPPEMENT/Notes/.bin:$HOME/.local/bin:$HOME/.pixi/bin:$PATH:/games/"
 export LANGUAGE="en-us"
 export EDITOR=hx
 export VISUAL=
@@ -20,6 +20,10 @@ export UNPASS_CACHE_TTL=$((3600 * 24))
 # KiD
 export KID_HOME_DIR=~/DEVELOPPEMENT/REPOS/mydebian
 export BOB_REPOS_DIR=~/DEVELOPPEMENT/BUILD
+
+######################################################
+# Hugging Face
+export HF_HOME=/usr/local/share/llamacpp/huggingface
 
 ######################################################
 # NVIDIA: Disabling executable memory
@@ -48,7 +52,7 @@ PATH="$HOME/.cargo/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 _nvm_current="$(nvm current 2>/dev/null)"
 if [ -n "$_nvm_current" ] && [ "$_nvm_current" != "N/A" ]; then
-  export PATH="$NVM_DIR/versions/node/$_nvm_current/bin:$PATH"
+	export PATH="$NVM_DIR/versions/node/$_nvm_current/bin:$PATH"
 fi
 unset _nvm_current
 
