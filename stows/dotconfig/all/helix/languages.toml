@@ -87,6 +87,43 @@ command = "codebook-lsp"
 args = ["serve"]
 
 ##
+# Harper
+[language-server.harper-ls]
+command = "harper-ls"
+args = ["--stdio"]
+
+[language-server.harper-ls.config.harper-ls]
+diagnosticSeverity = "warning"
+isolateEnglish = true
+dialect = "American"
+maxFileLength = 120000
+ignoredLintsPath = ""
+excludePatterns = []
+
+[language-server.harper-ls.config.harper-ls.linters]
+SpellCheck = true
+SpelledNumbers = false
+AnA = true
+UnclosedQuotes = true
+WrongQuotes = true
+LongSentences = false
+RepeatedWords = true
+Spaces = true
+Matcher = true
+CorrectNumberSuffix = true
+SentenceCapitalization = false
+TodoHypen = false
+OrthographicConsistency = false
+EllipsisLength = false
+
+[language-server.harper-ls.config.harper-ls.codeActions]
+ForceStable = true
+
+[language-server.harper-ls.config.harper-ls.markdown]
+IgnoreLinkTitle = false
+
+
+##
 # BUG: can't make it works
 # textLSP
 # [language-server.text-lsp]
@@ -106,16 +143,31 @@ args = ["serve"]
 # language = "auto:en"
 # txt = { parse = true }
 
-
 ##
-# BUG: can't make it works
-# Spelgud lsp spell check
-# [language-server.spelgud]
-# command = "spelgud"
+# Ltex-ls-plus
+# see: https://ltex-plus.github.io/ltex-plus/settings.html for server options.
+#
+# NOTE: works with ltapiserv-rs too except the proper content
+# type is not sent in the requests.
+# (https://github.com/cpg314/ltapiserv-rs?tab=readme-ov-file#ltex-ls-language-server-protocol-for-markup)
+[language-server.ltex-ls-plus]
+command = "ltex-ls-plus"
+args = ["--no-endless"]
+
+[language-server.ltex-ls-plus.config.ltex]
+"ltex-ls" = { path = "/home/gilles/.local/app/ltex-ls-plus-18.6.1" }
+languageShortCode = "en-US"
+disabledRules = { "en-US" = ["PROFANITY"] }
+dictionary = { "en-US" = ["builtin"] }
+# languageToolHttpServerUri = "http://localhost:8875"
+completionEnabled = true
+checkFrequency = "edit"  # edit | save | manual
+trace.server = "verbose" # off | messages | verbose
 
 
-##
-# Rst - RestructuredText
+##################################################################
+#                  RST - RestructuredText
+##################################################################
 [language-server.esbonio]
 command = "esbonio"
 
@@ -129,16 +181,85 @@ indent = { tab-width = 3, unit = "   " }
 roots = ["pyproject.toml", ".git"]
 language-servers = [{ name = "esbonio" }, { name = "helix" }]
 
-##
-# Rust
-[language-server.rust-analyzer.config.check]
-command = "clippy"
 
-[language-server.rust-analyzer.config.cargo]
-features = "all"
+##################################################################
+#                          Markdown
+##################################################################
+[language-server.iwe]
+command = "iwes"
 
-##
-# Bash
+[[language]]
+name = "markdown"
+scope = "source.markdown"
+injection-regex = "md|markdown"
+file-types = [
+  "md",
+  "livemd",
+  "markdown",
+  "mkd",
+  "mkdn",
+  "mdwn",
+  "mdown",
+  "markdn",
+  "mdtxt",
+  "mdtext",
+  "workbook",
+  { glob = "PULLREQ_EDITMSG" },
+]
+roots = [".rumdl.toml", ".current", ".harper-dictionary.txt"]
+language-servers = [
+  { name = "iwe" },
+  # { name = "markdown-oxide" },
+  { name = "rumdl" },
+  { name = "harper-ls" },
+  { name = "helix" },
+]
+indent = { tab-width = 2, unit = "  " }
+block-comment-tokens = { start = "<!--", end = "-->" }
+word-completion.trigger-length = 3
+formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
+auto-format = true
+
+
+##################################################################
+#                              MDX
+##################################################################
+[[grammar]]
+name = "mdx"
+# source = { git = "https://github.com/parmort/tree-sitter-mdx.git", rev = "413285231ce8fa8b11e7074bbe265b48aa7277f9" }
+source = { git = "https://github.com/srazzak/tree-sitter-mdx.git", rev = "3aa29e8de1bf0213948a04fe953039b6ab73777b" }
+
+[language-server.mdx-lsp]
+command = "mdx-language-server"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.mdx-lsp.config.typescript]
+tsdk = "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib"
+environment = "node"
+enabled = true
+
+[[language]]
+name = "mdx"
+scope = "source.mdx"
+injection-regex = "mdx"
+file-types = ["mdx"]
+language-servers = [
+  { name = "mdx-lsp" },
+  { name = "rumdl" },
+  { name = "harper-ls" },
+  { name = "helix" },
+  { name = "astro-ls" },
+]
+indent = { tab-width = 2, unit = "  " }
+block-comment-tokens = { start = "<!--", end = "-->" }
+word-completion.trigger-length = 3
+formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
+
+
+##################################################################
+#                             Bash
+##################################################################
 [language-server.bash-language-server.config]
 backgroundAnalysisMaxFiles = 1
 includeAllWorkspaceSymbols = true
@@ -148,7 +269,7 @@ shellcheckExternalSources = true
 [[language]]
 name = "bash"
 scope = "source.bash"
-file-types = ["bash", "sh", "bob", "pacstall", "pacscript", "conf"]
+file-types = ["bash", "sh", "bob", "pacstall", "pacscript", "conf", "nb-plugin"]
 language-servers = [
   { name = "bash-language-server", except-features = [
     "format",
@@ -169,9 +290,11 @@ auto-format = true
 "'" = "'"
 '`' = '`'
 
-##
-# SCSS & CSS
-# see https://wkillerud.github.io/some-sass/language-server/settings.html
+
+##################################################################
+#                         SCSS & CSS
+# https://wkillerud.github.io/some-sass/language-server/settings.html
+##################################################################
 [language-server.some-sass]
 command = "some-sass-language-server"
 args = ["--stdio"]
@@ -212,8 +335,9 @@ formatter = { command = "prettier", args = ["--parser=css"] }
 auto-format = true
 
 
-##
-# Typescript
+##################################################################
+#                     Typescript / Javascript
+##################################################################
 [language-server.biome]
 command = "npm"
 args = ["exec", "--no", "--", "biome", "lsp-proxy"]
@@ -293,8 +417,10 @@ language-servers = [
 ]
 indent = { tab-width = 4, unit = "  " }
 
-##
-# Astro
+
+##################################################################
+#                           Astro
+##################################################################
 [language-server.astro-ls]
 command = "astro-ls"
 args = ["--stdio"]
@@ -332,150 +458,20 @@ indent = { tab-width = 4, unit = "    " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 comment-token = "//"
 
-##
-# Ltex-ls-plus
-# see: https://ltex-plus.github.io/ltex-plus/settings.html for server options.
-#
-# NOTE: works with ltapiserv-rs too except the proper content
-# type is not sent in the requests.
-# (https://github.com/cpg314/ltapiserv-rs?tab=readme-ov-file#ltex-ls-language-server-protocol-for-markup)
-[language-server.ltex-ls-plus]
-command = "ltex-ls-plus"
-args = ["--no-endless"]
 
-[language-server.ltex-ls-plus.config.ltex]
-"ltex-ls" = { path = "/home/gilles/.local/app/ltex-ls-plus-18.6.1" }
-languageShortCode = "en-US"
-disabledRules = { "en-US" = ["PROFANITY"] }
-dictionary = { "en-US" = ["builtin"] }
-# languageToolHttpServerUri = "http://localhost:8875"
-completionEnabled = true
-checkFrequency = "edit"  # edit | save | manual
-trace.server = "verbose" # off | messages | verbose
+##################################################################
+#                             Rust
+##################################################################
+[language-server.rust-analyzer.config.check]
+command = "clippy"
+
+[language-server.rust-analyzer.config.cargo]
+features = "all"
 
 
-##
-# Harper
-[language-server.harper-ls]
-command = "harper-ls"
-args = ["--stdio"]
-
-[language-server.harper-ls.config.harper-ls]
-diagnosticSeverity = "warning"
-isolateEnglish = true
-dialect = "American"
-maxFileLength = 120000
-ignoredLintsPath = ""
-excludePatterns = []
-
-[language-server.harper-ls.config.harper-ls.linters]
-SpellCheck = true
-SpelledNumbers = false
-AnA = true
-UnclosedQuotes = true
-WrongQuotes = true
-LongSentences = false
-RepeatedWords = true
-Spaces = true
-Matcher = true
-CorrectNumberSuffix = true
-SentenceCapitalization = false
-TodoHypen = false
-OrthographicConsistency = false
-EllipsisLength = false
-
-[language-server.harper-ls.config.harper-ls.codeActions]
-ForceStable = true
-
-[language-server.harper-ls.config.harper-ls.markdown]
-IgnoreLinkTitle = false
-
-
-##
-# Markdown
-[[language]]
-name = "markdown"
-scope = "source.markdown"
-injection-regex = "md|markdown"
-file-types = [
-  "md",
-  "livemd",
-  "markdown",
-  "mkd",
-  "mkdn",
-  "mdwn",
-  "mdown",
-  "markdn",
-  "mdtxt",
-  "mdtext",
-  "workbook",
-  { glob = "PULLREQ_EDITMSG" },
-]
-language-servers = [
-  { name = "markdown-oxide" },
-  { name = "rumdl" },
-  { name = "harper-ls" },
-  { name = "helix" },
-]
-indent = { tab-width = 2, unit = "  " }
-block-comment-tokens = { start = "<!--", end = "-->" }
-word-completion.trigger-length = 3
-formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
-
-##
-# MDX
-[[grammar]]
-name = "mdx"
-# source = { git = "https://github.com/parmort/tree-sitter-mdx.git", rev = "413285231ce8fa8b11e7074bbe265b48aa7277f9" }
-source = { git = "https://github.com/srazzak/tree-sitter-mdx.git", rev = "3aa29e8de1bf0213948a04fe953039b6ab73777b" }
-
-[language-server.mdx-lsp]
-command = "mdx-language-server"
-args = ["--stdio"]
-config.hostInfo = "helix"
-
-[language-server.mdx-lsp.config.typescript]
-tsdk = "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib"
-environment = "node"
-enabled = true
-
-[[language]]
-name = "mdx"
-scope = "source.mdx"
-injection-regex = "mdx"
-file-types = ["mdx"]
-language-servers = [
-  { name = "mdx-lsp" },
-  { name = "rumdl" },
-  { name = "harper-ls" },
-  { name = "helix" },
-  { name = "astro-ls" },
-]
-indent = { tab-width = 2, unit = "  " }
-block-comment-tokens = { start = "<!--", end = "-->" }
-word-completion.trigger-length = 3
-formatter = { command = "rumdl", args = ["check", "--fix", "--stdin"] }
-
-
-##
-# Yaml
-[language-server.yaml-language-server]
-command = "yaml-language-server"
-args = ["--stdio"]
-
-[language-server.yaml-language-server.config.yaml]
-validate = true
-hover = true
-completion = true
-schema = true
-format = { enable = true }
-
-[[language]]
-name = "yaml"
-language-servers = ["yaml-language-server", "helix"]
-
-##
-# Python
+##################################################################
+#                           Python
+##################################################################
 [language-server.ty]
 command = "ty"
 environment = { "LC_ALL" = "en_US", "LANGUAGE" = "en-us", "LANG" = "en_US" }
@@ -642,9 +638,9 @@ diagnostic-severity = "hint"
 # args = { program = "{0}", runInTerminal = true }
 
 
-##
-# Cython
-#
+##################################################################
+#                          Cython
+##################################################################
 # [[grammar]]
 # name = "cython"
 # # source = { git = "https://github.com/b0o/tree-sitter-cython", rev = "62f44f5e7e41dde03c5f0a05f035e293bcf2bcf8" }
@@ -661,9 +657,9 @@ indent = { tab-width = 4, unit = "    " }
 language-servers = [{ name = "helix" }, { name = "harper-ls" }]
 
 
-##
-# TOML
-#
+##################################################################
+#                           TOML
+##################################################################
 [language-server.taplo]
 command = "taplo"
 args = ["lsp", "tcp"]
@@ -678,8 +674,28 @@ language-servers = [{ name = "taplo" }, { name = "helix" }]
 formatter = { command = "taplo", args = ["format", "-"] }
 
 
-##
-# Json
+##################################################################
+#                           Yaml
+##################################################################
+[language-server.yaml-language-server]
+command = "yaml-language-server"
+args = ["--stdio"]
+
+[language-server.yaml-language-server.config.yaml]
+validate = true
+hover = true
+completion = true
+schema = true
+format = { enable = true }
+
+[[language]]
+name = "yaml"
+language-servers = ["yaml-language-server", "helix"]
+
+
+##################################################################
+#                            Json
+##################################################################
 [language-server.vscode-json-language-server]
 command = "vscode-json-language-server"
 args = ["--stdio"]

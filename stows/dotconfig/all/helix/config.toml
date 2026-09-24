@@ -186,6 +186,7 @@ C-down = ["delete_selection", "paste_after"]
 "d" = [ # dict
   ":sh dict %{selection}",
 ]
+"b" = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 
 [keys.normal."'"]
 "/" = ":config-reload"
