@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/rgwood/systemctl-tui.git
+PROGRAM=systemctl-tui
+PKG_NAME='systemctl-tui'
+DESC='A fast, simple TUI for interacting with systemd services and their logs'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
