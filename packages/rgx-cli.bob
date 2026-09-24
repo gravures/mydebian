@@ -1,0 +1,13 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/brevity1swos/rgx.git
+PROGRAM=rgx
+PKG_NAME='rgx-cli'
+DESC='regex101 for the terminal — real-time matching, 3 engines, capture groups, replace mode, syntax highlighting, plain-English explanations, undo/redo, mouse support. Written in Rust.'
+LICENSE=(Apache-2.0 MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+unset LOCKED
