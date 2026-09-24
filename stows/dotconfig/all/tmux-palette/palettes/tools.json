@@ -1,0 +1,89 @@
+{
+    "title": "Toolset",
+    "items": [
+        {
+            "icon": "",
+            "title": "Nb",
+            "category": "Tools",
+            "action": { "popup": "nb shell" }
+        },
+        {
+            "icon": "",
+            "title": "Aerc",
+            "category": "Tools",
+            "action": { "popup": "aerc" }
+        },
+        {
+            "icon": "",
+            "title": "Neomutt",
+            "category": "Tools",
+            "action": { "popup": "neomutt" }
+        },
+        {
+            "icon": "",
+            "title": "QMan",
+            "category": "Tools",
+            "action": { "popup": "env TERM=xterm-ghostty qman" }
+        },
+        {
+            "icon": "",
+            "title": "Lazygit",
+            "category": "Tools",
+            "action": { "popup": "lazygit" }
+        },
+        {
+            "icon": "",
+            "title": "Dash",
+            "category": "Tools",
+            "action": { "popup": "gh dash" }
+        },
+        {
+            "icon": "",
+            "title": "Diffnav",
+            "category": "Tools",
+            "action": { "popup": "diffnav" }
+        },
+        {
+            "icon": "",
+            "title": "CodeReview",
+            "category": "Tools",
+            "action": { "popup": "tuicr" }
+        },
+        {
+            "icon": "",
+            "title": "Regex",
+            "category": "Tools",
+            "action": { "popup": "rgx --vim" }
+        },
+        {
+            "icon": "",
+            "title": "Fcm",
+            "category": "Tools",
+            "action": { "popup": "free-coding-models" }
+        },
+        {
+            "icon": "",
+            "title": "Aptui",
+            "category": "Tools",
+            "action": { "popup": "aptui" }
+        },
+        {
+            "icon": "",
+            "title": "Btop",
+            "category": "Tools",
+            "action": { "popup": "btop" }
+        },
+        {
+            "icon": "",
+            "title": "Dua",
+            "category": "Tools",
+            "action": { "popup": "disk" }
+        },
+        {
+            "icon": "",
+            "title": "Systemd Manager",
+            "category": "Tools",
+            "action": { "popup": "systemctl-tui" }
+        }
+    ]
+}
