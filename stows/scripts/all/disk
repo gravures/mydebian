@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#
+# Fzf volumes picker for running <dua> command
+
+function main() {
+	lsblk -l -o NAME,FSSIZE,FSUSE%,FSAVAIL,MOUNTPOINT -x FSUSE% | rg --color=never -v "SWAP|nvme" |
+		fzf --ansi --disabled \
+			--no-input \
+			--layout reverse \
+			--tac \
+			--cycle \
+			--gap \
+			--header-lines 1 \
+			--header-border line \
+			--header-first \
+			--no-sort \
+			--delimiter "\s+" \
+			--bind "enter:become(/usr/local/bin/dua interactive {5})" \
+			--bind "q:abort"
+}
+
+main "$@"
