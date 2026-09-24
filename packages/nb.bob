@@ -1,0 +1,22 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO="https://github.com/xwmx/nb.git"
+PROGRAM="nb"
+PKG_NAME='nb'
+DESC='CLI and local web plain text note‑taking, bookmarking, and archiving with linking, tagging, filtering, search, Git versioning & syncing, Pandoc conversion, + more, in a single portable script.'
+LICENSE=(AGPL-3.0)
+BUILD_DEPS=()
+RUNTIME_DEPS=(bash git)
+
+function prepare() { return 0; }
+function build() { return 0; }
+function package() {
+	install -D -t "${PKG_DIR}${PREFIX}/bin" ./nb
+	install -D -t "${PKG_DIR}${PREFIX}/bin" ./bin/bookmark
+	install -D -t "${PKG_DIR}${PREFIX}/etc/bash_completion.d" ./etc/nb-completion.bash
+	install -D -t "${PKG_DIR}${PREFIX}/etc/fish" ./etc/nb-completion.fish
+	install -D -t "${PKG_DIR}${PREFIX}/etc/zsh" ./etc/nb-completion.zsh
+}
+function clean() { return 0; }
