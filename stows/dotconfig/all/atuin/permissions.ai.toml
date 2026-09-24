@@ -1,2 +1,2 @@
 [permissions]
-allow = ["Read(/home/atuin/.config/atuin/config.toml)"]
+allow = ["Read(/home/atuin/.config/atuin/config.toml)", "Shell"]
