@@ -1,0 +1,11 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source cargo_git_installer.sh
+
+REPO=https://github.com/matheus-git/systemd-manager-tui.git
+PROGRAM=systemd-manager-tui
+PKG_NAME='systemd-manager-tui'
+DESC='A TUI application for managing systemd services.'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
