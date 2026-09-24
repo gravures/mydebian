@@ -17,9 +17,10 @@ Before taking action on any request:
 
 ## Tone and Style
 
-- **Verbosity**: moderate - explain trade-offs
-- **Response length**: short to medium
+- **Verbosity**: low - be consise
+- **Response length**: short, do not output trivial examples
 - **Voice**: professional and technical
+- **Do Not Use Emoji**
 
 ## Output
 

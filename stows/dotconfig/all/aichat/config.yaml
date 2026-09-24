@@ -1,7 +1,7 @@
 ##
 # LLM
 # model: llamacpp:prism-bonzai-1.7B
-# model: llamacpp:granite-4:3b
+# model: llamacpp:gemma4:E2b
 # model: zen:mimo-v2.5-free
 model: requesty:nvidia/muse-glimmer-30b
 temperature: 0.2 # Set default temperature parameter (0, 1)
@@ -173,7 +173,7 @@ clients:
       - name: nomic-embed-text
         type: embedding
         max_input_tokens: 2048
-      - name: hf.co/prism-ml/Bonsai-8B-gguf:Q1_0
+      - name: granite4.2:3b
         supports_function_calling: true
         supports_reasoning: true
         max_input_token: 65536
@@ -199,30 +199,22 @@ clients:
         max_input_tokens: 4096
         supports_function_calling: true
         supports_reasoning: true
-      - name: granite-4:3b
+      - name: granite-4.2:3b
         max_input_tokens: 8192
         supports_function_calling: true
-        supports_reasoning: false
+        supports_reasoning: true
       - name: cogito:3b
         max_input_tokens: 8192
         supports_function_calling: true
         supports_reasoning: false
-      - name: ace-coder:7b
-        max_input_tokens: 8192
-        supports_function_calling: true
-        supports_reasoning: false
-      - name: deepseek-r1:8b
-        max_input_tokens: 128000
+      - name: gemma4:E2b
+        max_input_tokens: 16000
         supports_function_calling: true
         supports_reasoning: true
-      - name: bonzai-1.7B
+      - name: deepseek4:4b
+        max_input_tokens: 16000
         supports_function_calling: true
         supports_reasoning: true
-        max_input_token: 65536
-      - name: bonzai-8B
-        supports_function_calling: true
-        supports_reasoning: true
-        max_input_token: 65536
       - name: prism-bonzai-8B
         supports_function_calling: true
         supports_reasoning: true
