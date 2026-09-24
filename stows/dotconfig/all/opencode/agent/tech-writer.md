@@ -7,7 +7,7 @@ permission:
     skill: allow
     context7: ask
     gh-grep: deny
-
+    grepai: allow
     question: allow
     read: allow
     grep: allow
@@ -17,7 +17,6 @@ permission:
     todoread: deny
     todowrite: deny
     bash: deny
-    codesearch: allow
     websearch: allow
     webfetch: allow
     edit: allow

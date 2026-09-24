@@ -14,24 +14,28 @@ description: >-
 mode: all
 temperature: 0.8
 permission:
-    task: deny
-    context7: ask
-    gh-grep: ask
-    question: allow
-    read: allow
-    grep: allow
-    lsp: allow
-    glob: allow
-    list: allow
-    todoread: allow
-    todowrite: deny
-    bash: allow
-    codesearch: allow
-    websearch: allow
-    webfetch: allow
-    edit: ask
-    write: ask
-    patch: ask
+  task:
+    "*": deny
+    integrator: ask
+    explore: allow
+    scout: allow
+  context7: ask
+  gh-grep: ask
+  grepai: allow
+  question: allow
+  read: allow
+  grep: allow
+  lsp: allow
+  glob: allow
+  list: allow
+  todoread: allow
+  todowrite: deny
+  bash: allow
+  websearch: allow
+  webfetch: allow
+  edit: ask
+  write: ask
+  patch: ask
 ---
 
 You are an expert debugging strategist specializing in work-in-progress

@@ -96,6 +96,17 @@
         "display_thinking": "none"
     },
     "diff_style": "auto",
+    "cursor": {
+        "style": "line",
+        "blinking": true
+    },
     "mouse": true,
-    "scroll_acceleration": { "enabled": true }
+    "scroll_acceleration": { "enabled": true },
+    "attention": {
+        "enabled": true,
+        "notifications": true,
+        "sound": false,
+        "volume": 0.4,
+        "sound_pack": "opencode.default"
+    }
 }

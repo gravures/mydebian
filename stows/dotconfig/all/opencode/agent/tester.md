@@ -61,7 +61,6 @@ permission:
       "testing-*": allow
     context7: ask
     gh-grep: deny
-
     question: allow
     read: allow
     grep: allow

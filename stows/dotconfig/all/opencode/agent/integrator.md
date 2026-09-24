@@ -27,7 +27,7 @@ description: >-
   user: "Add a method to calculate pagination offsets in the database utils
   module"
 
-  assistant: "I'll use the @integration-developer agent to add the method
+  assistant: "I'll use the @integrator agent to add the method
   following the existing code patterns."
 
   <commentary> This is a precise, well-scoped implementation task.
@@ -52,14 +52,13 @@ description: >-
 
   </example>
 mode: subagent
-maxSteps: 50
+steps: 50
 temperature: 0.3
 permission:
   task: deny
   skill: allow
   context7: ask
   gh-grep: ask
-
   question: allow
   read: allow
   grep: allow
@@ -69,7 +68,6 @@ permission:
   todoread: allow
   todowrite: deny
   bash: allow
-  codesearch: allow
   websearch: allow
   webfetch: allow
   edit: allow
@@ -141,6 +139,7 @@ Before implementing, ensure you understand the task completely:
 - Provide clear diffs when modifying existing files
 - Include file paths for all changes
 - Flag any ambiguities in the delegation before implementing
+- IMPORTANT: DO NOT ADD ***ANY*** COMMENTS unless asked
 
 ## Self-Correction Protocol
 

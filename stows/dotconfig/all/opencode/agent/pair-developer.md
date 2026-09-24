@@ -17,10 +17,12 @@ temperature: 0.5
 permission:
   task:
     "*": deny
-    Integration-developer: allow
+    analyzer: allow
+    integrator: allow
+    tech-writter: allow
   context7: ask
   gh-grep: ask
-
+  grepai: allow
   question: allow
   read: allow
   grep: allow
@@ -30,7 +32,6 @@ permission:
   todoread: allow
   todowrite: allow
   bash: ask
-  codesearch: allow
   websearch: allow
   webfetch: allow
   edit: deny
