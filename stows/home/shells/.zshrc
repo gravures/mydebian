@@ -82,13 +82,20 @@ source /usr/local/share/fzf-help/fzf-help.zsh
 zle -N fzf-help-widget
 bindkey "^H" fzf-help-widget
 
+export DEJA_CYCLE_KEY='^[[Z'        # shift+TAB
+export DEJA_CYCLE_FUZZY_KEY=''      # Shift+→ → next fuzzy preset
+export DEJA_CYCLE_FUZZY_BACK_KEY='' # Shift+← → previous fuzzy preset
+export DEJA_TOGGLE_EMPTY_KEY=''     # Shift+↑ → flip empty-prompt suggestions
+export DEJA_WORD_ACCEPT_KEY=''
+
 plugins=(
 	romkatv/zsh-defer
 	zsh-users/zsh-completions
 	# multirious/zsh-helix-mode
 	zdharma-continuum/fast-syntax-highlighting
 	zsh-users/zsh-history-substring-search
-	zsh-users/zsh-autosuggestions
+	# zsh-users/zsh-autosuggestions
+	Giammarco-Ferranti/deja
 )
 plugin::load $plugins
 

@@ -1,0 +1,30 @@
+# NOTE: This script not handle installations of GPU needed component.
+#
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/github_tarball_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/Giammarco-Ferranti/deja.git
+PKG_NAME=zsh-deja
+PROGRAM=deja
+DESC='Predictive inline shell autosuggestions for zsh. Go daemon, no TUI, no sync'
+LICENSE=(MIT)
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+function prepare() {
+	return
+}
+
+function build() {
+	make build
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mv -t "${PKG_DIR}${PREFIX}"/bin ./bin/deja
+}
+
+function clean() {
+	make clean
+}
