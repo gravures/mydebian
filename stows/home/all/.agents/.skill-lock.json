@@ -97,6 +97,91 @@
       "skillFolderHash": "d4423edc4984d5ad36d6ad5bbae865b49e01c423",
       "installedAt": "2026-09-02T16:01:24.736Z",
       "updatedAt": "2026-09-02T16:01:24.736Z"
+    },
+    "electron": {
+      "source": "hairyf/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hairyf/skills.git",
+      "skillPath": "skills/electron/SKILL.md",
+      "skillFolderHash": "4cd926e7d7568ae0d6dfa3870216d3b752ffd39e",
+      "installedAt": "2026-10-03T12:18:47.229Z",
+      "updatedAt": "2026-10-03T12:18:47.229Z"
+    },
+    "mojo-syntax": {
+      "source": "modular/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/modular/skills.git",
+      "skillPath": "mojo-syntax/SKILL.md",
+      "skillFolderHash": "1753ba3e0823cba2738cd9974daca57df132ad15",
+      "pluginName": "mojo-skills",
+      "installedAt": "2026-10-03T12:25:43.119Z",
+      "updatedAt": "2026-10-03T12:25:43.119Z"
+    },
+    "mojo-gpu-fundamentals": {
+      "source": "modular/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/modular/skills.git",
+      "skillPath": "mojo-gpu-fundamentals/SKILL.md",
+      "skillFolderHash": "dd62402c25363aeb1577c643bf5031b1e4099ce2",
+      "pluginName": "mojo-skills",
+      "installedAt": "2026-10-03T12:26:23.427Z",
+      "updatedAt": "2026-10-03T12:26:23.427Z"
+    },
+    "mojo-python-interop": {
+      "source": "modular/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/modular/skills.git",
+      "skillPath": "mojo-python-interop/SKILL.md",
+      "skillFolderHash": "ac056bb5f5113ed7400e47ea51527e10f916e770",
+      "pluginName": "mojo-skills",
+      "installedAt": "2026-10-03T12:26:59.618Z",
+      "updatedAt": "2026-10-03T12:26:59.618Z"
+    },
+    "rust-best-practices": {
+      "source": "apollographql/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/apollographql/skills.git",
+      "skillPath": "skills/rust-best-practices/SKILL.md",
+      "skillFolderHash": "b641cd05036ae1833560f3ea3072028e8efa7cae",
+      "installedAt": "2026-10-03T12:32:13.479Z",
+      "updatedAt": "2026-10-03T12:32:13.479Z"
+    },
+    "rust-unsafe": {
+      "source": "mohitmishra786/low-level-dev-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mohitmishra786/low-level-dev-skills.git",
+      "skillPath": "skills/rust/rust-unsafe/SKILL.md",
+      "skillFolderHash": "aca21a860a7d3f43baaab1a5e3ac4012a5d0b87c",
+      "installedAt": "2026-10-03T12:34:03.715Z",
+      "updatedAt": "2026-10-03T12:34:03.715Z"
+    },
+    "bun": {
+      "source": "midudev/autoskills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/midudev/autoskills.git",
+      "skillPath": "packages/autoskills/skills-registry/bun/SKILL.md",
+      "skillFolderHash": "92f4d6de34a3e8c75b955f1bc411220e0e52b840",
+      "installedAt": "2026-10-03T12:41:37.274Z",
+      "updatedAt": "2026-10-03T12:41:37.274Z"
+    },
+    "typescript": {
+      "source": "sentimony/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/sentimony/skills.git",
+      "skillPath": "skills/typescript/SKILL.md",
+      "skillFolderHash": "f272b53ebd124a6a183670eaba79cac4ac594eb8",
+      "pluginName": "skills",
+      "installedAt": "2026-10-03T12:54:28.267Z",
+      "updatedAt": "2026-10-03T12:54:28.267Z"
+    },
+    "github-actions-docs": {
+      "source": "xixu-me/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/xixu-me/skills.git",
+      "skillPath": "skills/github-actions-docs/SKILL.md",
+      "skillFolderHash": "518c85da555f91c346813aa5bb3cc62f9db8bfb3",
+      "installedAt": "2026-10-03T13:23:34.233Z",
+      "updatedAt": "2026-10-03T13:23:34.233Z"
     }
   },
   "dismissed": {
@@ -104,14 +189,13 @@
   },
   "lastSelectedAgents": [
     "amp",
-    "antigravity",
-    "antigravity-cli",
     "cline",
     "codex",
     "cursor",
-    "deepagents",
+    "droid",
     "gemini-cli",
     "github-copilot",
+    "kilo",
     "kimi-code-cli",
     "opencode",
     "warp",
