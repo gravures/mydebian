@@ -4,19 +4,36 @@ description: >
   Use webfetch, websearch, and context7 for remote docs. Delegates
   local codebase and graph queries to the search agent.
 mode: all
-disable: true
+disabled: true
 steps: 25
-temperature: 0.1
-permission:
-  "*": deny
-  task:
-    "*": deny
-    search: allow
-  edit: deny
-  context7: allow
-  cbm_list_projects: allow
-  webfetch: allow
-  websearch: allow
+request:
+  body:
+    temperature: 0.1
+permissions:
+  - action: "*"
+    resource: "*"
+    effect: deny
+  - action: "subagent"
+    resource: "*"
+    effect: deny
+  - action: "subagent"
+    resource: "search"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: deny
+  - action: "context7"
+    resource: "*"
+    effect: allow
+  - action: "cbm_list_projects"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "websearch"
+    resource: "*"
+    effect: allow
 ---
 
 You are a dependency researcher. You investigate external libraries, read upstream source code, and cross-reference local code against external implementations — without modifying anything.

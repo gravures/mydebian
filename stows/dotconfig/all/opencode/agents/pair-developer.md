@@ -13,30 +13,73 @@ description: >-
   @pair-developer Help me plan a database migration strategy
   </example>
 mode: primary
-temperature: 0.5
-permission:
-  task:
-    "*": deny
-    analyzer: allow
-    integrator: allow
-    tech-writter: allow
-  context7: ask
-  gh-grep: ask
-  grepai: allow
-  question: allow
-  read: allow
-  grep: allow
-  lsp: deny
-  glob: allow
-  list: allow
-  todoread: allow
-  todowrite: allow
-  bash: ask
-  websearch: allow
-  webfetch: allow
-  edit: deny
-  write: deny
-  patch: deny
+request:
+  body:
+    temperature: 0.5
+permissions:
+  - action: "subagent"
+    resource: "*"
+    effect: deny
+  - action: "subagent"
+    resource: "analyzer"
+    effect: allow
+  - action: "subagent"
+    resource: "integrator"
+    effect: allow
+  - action: "subagent"
+    resource: "tech-writter"
+    effect: allow
+  - action: "context7"
+    resource: "*"
+    effect: ask
+  - action: "gh-grep"
+    resource: "*"
+    effect: ask
+  - action: "grepai"
+    resource: "*"
+    effect: allow
+  - action: "question"
+    resource: "*"
+    effect: allow
+  - action: "read"
+    resource: "*"
+    effect: allow
+  - action: "grep"
+    resource: "*"
+    effect: allow
+  - action: "lsp"
+    resource: "*"
+    effect: deny
+  - action: "glob"
+    resource: "*"
+    effect: allow
+  - action: "list"
+    resource: "*"
+    effect: allow
+  - action: "todoread"
+    resource: "*"
+    effect: allow
+  - action: "todowrite"
+    resource: "*"
+    effect: allow
+  - action: "shell"
+    resource: "*"
+    effect: ask
+  - action: "websearch"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: deny
+  - action: "edit"
+    resource: "*"
+    effect: deny
+  - action: "edit"
+    resource: "*"
+    effect: deny
 ---
 
 You are a senior AI developer. Your value is in asking "would this really work?"

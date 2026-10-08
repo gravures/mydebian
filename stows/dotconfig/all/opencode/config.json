@@ -1,52 +1,68 @@
 {
     "$schema": "https://opencode.ai/config.json",
-    "autoshare": false,
-    "autoupdate": true,
-    "plugin": [ "@dietrichgebert/ponytail" ],
-    "permission": {
-        "external_directory": {
-            "~/.config/opencode/paul-framework/**": "allow",
-            "~/.config/opencode/instructions/**": "allow"
+    "share": "disabled",
+    "update": "auto",
+    "plugins": [ "@dietrichgebert/ponytail" ],
+    "permissions": [
+        {
+            "action": "external_directory",
+            "resource": "~/.config/opencode/paul-framework/**",
+            "effect": "allow"
         },
-        "edit": {
-            "~/.config/opencode/paul-framework/**": "deny",
-            "~/.config/opencode/instructions/**": "deny"
+        {
+            "action": "external_directory",
+            "resource": "~/.config/opencode/instructions/**",
+            "effect": "allow"
+        },
+        {
+            "action": "edit",
+            "resource": "~/.config/opencode/paul-framework/**",
+            "effect": "deny"
+        },
+        {
+            "action": "edit",
+            "resource": "~/.config/opencode/instructions/**",
+            "effect": "deny"
         }
-    },
+    ],
     "instructions": [ ],
     "mcp": {
-        "cbm": {
-            "type": "local",
-            "command": [ "/home/gilles/.local/bin/codebase-memory-mcp" ],
-            "enabled": true
-        },
-        "astro": {
-            "type": "remote",
-            "url": "https://mcp.docs.astro.build/mcp",
-            "enabled": false
-        },
-        "context7": {
-            "type": "remote",
-            "url": "https://mcp.context7.com/mcp",
-            "enabled": false
+        "servers": {
+            "cbm": {
+                "type": "local",
+                "command": [ "/home/gilles/.local/bin/codebase-memory-mcp" ],
+                "disabled": false
+            },
+            "astro": {
+                "type": "remote",
+                "url": "https://mcp.docs.astro.build/mcp",
+                "disabled": true
+            },
+            "context7": {
+                "type": "remote",
+                "url": "https://mcp.context7.com/mcp",
+                "disabled": true
+            }
         }
     },
     "default_agent": "chat",
-    "agent": {
+    "agents": {
         "build": {
-            "prompt": "file:./instructions/BUILD.md",
-            "permission": {
-                "task": {
-                    "*": "allow",
-                    "tester": "ask",
-                    "tech-writer": "ask",
-                    "analyzer": "ask"
-                }
-            }
+            "system": "",
+            "permissions": [
+                { "action": "subagent", "resource": "*", "effect": "allow" },
+                { "action": "subagent", "resource": "tester", "effect": "ask" },
+                { "action": "subagent", "resource": "tech-writer", "effect": "ask" },
+                { "action": "subagent", "resource": "analyzer", "effect": "ask" }
+            ]
         },
         "plan": {
-            "temperature": 0.2,
-            "disable": true
+            "request": {
+                "body": {
+                    "temperature": 0.2
+                }
+            },
+            "disabled": true
         }
     },
     "lsp": {
@@ -140,11 +156,13 @@
             }
         }
     },
-    "provider": {
+    "providers": {
         "requesty": {
             "name": "Requesty AI",
-            "npm": "@ai-sdk/openai-compatible",
-            "api": "https://router.requesty.ai/v1",
+            "package": "aisdk:@ai-sdk/openai-compatible",
+            "settings": {
+                "baseURL": "https://router.requesty.ai/v1"
+            },
             "models": {
                 "google/gemma-4-31b-it": {
                     "name": "Gemma-4[free]"
@@ -156,34 +174,35 @@
         },
         "google": {
             "name": "Google",
-            "npm": "@ai-sdk/openai-compatible",
-            "api": "https://generativelanguage.googleapis.com/v1beta/openai",
+            "package": "aisdk:@ai-sdk/openai-compatible",
+            "settings": {
+                "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai"
+            },
             "models": {
                 "gemini-2.5-pro": {
                     "name": "Gemini Pro(Free)",
-                    "attachment": false,
-                    "temperature": true,
-                    "reasoning": true,
-                    "tool_call": true,
+                    "capabilities": {
+                        "tools": true,
+                        "input": [ "text" ],
+                        "output": [ "text" ]
+                    },
                     "limit": {
                         "context": 131072,
                         "output": 131072
-                    },
-                    "modalities": {
-                        "input": [ "text" ],
-                        "output": [ "text" ]
                     }
                 }
             }
         },
         "openrouter": {
             "name": "MyOpenRouter",
-            "npm": "@ai-sdk/openai-compatible",
-            "api": "https://openrouter.ai/api/v1",
+            "package": "aisdk:@ai-sdk/openai-compatible",
+            "settings": {
+                "baseURL": "https://openrouter.ai/api/v1"
+            },
             "models": {
                 "z-ai/glm-4.5-air:free": {
                     "name": "Glm-4.5[free]",
-                    "options": {
+                    "settings": {
                         "provider": {
                             "only": [ "z-ai" ]
                         }
@@ -191,7 +210,7 @@
                 },
                 "qwen/qwen3-coder:free": {
                     "name": "Qwen3-Coder[free]",
-                    "options": {
+                    "settings": {
                         "provider": {
                             "only": [ "venice/beta" ]
                         }
@@ -202,43 +221,25 @@
                 }
             }
         },
-        "ollama": {
-            "npm": "@ai-sdk/openai-compatible",
-            "options": {
-                "baseURL": "http://127.0.0.1:11434/v1"
-            },
-            "models": {
-                "glm-4.7:cloud": {
-                    "name": "glm[free]",
-                    "temperature": true,
-                    "reasoning": true,
-                    "tool_call": true,
-                    "limit": {
-                        "context": 202752,
-                        "output": 65000
-                    }
-                }
-            }
-        },
         "llamacpp": {
-            "npm": "@ai-sdk/openai-compatible",
-            "options": {
+            "package": "aisdk:@ai-sdk/openai-compatible",
+            "settings": {
                 "baseURL": "http://127.0.0.1:9999/v1"
             },
             "models": {
                 "deepseek4:4b": {
-                    "temperature": true,
-                    "reasoning": true,
-                    "tool_call": true,
+                    "capabilities": {
+                        "tools": true
+                    },
                     "limit": {
                         "context": 16000,
                         "output": 16000
                     }
                 },
                 "gemma4:E2b": {
-                    "temperature": true,
-                    "reasoning": true,
-                    "tool_call": true,
+                    "capabilities": {
+                        "tools": true
+                    },
                     "limit": {
                         "context": 16000,
                         "output": 16000
@@ -246,14 +247,14 @@
                 },
                 "granite3.3:2b": {
                     "name": "granite:2b",
-                    "temperature": true,
-                    "reasoning": true,
-                    "tool_call": true,
+                    "capabilities": {
+                        "tools": true
+                    },
                     "limit": {
                         "context": 16384,
                         "output": 16384
                     },
-                    "options": {
+                    "settings": {
                         "messages": [
                             { "role": "control", "content": "thinking" }
                         ]
@@ -261,14 +262,12 @@
                 },
                 "granite-code:3b": {
                     "name": "granite-code:3b",
-                    "temperature": true,
-                    "reasoning": false,
-                    "tool_call": false,
+                    "capabilities": {
+                        "tools": false
+                    },
                     "limit": {
                         "context": 8192,
                         "output": 8192
-                    },
-                    "options": {
                     }
                 }
             }

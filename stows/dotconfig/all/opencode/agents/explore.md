@@ -9,19 +9,37 @@ description: >
   comprehensive analysis across multiple locations and naming conventions.
 mode: all
 steps: 10
-temperature: 0.1
-permission:
-  "*": deny
-  skill:
-    "*": deny
-  cbm_*: allow
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  bash: allow
-  external_directory:
-    "*": ask
+request:
+  body:
+    temperature: 0.1
+permissions:
+  - action: "*"
+    resource: "*"
+    effect: deny
+  - action: "skill"
+    resource: "*"
+    effect: deny
+  - action: "cbm_*"
+    resource: "*"
+    effect: allow
+  - action: "read"
+    resource: "*"
+    effect: allow
+  - action: "grep"
+    resource: "*"
+    effect: allow
+  - action: "glob"
+    resource: "*"
+    effect: allow
+  - action: "list"
+    resource: "*"
+    effect: allow
+  - action: "shell"
+    resource: "*"
+    effect: allow
+  - action: "external_directory"
+    resource: "*"
+    effect: ask
 ---
 
 You are a codebase search specialist. You excel at navigating and exploring codebases,

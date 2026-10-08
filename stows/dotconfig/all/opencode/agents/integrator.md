@@ -53,26 +53,64 @@ description: >-
   </example>
 mode: subagent
 steps: 50
-temperature: 0.3
-permission:
-  task: deny
-  skill: allow
-  context7: ask
-  gh-grep: ask
-  question: allow
-  read: allow
-  grep: allow
-  lsp: allow
-  glob: allow
-  list: allow
-  todoread: allow
-  todowrite: deny
-  bash: allow
-  websearch: allow
-  webfetch: allow
-  edit: allow
-  write: allow
-  patch: allow
+request:
+  body:
+    temperature: 0.3
+permissions:
+  - action: "subagent"
+    resource: "*"
+    effect: deny
+  - action: "skill"
+    resource: "*"
+    effect: allow
+  - action: "context7"
+    resource: "*"
+    effect: ask
+  - action: "gh-grep"
+    resource: "*"
+    effect: ask
+  - action: "question"
+    resource: "*"
+    effect: allow
+  - action: "read"
+    resource: "*"
+    effect: allow
+  - action: "grep"
+    resource: "*"
+    effect: allow
+  - action: "lsp"
+    resource: "*"
+    effect: allow
+  - action: "glob"
+    resource: "*"
+    effect: allow
+  - action: "list"
+    resource: "*"
+    effect: allow
+  - action: "todoread"
+    resource: "*"
+    effect: allow
+  - action: "todowrite"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "*"
+    effect: allow
+  - action: "websearch"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: allow
 ---
 
 You are an Implementation Specialist — a disciplined developer who executes

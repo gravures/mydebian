@@ -53,29 +53,70 @@ description: >-
 
       </example>
 mode: all
-temperature: 0.1
-permission:
-    task: deny
-    skill:
-      "*": ask
-      "testing-*": allow
-    context7: ask
-    gh-grep: deny
-    question: allow
-    read: allow
-    grep: allow
-    lsp: allow
-    glob: allow
-    list: allow
-    todoread: allow
-    todowrite: deny
-    bash: allow
-    codesearch: allow
-    websearch: allow
-    webfetch: allow
-    edit: allow
-    write: allow
-    patch: deny
+request:
+  body:
+    temperature: 0.1
+permissions:
+  - action: "subagent"
+    resource: "*"
+    effect: deny
+  - action: "skill"
+    resource: "*"
+    effect: ask
+  - action: "skill"
+    resource: "testing-*"
+    effect: allow
+  - action: "context7"
+    resource: "*"
+    effect: ask
+  - action: "gh-grep"
+    resource: "*"
+    effect: deny
+  - action: "question"
+    resource: "*"
+    effect: allow
+  - action: "read"
+    resource: "*"
+    effect: allow
+  - action: "grep"
+    resource: "*"
+    effect: allow
+  - action: "lsp"
+    resource: "*"
+    effect: allow
+  - action: "glob"
+    resource: "*"
+    effect: allow
+  - action: "list"
+    resource: "*"
+    effect: allow
+  - action: "todoread"
+    resource: "*"
+    effect: allow
+  - action: "todowrite"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "*"
+    effect: allow
+  - action: "codesearch"
+    resource: "*"
+    effect: allow
+  - action: "websearch"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: deny
 ---
 
 You are a Senior Developer with deep expertise in software testing and writing robust tests.

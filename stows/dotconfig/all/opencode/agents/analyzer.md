@@ -12,30 +12,73 @@ description: >-
   current approach is optimal, use the Task tool to launch progress-debugger to
   explore alternative implementations.
 mode: all
-temperature: 0.8
-permission:
-  task:
-    "*": deny
-    integrator: ask
-    explore: allow
-    scout: allow
-  context7: ask
-  gh-grep: ask
-  grepai: allow
-  question: allow
-  read: allow
-  grep: allow
-  lsp: allow
-  glob: allow
-  list: allow
-  todoread: allow
-  todowrite: deny
-  bash: allow
-  websearch: allow
-  webfetch: allow
-  edit: ask
-  write: ask
-  patch: ask
+request:
+  body:
+    temperature: 0.8
+permissions:
+  - action: "subagent"
+    resource: "*"
+    effect: deny
+  - action: "subagent"
+    resource: "integrator"
+    effect: ask
+  - action: "subagent"
+    resource: "explore"
+    effect: allow
+  - action: "subagent"
+    resource: "scout"
+    effect: allow
+  - action: "context7"
+    resource: "*"
+    effect: ask
+  - action: "gh-grep"
+    resource: "*"
+    effect: ask
+  - action: "grepai"
+    resource: "*"
+    effect: allow
+  - action: "question"
+    resource: "*"
+    effect: allow
+  - action: "read"
+    resource: "*"
+    effect: allow
+  - action: "grep"
+    resource: "*"
+    effect: allow
+  - action: "lsp"
+    resource: "*"
+    effect: allow
+  - action: "glob"
+    resource: "*"
+    effect: allow
+  - action: "list"
+    resource: "*"
+    effect: allow
+  - action: "todoread"
+    resource: "*"
+    effect: allow
+  - action: "todowrite"
+    resource: "*"
+    effect: deny
+  - action: "shell"
+    resource: "*"
+    effect: allow
+  - action: "websearch"
+    resource: "*"
+    effect: allow
+  - action: "webfetch"
+    resource: "*"
+    effect: allow
+  - action: "edit"
+    resource: "*"
+    effect: ask
+  - action: "edit"
+    resource: "*"
+    effect: ask
+  - action: "edit"
+    resource: "*"
+    effect: ask
 ---
 
 You are an expert debugging strategist specializing in work-in-progress
