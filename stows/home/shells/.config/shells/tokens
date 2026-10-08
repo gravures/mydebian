@@ -12,3 +12,4 @@ export NVIDIA_API_KEY="$(unpass Tokens/Nvidia)"
 export REQUESTY_API_KEY="$(unpass Tokens/Requesty)"
 export PGPASSWORD="$(unpass Postgres/grepai)"
 export HF_TOKEN="$(unpass Tokens/HF)"
+export ZAI_API_KEY=$(unpass Tokens/Zai)
