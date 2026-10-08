@@ -17,13 +17,13 @@ permission:
   external_directory:
     "*": ask
     "~/.config/opencode/paul-framework/**": allow
-  read:
-    "~/.config/opencode/paul-framework/**": allow
-    edit:
+  edit:
     "*": deny
     ".opencode/plans/*.md": allow
     ".paul/**": allow
     "notes/**": allow
+  read:
+    "~/.config/opencode/paul-framework/**": allow
   bash: ask
   todowrite: allow
   grepai: allow
