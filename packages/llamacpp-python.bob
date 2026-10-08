@@ -3,7 +3,7 @@
 source base_installer.sh
 
 REPO=https://github.com/abetlen/llama-cpp-python.git
-PKG_NAME=llamacpp
+PKG_NAME=llamacpp-python
 DESC='The llamacpp server via llama-cpp-python with huggingface_hub cli integration.'
 LICENSE=(MIT Apache-2.0)
 PROGRAM=llamacpp-server

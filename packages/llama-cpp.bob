@@ -1,0 +1,194 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO=https://github.com/ggml-org/llama.cpp.git
+PKG_NAME=llama-cpp
+DESC='LLM inference in C/C++'
+LICENSE=(MIT)
+BOB_DEPS=()
+BUILD_DEPS=(libvulkan-dev spirv-headers libopenblas-dev libopenblas64-dev)
+RUNTIME_DEPS=(libopenblas0 libopenblas64-0 glslc)
+
+UV_DIR=$(uv tool dir)/llama-cpp-python
+LLAMACPP_HOME=${PREFIX}/share/llamacpp
+
+function prepare() {
+	# configure llamacpp with vulkan support
+	# -DGGML_NATIVE=0 -DGGML_BACKEND_DL=1 -DGGML_CPU_ALL_VARIANTS=1
+	cmake -B build -Wno-dev -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS -DGGML_VULKAN=1 -DGGML_NATIVE=1
+}
+
+function build() {
+	ncores=$(nproc --ignore 2)
+	cmake --build build --config Release -j ${ncores}
+}
+
+function package() {
+	# install all venv contents in PREFIX/share/llamacpp (which will be the home of llamacpp user)
+	mkdir -p "${PKG_DIR}${LLAMACPP_HOME}" # PREFIX/share/llamacpp
+	mkdir -p "${PKG_DIR}${PREFIX}"/bin
+	mkdir -p "${PKG_DIR}"/etc/systemd/system
+
+	DESTDIR="${PKG_DIR}" CMAKE_INSTALL_PREFIX="${PREFIX}" cmake --install build
+
+	# create huggingface cache repo where models will be downloaded
+	mkdir --parent "${PKG_DIR}${LLAMACPP_HOME}/huggingface"
+
+	# create service
+	# see: https://www.baeldung.com/linux/ulimit-limits-systemd-units
+	cat <<EOF >"${PKG_DIR}/etc/systemd/system/llamacpp.service"
+[Unit]
+Description=Llamacpp service
+After=network-online.target
+
+[Service]
+type=exec
+ExecStart=${PREFIX}/bin/llama-server --port 9999
+User=llamacpp
+Group=llamacpp
+Restart=always
+RestartSec=3
+MemoryHigh=70%
+MemoryMax=80%
+LimitMEMLOCK=4G
+Environment="PATH=${PREFIX}/bin:\$PATH"
+Environment="LD_LIBRARY_PATH=${PREFIX}/lib:$LD_LIBRARY_PATH"
+Environment="HF_HOME=${LLAMACPP_HOME}/huggingface"
+Environment="LLAMA_ARG_MODELS_PRESET=$HOME/.config/llamacpp/config.ini"
+Environment="GGML_VK_DISABLE_F16=1"
+Environment="GGML_VK_DISABLE_COOPMAT=1"
+
+[Install]
+WantedBy=default.target
+EOF
+
+}
+
+function clean() {
+	# make clean
+	:
+}
+
+function post_install() {
+	LLAMACPP_HOME=${PREFIX}/share/llamacpp
+
+	# Add llamacpp system user and group
+	if ! id llamacpp >/dev/null 2>&1; then
+		adduser --system --group --shell /bin/false --home "${LLAMACPP_HOME}" llamacpp
+	fi
+
+	# add llamacpp to render group allowing access to gpu
+	if getent group render >/dev/null 2>&1; then
+		adduser llamacpp render
+	fi
+
+	# add llamacpp to video group allowing access to gpu
+	if getent group video >/dev/null 2>&1; then
+		adduser llamacpp video
+	fi
+
+	adduser "${USER}" llamacpp
+
+	if [[ ! -e ${HOME}/.config/llamacpp/config.ini ]]; then
+		cat <<EOF >"${HOME}/.config/llamacpp/config.ini"
+version = 1
+
+; (Optional) This section provides global settings shared across all presets.
+; If the same key is defined in a specific preset, it will override the value in this global section.
+[*]
+host = localhost
+port = 9999
+jinja = true
+LLAMA_ARG_MODELS_MAX = 2
+LLAMA_ARG_THINK = deepseek-legacy
+c = 4096
+n-gpu-layers = -1
+
+; additional options that are exclusive to presets:
+;
+; load-on-startup (boolean): Controls whether the model loads automatically
+;                            when the server starts. Only applies at startup:
+;                            if the model list is reloaded later (for example after
+;                            editing the preset file), a newly added model is listed
+;                            but not loaded
+; stop-timeout (int, seconds): After requested unload, wait for this many seconds
+;                              before forcing termination (default: 10)
+; dedup-cache-models (boolean): When the preset uses hf-repo pointing to a model that
+;                               is already downloaded, hide the corresponding cached model
+;                               entry from GET /models (the preset entry remains visible).
+;                               Set it in the [*] section to apply to all presets.
+
+; If the key corresponds to an existing model on the server,
+; this will be used as the default config for that model
+; If the key does NOT correspond to an existing model,
+; you need to specify at least the model path or HF repo
+;
+; [myModel]
+; model = ${LLAMACPP_HOME}/huggingface/hub/models--mradermacher--tiny_starcoder_py-i1-GGUF
+; chat-template = chatml
+; n-gpu-layers = 123
+; c = 4096
+; LLAMA_ARG_CACHE_RAM = 0
+; model-draft = /Users/abc/my-models/draft.gguf
+
+EOF
+		chown llamacpp:llamacpp ${HOME}/.config/llamacpp/config.ini
+	fi
+
+	if [[ -d ${LLAMACPP_HOME} ]]; then
+		# set owners & permissions
+		chown -R llamacpp:llamacpp "${LLAMACPP_HOME}"
+		chown llamacpp:llamacpp "${LLAMACPP_HOME}/huggingface"
+		chmod 775 "${LLAMACPP_HOME}/huggingface"
+		chmod g+s "${LLAMACPP_HOME}/huggingface"
+		setfacl -R -m g::rwx "${LLAMACPP_HOME}/huggingface"
+		setfacl -R -m o::rx "${LLAMACPP_HOME}/huggingface"
+		# chmod 664 "${LLAMACPP_HOME}/config.json"
+	fi
+
+	# enable service
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl daemon-reload
+		systemctl enable llamacpp
+		systemctl start llamacpp
+		;;
+	*) ;;
+	esac
+
+}
+
+post_upgrade() {
+	SERVICE_ENABLED="$(systemctl is-enabled llamacpp || true)"
+	case ${SERVICE_ENABLED} in
+	enabled | enabled-runtime)
+		systemctl restart llamacpp
+		;;
+	*) ;;
+	esac
+}
+
+function pre_remove() {
+	LLAMACPP_HOME=${PREFIX}/share/llamacpp
+	SYSTEMCTL_RUNNING="$(systemctl is-system-running || true)"
+	case ${SYSTEMCTL_RUNNING} in
+	running | degraded)
+		systemctl stop llamacpp
+		systemctl disable llamacpp
+		;;
+	*) ;;
+	esac
+
+	if id llamacpp >/dev/null 2>&1; then
+		echo "do yo want to suppress llamacpp system user,"
+		read -rp "be careful this will delete all previously huggingface downloaded models ? [y/N]: " confirm
+		if [[ $confirm != [yY] ]]; then
+			return
+		fi
+	fi
+
+	echo "suppressing llamacpp user, wiping out all its data..."
+	deluser --group --remove-home llamacpp
+}
