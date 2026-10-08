@@ -30,7 +30,7 @@ use_tools: fs.web_search # Which tools to use by default.
 # session:<name>
 # <session>:<role>
 cmd_prelude: session:temp
-repl_prelude: role:%explain-shell%
+repl_prelude: role:tty
 agent_prelude: null # Set a session to use when starting a agent (e.g. temp, default)
 
 # Session
@@ -187,27 +187,15 @@ clients:
         max_input_tokens: 512
         default_chunk_size: 1000
         max_batch_size: 50
-      - name: star-pycoder:164m
-        max_input_tokens: 8192
-        supports_function_calling: false
-        supports_reasoning: false
-      - name: qwen-coder:1.5b
-        max_input_tokens: 4096
-        supports_function_calling: true
-        supports_reasoning: false
-      - name: granite-3.3:2b
-        max_input_tokens: 4096
-        supports_function_calling: true
-        supports_reasoning: true
       - name: granite-4.2:3b
         max_input_tokens: 8192
         supports_function_calling: true
         supports_reasoning: true
-      - name: cogito:3b
-        max_input_tokens: 8192
-        supports_function_calling: true
-        supports_reasoning: false
       - name: gemma4:E2b
+        max_input_tokens: 16000
+        supports_function_calling: true
+        supports_reasoning: true
+      - name: gemma4:coder
         max_input_tokens: 16000
         supports_function_calling: true
         supports_reasoning: true
@@ -215,18 +203,10 @@ clients:
         max_input_tokens: 16000
         supports_function_calling: true
         supports_reasoning: true
-      - name: prism-bonzai-8B
+      - name: huihui:moe
+        max_input_tokens: 16000
         supports_function_calling: true
         supports_reasoning: true
-        max_input_token: 65536
-      - name: prism-bonzai-4B
-        supports_function_calling: true
-        supports_reasoning: true
-        max_input_token: 65536
-      - name: prism-bonzai-1.7B
-        supports_function_calling: true
-        supports_reasoning: true
-        max_input_token: 65536
     # patch:
     #   chat_completions:
     #     'cogito:3b':
