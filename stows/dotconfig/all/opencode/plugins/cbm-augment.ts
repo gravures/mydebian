@@ -6,6 +6,7 @@
 // OpenCode already reaches every tool over MCP; this adds only the
 // automatic graph lookup before a grep/glob, which other clients get
 // through their own hook configuration.
+import { Plugin } from '@opencode/plugin';
 import { spawn } from 'node:child_process';
 
 const BIN = '/home/gilles/.local/bin/codebase-memory-mcp';
@@ -28,14 +29,25 @@ function augment(tool, args) {
   });
 }
 
-export const CodebaseMemory = async () => ({
-  'tool.execute.after': async (input, output) => {
-    const tool = input?.tool === 'grep' ? 'Grep' : input?.tool === 'glob' ? 'Glob' : null;
-    if (!tool) return;
-    const extra = await augment(tool, output?.args);
-    if (extra && typeof output?.output === 'string') {
-      output.output += '\n' + extra;
-    }
+export default Plugin.define({
+  id: 'cbm-augment',
+  async setup(ctx) {
+    await ctx.tool.hook('execute.after', async (event) => {
+      if (event.status !== 'completed') return;
+      const tool = event.tool === 'grep' ? 'Grep' : event.tool === 'glob' ? 'Glob' : null;
+      if (!tool) return;
+      const extra = await augment(tool, (event.input as Record<string, unknown>) ?? {});
+      if (!extra) return;
+      const prev = event.result;
+      const content = typeof prev.content === 'string'
+        ? prev.content + '\n' + extra
+        : Array.isArray(prev.content)
+          ? [...prev.content, { type: 'text' as const, text: extra }]
+          : extra;
+      event.result = { ...prev, content };
+    });
   },
 });
 // codebase-memory-mcp:end
+
+// v2-port reload marker

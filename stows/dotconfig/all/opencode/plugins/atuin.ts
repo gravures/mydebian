@@ -1,35 +1,21 @@
 /**
- * Atuin plugin for opencode.
+ * Atuin plugin for the OpenCode V2 tool/shell hook API.
  *
- * Tracks bash commands executed by opencode in Atuin history with author
- * `opencode`.
- *
- * Install with:
- *   atuin hook install opencode
- *
- * Then restart opencode.
+ * Install with `atuin hook install opencode-v2`, then restart OpenCode.
+ * This replaces the V1 template at opencode/plugins/atuin.ts.
+ * Do not place both templates in an autoload directory.
  */
 
-import type { Plugin } from "@opencode-ai/plugin";
 import { spawn } from "node:child_process";
 
 const ATUIN_AUTHOR = "opencode";
 const ATUIN_TIMEOUT_MS = 10_000;
-
-// opencode's shell tool keeps the id `bash` for compatibility, even though its
-// module is named `shell`.
-const BASH_TOOL = "bash";
-
-// A command that did not exit on its own reports a null exit code, so
-// substitute the conventional code for each of the two ways that happens.
+// V2 exposes the shell tool as "shell"; older builds used "bash".
+const SHELL_TOOLS = new Set(["shell", "bash"]);
 const EXIT_ABORTED = 130;
 const EXIT_TIMED_OUT = 124;
 
-// A denied command reaches neither `shell.env` nor `tool.execute.after`, so its
-// proposal is never claimed and would sit in the map for the life of the
-// session. Bound the map to cap that. Evicting the oldest can in principle drop
-// a command still waiting at its permission prompt, which just goes unrecorded,
-// but only a handful of calls are ever genuinely in flight at once.
+// Bound pending V2 proposals when the host omits completion events.
 const MAX_PROPOSED = 128;
 
 interface Proposal {
@@ -47,18 +33,7 @@ interface AtuinResult {
 	stdout: string;
 }
 
-interface ToolOutput {
-	output: string;
-	metadata: unknown;
-}
-
-/**
- * Run Atuin, resolving rather than rejecting on every failure.
- *
- * Spawned without a shell: a recorded command is arbitrary text that has to
- * reach Atuin as a single argv entry unmangled, which rules out the Bun shell
- * the plugin API hands us.
- */
+/** Run without a shell: the recorded command must stay a single argv entry. */
 function atuin(args: string[], cwd: string): Promise<AtuinResult> {
 	return new Promise((resolve) => {
 		let child: ReturnType<typeof spawn>;
@@ -72,7 +47,6 @@ function atuin(args: string[], cwd: string): Promise<AtuinResult> {
 		let stdout = "";
 		let settled = false;
 		const timer = setTimeout(() => child.kill("SIGKILL"), ATUIN_TIMEOUT_MS);
-
 		const settle = (result: AtuinResult) => {
 			if (settled) return;
 			settled = true;
@@ -93,56 +67,86 @@ async function startHistory(
 	cwd: string,
 	proposal: Proposal,
 ): Promise<string | undefined> {
-	const args = [
-		"history",
-		"start",
-		"--author",
-		ATUIN_AUTHOR,
-		"--author-kind",
-		"agent",
-	];
+	const args = ["history", "start", "--author", ATUIN_AUTHOR, "--author-kind", "agent"];
 	if (proposal.intent) args.push("--intent", proposal.intent);
 	args.push("--", proposal.command);
-
 	const result = await atuin(args, cwd);
 	if (result.code !== 0) return undefined;
-
 	const historyId = result.stdout.trim();
 	return historyId.length > 0 ? historyId : undefined;
 }
 
-// The tool records an abort or a timeout in its output text rather than as an
-// exit code, so string matching is the only way to tell the two apart.
-function exitCodeFrom(output: ToolOutput): number {
-	const exit = (output.metadata as { exit?: unknown } | undefined)?.exit;
+// V2 reports completion and error payloads instead of V1's ToolOutput.
+function exitCodeFrom(event: unknown): number {
+	const e = (event ?? {}) as {
+		status?: unknown;
+		result?: unknown;
+		error?: unknown;
+	};
+	const payload = e.status === "error" ? e.error : e.result;
+	const metadata = (payload as { metadata?: unknown } | undefined)?.metadata;
+	const exit = (metadata as { exit?: unknown } | undefined)?.exit;
 	if (typeof exit === "number") return exit;
 
-	const text = typeof output.output === "string" ? output.output : "";
+	let text = "";
+	try {
+		const p = payload as { message?: unknown; output?: unknown } | undefined;
+		if (typeof p?.message === "string") text = p.message;
+		else if (typeof p?.output === "string") text = p.output;
+		else text = JSON.stringify(payload ?? "");
+	} catch {
+		// Malformed diagnostic payloads must not abort a tool call.
+	}
 	if (text.includes("User aborted the command")) return EXIT_ABORTED;
 	if (/exceeding timeout \d+ ms/.test(text)) return EXIT_TIMED_OUT;
-	return 1;
+	return e.status === "completed" ? 0 : 1;
 }
 
-// A rejected hook aborts opencode's tool call and discards the command's
-// output. A missing history entry is always the better failure.
 async function swallowFailures(work: () => void | Promise<void>): Promise<void> {
 	try {
 		await work();
 	} catch {
-		// Deliberately ignored.
+		// A missing history entry is always the better failure.
 	}
 }
 
-// opencode treats every export of a plugin file as a plugin function and fails
-// to load the file if one is not, so keep this the only export.
-export const AtuinPlugin: Plugin = async ({ directory }) => {
-	// Commands opencode has proposed but is not yet cleared to run, keyed by
-	// tool call ID.
-	const proposed = new Map<string, Proposal>();
-	// Atuin history IDs for commands that did start, keyed by tool call ID.
-	const running = new Map<string, Entry>();
+interface Pending extends Proposal {
+	claimed: boolean;
+	ambiguous: boolean;
+}
 
-	function propose(callID: string, args: unknown) {
+// Beta hook domains are feature-detected rather than imported from the V1
+// package. Builds without this API leave history recording disabled.
+async function setup(ctx: any): Promise<(() => Promise<void>) | void> {
+	const tool = ctx?.tool;
+	const shell = ctx?.shell;
+	if (typeof tool?.hook !== "function" || typeof shell?.hook !== "function") return;
+	const baseDir =
+		typeof ctx?.location?.directory === "string" ? ctx.location.directory : "";
+
+	// Keep a proposal until its tool finishes, including after it is claimed.
+	// Otherwise a concurrent duplicate could appear unique after the first
+	// command started. History entries are always closed by exact tool ID.
+	const proposed = new Map<string, Pending>();
+	const running = new Map<string, Entry>();
+	const registrations: { dispose?: () => unknown }[] = [];
+	let active = false;
+	let correlationDisabled = false;
+
+	async function dispose() {
+		// Make leftover callbacks inert even if a host disposer rejects.
+		active = false;
+		proposed.clear();
+		running.clear();
+		for (const registration of registrations.splice(0).reverse()) {
+			await swallowFailures(async () => {
+				await registration?.dispose?.();
+			});
+		}
+	}
+
+	function remember(id: string, args: unknown) {
+		if (correlationDisabled || proposed.has(id)) return;
 		const { command, description } = (args ?? {}) as {
 			command?: unknown;
 			description?: unknown;
@@ -150,73 +154,80 @@ export const AtuinPlugin: Plugin = async ({ directory }) => {
 		if (typeof command !== "string" || command.length === 0) return;
 
 		if (proposed.size >= MAX_PROPOSED) {
-			const oldest = proposed.keys().next().value;
-			if (oldest !== undefined) proposed.delete(oldest);
+			// Eviction is unsafe without a shell call ID: a delayed, evicted
+			// command could claim a newer identical proposal. Stop correlating
+			// until reload, but still let already-started entries finish.
+			correlationDisabled = true;
+			proposed.clear();
+			return;
 		}
 
-		proposed.set(callID, {
+		let ambiguous = false;
+		for (const proposal of proposed.values()) {
+			if (proposal.command !== command) continue;
+			proposal.ambiguous = true;
+			ambiguous = true;
+		}
+		proposed.set(id, {
 			command,
-			intent:
-				typeof description === "string" && description.length > 0
-					? description
-					: undefined,
+			intent: typeof description === "string" && description.length > 0
+				? description : undefined,
+			claimed: false,
+			ambiguous,
 		});
 	}
 
-	async function start(callID: string, cwd: string) {
-		const proposal = proposed.get(callID);
-		if (!proposal) return;
-		proposed.delete(callID);
-
-		const historyId = await startHistory(cwd, proposal);
-		if (historyId) running.set(callID, { historyId, cwd });
+	async function claim(command: string, cwd: unknown) {
+		if (correlationDisabled) return;
+		for (const [id, proposal] of proposed) {
+			if (proposal.command !== command || proposal.claimed || proposal.ambiguous) continue;
+			proposal.claimed = true;
+			const resolvedCwd = typeof cwd === "string" && cwd.length > 0 ? cwd : baseDir;
+			const historyId = await startHistory(resolvedCwd, proposal);
+			// Setup may have been disposed while the Atuin subprocess ran.
+			if (active && historyId) running.set(id, { historyId, cwd: resolvedCwd });
+			return;
+		}
 	}
 
-	async function finish(callID: string, output: ToolOutput) {
-		proposed.delete(callID);
-
-		const entry = running.get(callID);
+	async function finish(id: string, event: unknown) {
+		proposed.delete(id);
+		const entry = running.get(id);
 		if (!entry) return;
-		running.delete(callID);
-
+		running.delete(id);
 		await atuin(
-			[
-				"history",
-				"end",
-				entry.historyId,
-				"--exit",
-				String(exitCodeFrom(output)),
-			],
+			["history", "end", entry.historyId, "--exit", String(exitCodeFrom(event))],
 			entry.cwd,
 		);
 	}
 
-	return {
-		// Fires before the permission prompt, so only remember the command here.
-		// Starting an entry would record commands the user went on to deny.
-		"tool.execute.before": (input, output) =>
+	try {
+		registrations.push(await tool.hook("execute.before", (event: any) =>
 			swallowFailures(() => {
-				if (input.tool !== BASH_TOOL) return;
-				propose(input.callID, output.args);
+				if (!active || !SHELL_TOOLS.has(event?.tool) || typeof event?.id !== "string") return;
+				remember(event.id, event.input);
 			}),
+		));
+		registrations.push(await shell.hook("create.before", (event: any) =>
+			swallowFailures(() => {
+				if (!active || typeof event?.command !== "string" || !event.command) return;
+				return claim(event.command, event.cwd);
+			}),
+		));
+		registrations.push(await tool.hook("execute.after", (event: any) =>
+			swallowFailures(() => {
+				if (!active || !SHELL_TOOLS.has(event?.tool) || typeof event?.id !== "string") return;
+				return finish(event.id, event);
+			}),
+		));
+		// No callback may open an entry until *all* hooks are registered.
+		active = true;
+	} catch {
+		await dispose();
+		return;
+	}
+	return dispose;
+}
 
-		// The only hook that runs after the permission prompt but before the
-		// command does, and the only one given the resolved working directory.
-		// It also fires for user-run shells and for PTY sessions, which
-		// opencode did not run; those are skipped because they have no
-		// proposal to claim, not because of the call ID check below.
-		"shell.env": (input) =>
-			swallowFailures(() => {
-				if (!input.callID) return;
-				return start(input.callID, input.cwd || directory);
-			}),
-
-		// Also fires when the user aborts a command, unlike the error paths,
-		// which skip this hook and leave the entry open.
-		"tool.execute.after": (input, output) =>
-			swallowFailures(() => {
-				if (input.tool !== BASH_TOOL) return;
-				return finish(input.callID, output);
-			}),
-	};
-};
+// V2 has an object-only definition; never expose it to legacy V1 loaders.
+export default { id: "atuin", setup };
