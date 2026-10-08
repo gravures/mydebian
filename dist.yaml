@@ -29,12 +29,27 @@ packagers:
         - vscodium
         - griffo
         - github-cli
+        - mise
       wezterm:
         Types: deb
         URIs: https://apt.fury.io/wez/
         Suites: \*
         Components: \*
         Signed-By: /usr/share/keyrings/wezterm-fury.gpg
+        Enabled: yes
+      protonvon-stable:
+        Types: deb
+        URIs: https://repo.protonvpn.com/debian
+        Suites: stable
+        Components: main
+        Signed-By: /usr/share/keyrings/protonvpn-stable-archive-keyring.gpg
+        Enabled: yes
+      mexerica:
+        Types: deb
+        URIs: https://mexirica.github.io/aptui/
+        Suites: stable
+        Components: main
+        Signed-By: /usr/share/keyrings/aptui-archive-keyring.gpg
         Enabled: yes
   flatpak:
     enabled: yes
@@ -135,10 +150,11 @@ steps:
       - w3m
       - surfraw
       - ddgr
+      - aerc
     bob:
-      - browsh
       - chawan
       - neomutt
+      - nb
 
   terminal:
     doc: Terminal environment
