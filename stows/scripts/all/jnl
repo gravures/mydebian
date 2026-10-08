@@ -12,7 +12,7 @@ fi
 unit=()
 [[ -n ${1} ]] && unit=(--unit "${1}")
 
-sudo journalctl \
+journalctl \
 	--reverse \
 	--since "${since}" \
 	--until "now" \

@@ -1,53 +1,156 @@
 #!/usr/bin/env bash
 
-# List foreign installed packages
-echo Non-debian installed packages:
-aptitude search '?narrow(?installed, ?not(?origin(Debian)))' -F '%p %M %O'
-echo
+function report() {
+	# List foreign installed packages
+	echo Non-debian installed packages:
+	aptitude search '?narrow(?installed, ?not(?origin(Debian)))' -F '%p %M %O'
+	echo
 
-# List debian-backports packages
-echo List debian-backports packages:
-aptitude search '?narrow(~i, ~Abackports)'
+	# List debian-backports packages
+	echo List debian-backports packages:
+	aptitude search '?narrow(~i, ~Abackports)'
+	echo
 
-# Clean up leftover configuration files
-echo Leftover configuration files:
-sudo find /etc -name '*.dpkg-*' -o -name '*.ucf-*' -o -name '*.merge-error'
-echo
+	# Clean up leftover configuration files
+	echo Leftover configuration files:
+	sudo find /etc -name '*.dpkg-*' -o -name '*.ucf-*' -o -name '*.merge-error'
+	echo
 
-# Check package status consistency
-echo Packages status consistency:
-dpkg --audit
-echo
+	# Check package status consistency
+	echo Packages status consistency:
+	dpkg --audit
+	echo
 
-# Check hold package
-echo Hold packages:
-apt-mark showhold
-echo
+	# Check hold package
+	echo Hold packages:
+	apt-mark showhold
+	echo
 
-# TODO: Check APT pinning
+	# TODO: Check APT pinning
 
-# Check we have a kernel meta-package installed
-echo check for installed kernel meta-packages:
-dpkg -l 'linux-image*' | grep ^ii | grep -i meta
-echo
+	# Check we have a kernel meta-package installed
+	echo check for installed kernel meta-packages:
+	dpkg -l 'linux-image*' | grep ^ii | grep -i meta
+	echo
 
-# Check we have a kernel meta-package installed
-echo check gpgv is installed:
-aptitude search '~igpgv'
-echo
+	# Check we have a kernel meta-package installed
+	echo check gpgv is installed:
+	aptitude search '~igpgv'
+	echo
 
-# Purging config files from removed packages
-echo Orphan config files:
-apt list '~c'
-# sudo apt purge '-c'
-echo
+	# Purging config files from removed packages
+	echo Orphan config files:
+	apt list '~c' 2>/dev/null | cat | tail -n +2
+	# sudo apt purge '-c'
+	echo
 
-# obsolete packages
-echo Obsolete packages:
-apt list '~o'
-# sudo apt purge '~o'
-echo
+	# obsolete packages
+	echo Obsolete packages:
+	apt list '~o' 2>/dev/null | cat | tail -n +2
+	# sudo apt purge '~o'
+	echo
 
-# list dev packages
-echo installed dev packages:
-aptitude search -F '%p' '~i-dev$ !~M' # > pkglist
+	# list dev packages
+	echo manually installed dev packages:
+	aptitude search -F '%p' '~i-dev$ !~M' # > pkglist
+}
+
+USER_NAME="${SUDO_USER:-${USER}}"
+USER_DIR="/home/${USER_NAME}"
+
+function clean_flatpack() {
+	[[ -n "$(command -v flatpak)" ]] || return
+	echo cleaning flatpack
+
+	# Remove unused flatpak runtimes
+	if [ -n "$(flatpak list --runtime)" ]; then
+		echo removing unused runtimes...
+		flatpak uninstall --unused
+	fi
+
+	# Remove unused ref in /var/lib/flatpak/repo/object
+	echo cleaning flatpak repos...
+	sudo flatpak repair
+
+	# Remove flatpak cache
+	echo removing flatpak caches...
+	sudo rm -rf /var/tmp/flatpak-cache-*
+	sudo -u "${USER_NAME}" rm -rf "${USER_DIR}"/.cache/flatpak/*
+	echo
+}
+
+function clean_apt() {
+	echo Apt cleaning...
+	sudo apt purge '~c'
+	sudo apt autoremove
+	sudo apt autoclean
+	echo
+}
+
+function clean_uv() {
+	[[ -n "$(command -v uv)" ]] || return
+	echo cleaning uv cache...
+	uv cache prune
+	echo
+}
+
+function clean_npm() {
+	[[ -n "$(command -v npm)" ]] || return
+	echo cleaning npm cache...
+	npm prune
+	npm cache verify
+	echo
+}
+
+function clean() {
+	clean_apt
+	clean_flatpack
+	clean_uv
+	clean_npm
+}
+
+function apt_history() {
+	zcat -f /var/log/dpkg.log* 2>/dev/null |
+		awk '$3=="install"&&$5=="<none>"{p=$4;sub(/:.*/,"",p);if(!(p in t)||$1" "$2<t[p])t[p]=$1" "$2}END{for(p in t)print p"\t"t[p]}' |
+		awk -F'\t' 'NR==FNR{l[$1]=$2;next}{print ($1 in l?l[$1]:substr($2,1,19))"\t"$1}' - <(stat -c $'%y\t%n' /var/lib/dpkg/info/*.list 2>/dev/null |
+			awk -F'\t' '{n=$2;sub(/.*\//,"",n);sub(/\.list$/,"",n);sub(/:.*/,"",n);print n"\t"$1}') |
+		awk -F'\t' 'NR==FNR{m[$1]=1;next}$2 in m' <(apt-mark showmanual) - |
+		LC_ALL=C sort -k1,2r
+}
+
+function test_history() {
+	while read -r day hour action pkg _ version _; do
+		pkg=${pkg%:*}
+		[[ "$(stat -c $'%s' /var/lib/dpkg/info/${pkg}.list 2>/dev/null)" -gt 0 ]] && echo "${day} ${pkg}"
+	done < <(
+		zcat -f /var/log/dpkg.log* 2>/dev/null |
+			grep '\binstall\b' |
+			LC_ALL=C sort -k1,2r
+	)
+}
+
+case ${1} in
+audit | a)
+	report
+	;;
+cache | c)
+	clean
+	;;
+history | h)
+	apt_history
+	;;
+*)
+	cat <<HEREDOC
+usage:
+  mister-clean [COMMAND]
+
+commands:
+  audit     - print an audit before an apt dist-upgrade
+  cache     - autoremove apt packages, clear apt cache,
+              purge flatpack cache, uv cache, npm cache
+  history   - print an history of apt manually installed
+              packages
+HEREDOC
+	exit 0
+	;;
+esac
