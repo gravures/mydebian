@@ -182,6 +182,15 @@
       "skillFolderHash": "518c85da555f91c346813aa5bb3cc62f9db8bfb3",
       "installedAt": "2026-10-03T13:23:34.233Z",
       "updatedAt": "2026-10-03T13:23:34.233Z"
+    },
+    "mise": {
+      "source": "markpitt/claude-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/markpitt/claude-skills.git",
+      "skillPath": "skills/mise/SKILL.md",
+      "skillFolderHash": "9f579027718709b33e1b32d4e37e7c9f555d9c6f",
+      "installedAt": "2026-10-09T09:49:04.883Z",
+      "updatedAt": "2026-10-09T09:49:04.883Z"
     }
   },
   "dismissed": {
@@ -198,6 +207,7 @@
     "kilo",
     "kimi-code-cli",
     "opencode",
+    "pi",
     "warp",
     "zed"
   ]
