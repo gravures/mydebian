@@ -56,14 +56,7 @@
                 { "action": "subagent", "resource": "analyzer", "effect": "ask" }
             ]
         },
-        "plan": {
-            "request": {
-                "body": {
-                    "temperature": 0.2
-                }
-            },
-            "disabled": true
-        }
+        "plan": { "disabled": true }
     },
     "lsp": {
         "bash": {
