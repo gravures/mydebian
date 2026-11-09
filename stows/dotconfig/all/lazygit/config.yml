@@ -1,16 +1,31 @@
 git:
   overrideGpg: true
   diffRenderers:
-    - colorArg: always
+    - name: delta
+      type: stdinFilter
+      colorArg: always
       command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - name: delta-two-side
+      type: stdinFilter
+      colorArg: always
+      command: delta --dark --side-by-side --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 gui:
   nerdFontsVersion: 3
+  sidePanelWidth: 0.4
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 3
-  mainPanelSplitMode: flexible
-  screenMode: normal
+  shrinkSidePanelsToContent: true
+  sidePanels:
+    - [status]
+    - [files, worktrees, submodules]
+    - [branches, remotes, tags]
+    - [commits, reflog, stash]
+  mainPanelSplitMode: vertical
   enlargedSideViewLocation: top
-  commandLogSize: 4
+  screenMode: normal
+  portraitMode: never
+  wrapLinesInDiffView: false
+  commandLogSize: 1
   theme:
     inactiveBorderColor:
       - "#444"
