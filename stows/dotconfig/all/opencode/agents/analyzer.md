@@ -16,11 +16,11 @@ request:
   body:
     temperature: 0.8
 permissions:
-  - action: "subagent"
+  - action: "*"
     resource: "*"
     effect: deny
   - action: "subagent"
-    resource: "integrator"
+    resource: "coder"
     effect: ask
   - action: "subagent"
     resource: "explore"
@@ -31,10 +31,7 @@ permissions:
   - action: "context7"
     resource: "*"
     effect: ask
-  - action: "gh-grep"
-    resource: "*"
-    effect: ask
-  - action: "grepai"
+  - action: "skill"
     resource: "*"
     effect: allow
   - action: "question"
@@ -58,24 +55,9 @@ permissions:
   - action: "todoread"
     resource: "*"
     effect: allow
-  - action: "todowrite"
-    resource: "*"
-    effect: deny
   - action: "shell"
     resource: "*"
     effect: allow
-  - action: "websearch"
-    resource: "*"
-    effect: allow
-  - action: "webfetch"
-    resource: "*"
-    effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: ask
-  - action: "edit"
-    resource: "*"
-    effect: ask
   - action: "edit"
     resource: "*"
     effect: ask

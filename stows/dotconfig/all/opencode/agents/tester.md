@@ -6,72 +6,20 @@ description: >-
       This agent should be invoked after implementation is complete or when
       test coverage gaps are identified. The agent proactively runs
       tests and reports results rather than just generating test code.
-
-      <example>
-
-      Context: User has just implemented a new payment processing module and needs
-      to ensure it works correctly.
-
-      user: "I've finished the payment module implementation"
-
-      assistant: "I'll use the @tester agent to create comprehensive tests
-      and verify everything works"
-
-      <commentary> Since new code has been written that needs validation,
-      use the @tester agent to write tests, run them, and report
-      any issues found. </commentary>
-
-      </example>
-
-      <example>
-
-      Context: User mentions that a recent change might have broken existing
-      functionality.
-
-      user: "The last commit might have broken the auth flow"
-
-      assistant: "Let me delegate to the @tester agent to investigate
-      and create regression tests"
-
-      <commentary> When potential regressions are suspected, proactively use the
-      @tester agent to run existing tests and add coverage for the affected
-      area. </commentary>
-
-      </example>
-
-      <example>
-
-      Context: Code review has identified missing test coverage for edge cases.
-
-      user: "Can you add tests for the error handling paths?"
-
-      assistant: "I'll have the @tester agent build out comprehensive
-      coverage for all edge cases and error conditions"
-
-      <commentary> When specific coverage gaps are identified, use the @tester
-      agent to systematically address them with thorough test cases. </commentary>
-
-      </example>
 mode: all
 request:
   body:
     temperature: 0.1
 permissions:
+  - action: "*"
+    resource: "*"
+    effect: deny
   - action: "subagent"
-    resource: "*"
-    effect: deny
-  - action: "skill"
-    resource: "*"
-    effect: ask
-  - action: "skill"
-    resource: "testing-*"
+    resource: "explore"
     effect: allow
-  - action: "context7"
+  - action: "skill"
     resource: "*"
-    effect: ask
-  - action: "gh-grep"
-    resource: "*"
-    effect: deny
+    effect: allow
   - action: "question"
     resource: "*"
     effect: allow
@@ -93,30 +41,12 @@ permissions:
   - action: "todoread"
     resource: "*"
     effect: allow
-  - action: "todowrite"
-    resource: "*"
-    effect: deny
   - action: "shell"
     resource: "*"
     effect: allow
-  - action: "codesearch"
-    resource: "*"
-    effect: allow
-  - action: "websearch"
-    resource: "*"
-    effect: allow
-  - action: "webfetch"
-    resource: "*"
-    effect: allow
   - action: "edit"
     resource: "*"
     effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: deny
 ---
 
 You are a Senior Developer with deep expertise in software testing and writing robust tests.

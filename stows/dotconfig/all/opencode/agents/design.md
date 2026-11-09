@@ -12,27 +12,21 @@ permissions:
   - action: "*"
     resource: "*"
     effect: deny
-  - action: "subagent"
+  - action: "ctx_*"
     resource: "*"
-    effect: deny
+    effect: allow
   - action: "subagent"
-    resource: "search"
+    resource: "explore"
     effect: allow
   - action: "subagent"
     resource: "scout"
     effect: allow
-  - action: "skill"
-    resource: "*"
-    effect: deny
   - action: "external_directory"
     resource: "*"
-    effect: ask
+    effect: deny
   - action: "external_directory"
     resource: "~/.config/opencode/paul-framework/**"
     effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: deny
   - action: "edit"
     resource: ".opencode/plans/*.md"
     effect: allow
@@ -47,11 +41,8 @@ permissions:
     effect: allow
   - action: "shell"
     resource: "*"
-    effect: ask
+    effect: deny
   - action: "todowrite"
-    resource: "*"
-    effect: allow
-  - action: "grepai"
     resource: "*"
     effect: allow
   - action: "grep"

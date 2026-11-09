@@ -21,13 +21,7 @@ permissions:
     effect: allow
   - action: "skill"
     resource: "*"
-    effect: deny
-  - action: "skill"
-    resource: "grepai-*"
     effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: deny
   - action: "shell"
     resource: "*"
     effect: allow
@@ -40,9 +34,6 @@ permissions:
   - action: "read"
     resource: "*"
     effect: allow
-  - action: "grepai"
-    resource: "*"
-    effect: allow
   - action: "glob"
     resource: "*"
     effect: allow
@@ -50,15 +41,6 @@ permissions:
     resource: "*"
     effect: allow
   - action: "question"
-    resource: "*"
-    effect: allow
-  - action: "plan_exit"
-    resource: "*"
-    effect: allow
-  - action: "webfetch"
-    resource: "*"
-    effect: allow
-  - action: "websearch"
     resource: "*"
     effect: allow
 ---

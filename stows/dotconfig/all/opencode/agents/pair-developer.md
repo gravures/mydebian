@@ -17,26 +17,17 @@ request:
   body:
     temperature: 0.5
 permissions:
-  - action: "subagent"
+  - action: "*"
     resource: "*"
     effect: deny
+  - action: "skill"
+    resource: "*"
+    effect: allow
   - action: "subagent"
     resource: "analyzer"
     effect: allow
   - action: "subagent"
-    resource: "integrator"
-    effect: allow
-  - action: "subagent"
-    resource: "tech-writter"
-    effect: allow
-  - action: "context7"
-    resource: "*"
-    effect: ask
-  - action: "gh-grep"
-    resource: "*"
-    effect: ask
-  - action: "grepai"
-    resource: "*"
+    resource: "scout"
     effect: allow
   - action: "question"
     resource: "*"
@@ -49,7 +40,7 @@ permissions:
     effect: allow
   - action: "lsp"
     resource: "*"
-    effect: deny
+    effect: allow
   - action: "glob"
     resource: "*"
     effect: allow
@@ -59,24 +50,9 @@ permissions:
   - action: "todoread"
     resource: "*"
     effect: allow
-  - action: "todowrite"
-    resource: "*"
-    effect: allow
   - action: "shell"
     resource: "*"
     effect: ask
-  - action: "websearch"
-    resource: "*"
-    effect: allow
-  - action: "webfetch"
-    resource: "*"
-    effect: allow
-  - action: "edit"
-    resource: "*"
-    effect: deny
-  - action: "edit"
-    resource: "*"
-    effect: deny
   - action: "edit"
     resource: "*"
     effect: deny
