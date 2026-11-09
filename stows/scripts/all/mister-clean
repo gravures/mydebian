@@ -102,11 +102,19 @@ function clean_npm() {
 	echo
 }
 
+function clean_huggingface() {
+	[[ -n "$(command -v hf)" ]] || return
+	echo cleaning huggingface cache...
+	hf cache prune
+	echo
+}
+
 function clean() {
 	clean_apt
 	clean_flatpack
 	clean_uv
 	clean_npm
+	clean_huggingface
 }
 
 function apt_history() {
