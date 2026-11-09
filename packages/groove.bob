@@ -1,0 +1,34 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/cargo_git_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/alphabet-h/grooveseek.git'
+PKG_NAME=groove
+PROGRAM=groove
+DESC='MCP server for semantic hybrid search (sqlite-vec + FTS5 with optional cross-encoder reranking) over a Markdown / plain-text knowledge base'
+LICENSE=(MIT)
+
+BUILD_DEPS=()
+RUNTIME_DEPS=()
+
+function prepare() {
+	rustup override set stable
+	rustup update stable
+}
+
+function build() {
+	cargo build --release
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	install -D -t "${PKG_DIR}${PREFIX}/bin" ./target/release/groove
+	install -D -t "${PKG_DIR}${PREFIX}/bin" ./target/release/groove-svc
+	install -D -t "${PKG_DIR}${PREFIX}/bin" ./target/release/groove-tray
+	install -D -t "${PKG_DIR}${PREFIX}/lib" ./target/release/libgroove_grammar_php.so
+	install -D -t "${PKG_DIR}${PREFIX}/lib" ./target/release/libgroove_grammar_python.so
+}
+
+function clean() {
+	cargo clean
+}
