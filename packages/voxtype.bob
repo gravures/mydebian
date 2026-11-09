@@ -1,0 +1,44 @@
+# shellcheck disable=SC2034
+# shellcheck source=../libs/bob/base_installer.sh
+source base_installer.sh
+
+REPO='https://github.com/peteonrails/voxtype.git'
+PKG_NAME='voxtype'
+DESC='Voice-to-text with push-to-talk for Wayland compositors'
+LICENSE=(MIT)
+PROGRAM=voxtype
+BUILD_DEPS=(libasound2-dev libclang-dev libgtk4-layer-shell-dev libglib2.0-dev libgdk-pixbuf-2.0-dev libcairo2-dev libpango1.0-dev libgraphene-1.0-dev libgtk-4-dev)
+RUNTIME_DEPS=(libvulkan1 wtype ydotool libportaudio2 wl-clipboard libgtk4-layer-shell0 libnotify-bin pipewire-alsa)
+PATCH_PR=(846)
+
+function prepare() {
+	rustup override set stable
+	rustup update stable
+}
+
+function build() {
+	:
+	# cargo build --release --features gpu-vulkan,parakeet,moonshine,whistle,osd-gtk4
+}
+
+function package() {
+	mkdir -p "${PKG_DIR}${PREFIX}"
+	mkdir -p "${PKG_DIR}${PREFIX}/bin"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype-audio-bridge"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype-mirror-registry"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype-osd"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype-osd-gtk4"
+	install -Dm755 target/release/voxtype "${PKG_DIR}${PREFIX}/bin/voxtype-osd-quickshell"
+}
+
+function clean() {
+	:
+	# cargo clean
+}
+
+function post_install() {
+	if getent group input >/dev/null 2>&1; then
+		adduser "${USER}" input
+	fi
+}
