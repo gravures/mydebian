@@ -21,8 +21,8 @@ $status\
 
 command_timeout = 5000
 add_newline = true
-continuation_prompt = '↳ '
 palette = "catppuccin_macchiato"
+continuation_prompt = "[│](blue) "
 
 [line_break]
 disabled = false
