@@ -29,6 +29,11 @@ channels = ["conda-forge"]
 dependencies = { python = "3.14.*" }
 exposed = { py14 = "python3" }
 
+[envs.py15]
+channels = ["conda-forge"]
+dependencies = { python-jit = "3.15.*" }
+exposed = { py15 = "python3" }
+
 [envs.pylsp]
 channels = ["conda-forge"]
 dependencies = { pylsp-mypy = "*", python = "3.14.*" }
