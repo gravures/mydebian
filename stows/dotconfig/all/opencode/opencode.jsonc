@@ -1,269 +1,441 @@
 {
-    "$schema": "https://opencode.ai/config.json",
-    "share": "disabled",
-    "update": "auto",
-    "plugins": [ "@dietrichgebert/ponytail" ],
-    "permissions": [
-        {
-            "action": "external_directory",
-            "resource": "~/.config/opencode/paul-framework/**",
-            "effect": "allow"
-        },
-        {
-            "action": "external_directory",
-            "resource": "~/.config/opencode/instructions/**",
-            "effect": "allow"
-        },
-        {
-            "action": "edit",
-            "resource": "~/.config/opencode/paul-framework/**",
-            "effect": "deny"
-        },
-        {
-            "action": "edit",
-            "resource": "~/.config/opencode/instructions/**",
-            "effect": "deny"
-        }
-    ],
-    "instructions": [ ],
-    "mcp": {
-        "servers": {
-            "cbm": {
-                "type": "local",
-                "command": [ "/home/gilles/.local/bin/codebase-memory-mcp" ],
-                "disabled": false
-            },
-            "astro": {
-                "type": "remote",
-                "url": "https://mcp.docs.astro.build/mcp",
-                "disabled": true
-            },
-            "context7": {
-                "type": "remote",
-                "url": "https://mcp.context7.com/mcp",
-                "disabled": true
-            }
-        }
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "update": "auto",
+  "plugins": [
+    "@dietrichgebert/ponytail",
+    "github:barreiroleo/opencode-subagent#master"
+  ],
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "~/.config/opencode/paul-framework/**",
+      "effect": "allow"
     },
-    "default_agent": "chat",
-    "agents": {
-        "build": {
-            "system": "",
-            "permissions": [
-                { "action": "subagent", "resource": "*", "effect": "allow" },
-                { "action": "subagent", "resource": "tester", "effect": "ask" },
-                { "action": "subagent", "resource": "tech-writer", "effect": "ask" },
-                { "action": "subagent", "resource": "analyzer", "effect": "ask" }
-            ]
-        },
-        "plan": { "disabled": true }
+    {
+      "action": "external_directory",
+      "resource": "~/.config/opencode/instructions/**",
+      "effect": "allow"
     },
-    "lsp": {
-        "bash": {
-            "command": [ "bash-language-server", "start" ],
-            "extensions": [ ".bash", ".sh", ".bob", ".pacstall", ".pacscript" ],
-            "initialization": {
-                "config": {
-                    "backgroundAnalysisMaxFiles": 1,
-                    "includeAllWorkspaceSymbols": true
-                }
-            }
-        },
-        "zuban": {
-            "command": [ "zuban", "server" ],
-            "env": { "LC_ALL": "en_US", "LANGUAGE": "en-us", "LANG": "en_US" },
-            "extensions": [ ".py", ".pyw", "ipy" ]
-        },
-        "ruff": {
-            "command": [ "ruff", "server" ],
-            "env": { "RUFF_TRACE": "messages" },
-            "extensions": [ ".py", ".pyw", "ipy" ]
-        },
-        "json-lsp": {
-            "command": [ "vscode-json-language-server", "--stdio" ],
-            "extensions": [ ".json" ],
-            "initialization": {
-                "config": {
-                    "json": {
-                        "validate": { "enable": true },
-                        "keepLines": { "enanle": true }
-                    }
-                }
-            }
-        },
-        "yaml-ls": {
-            "command": [ "yaml-language-server", "--stdio" ],
-            "extensions": [ ".yaml", ".yml" ],
-            "initialization": {
-                "config": {
-                    "yaml": {
-                        "validate": { "enable": true },
-                        "schema": { "enable": true }
-                    }
-                }
-            }
-        },
-        "typescript": {
-            "command": [ "typescript-language-server", "--stdio" ],
-            "extensions": [ ".ts", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs" ],
-            "initialization": {
-                "config": {
-                    "hostinfo": "opencode"
-                }
-            }
-        },
-        "biome": {
-            "command": [ "npm", "exec", "--no", "--", "biome", "lsp-proxy" ],
-            "extensions": [ ".ts", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs" ]
-        },
-        "eslint": {
-            "disabled": true
-        },
-        "deno": {
-            "disabled": true
-        },
-        "astro": {
-            "command": [ "astro-ls", "--stdio" ],
-            "extensions": [ ".astro", ".mdx" ],
-            "initialization": {
-                "config": {
-                    "contentIntellisense": true,
-                    "typescript": {
-                        "tsdk": "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib",
-                        "environment": "node"
-                    }
-                }
-            }
-        },
-        "somesass": {
-            "command": [ "some-sass-language-server", "--stdio" ],
-            "extensions": [ ".scss", ".sass", ".css" ],
-            "initialization": {
-                "config": {
-                    "somesass": {
-                        "workspace": {
-                            "loadPaths": [ "**/*.scss", "**/*.sass" ]
-                        }
-                    }
-                }
-            }
-        }
+    {
+      "action": "edit",
+      "resource": "~/.config/opencode/paul-framework/**",
+      "effect": "deny"
     },
-    "providers": {
-        "requesty": {
-            "name": "Requesty AI",
-            "package": "aisdk:@ai-sdk/openai-compatible",
-            "settings": {
-                "baseURL": "https://router.requesty.ai/v1"
-            },
-            "models": {
-                "google/gemma-4-31b-it": {
-                    "name": "Gemma-4[free]"
-                },
-                "nvidia/muse-glimmer-30b": {
-                    "name": "Muse-glimmer[free]"
-                }
-            }
-        },
-        "google": {
-            "name": "Google",
-            "package": "aisdk:@ai-sdk/openai-compatible",
-            "settings": {
-                "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai"
-            },
-            "models": {
-                "gemini-2.5-pro": {
-                    "name": "Gemini Pro(Free)",
-                    "capabilities": {
-                        "tools": true,
-                        "input": [ "text" ],
-                        "output": [ "text" ]
-                    },
-                    "limit": {
-                        "context": 131072,
-                        "output": 131072
-                    }
-                }
-            }
-        },
-        "openrouter": {
-            "name": "MyOpenRouter",
-            "package": "aisdk:@ai-sdk/openai-compatible",
-            "settings": {
-                "baseURL": "https://openrouter.ai/api/v1"
-            },
-            "models": {
-                "z-ai/glm-4.5-air:free": {
-                    "name": "Glm-4.5[free]",
-                    "settings": {
-                        "provider": {
-                            "only": [ "z-ai" ]
-                        }
-                    }
-                },
-                "qwen/qwen3-coder:free": {
-                    "name": "Qwen3-Coder[free]",
-                    "settings": {
-                        "provider": {
-                            "only": [ "venice/beta" ]
-                        }
-                    }
-                },
-                "mistralai/devstral-2512:free": {
-                    "name": "Devstral-2[free]"
-                }
-            }
-        },
-        "llamacpp": {
-            "package": "aisdk:@ai-sdk/openai-compatible",
-            "settings": {
-                "baseURL": "http://127.0.0.1:9999/v1"
-            },
-            "models": {
-                "deepseek4:4b": {
-                    "capabilities": {
-                        "tools": true
-                    },
-                    "limit": {
-                        "context": 16000,
-                        "output": 16000
-                    }
-                },
-                "gemma4:E2b": {
-                    "capabilities": {
-                        "tools": true
-                    },
-                    "limit": {
-                        "context": 16000,
-                        "output": 16000
-                    }
-                },
-                "granite3.3:2b": {
-                    "name": "granite:2b",
-                    "capabilities": {
-                        "tools": true
-                    },
-                    "limit": {
-                        "context": 16384,
-                        "output": 16384
-                    },
-                    "settings": {
-                        "messages": [
-                            { "role": "control", "content": "thinking" }
-                        ]
-                    }
-                },
-                "granite-code:3b": {
-                    "name": "granite-code:3b",
-                    "capabilities": {
-                        "tools": false
-                    },
-                    "limit": {
-                        "context": 8192,
-                        "output": 8192
-                    }
-                }
-            }
-        }
+    {
+      "action": "edit",
+      "resource": "~/.config/opencode/instructions/**",
+      "effect": "deny"
+    },
+    { "action": "shell", "resource": "git *", "effect": "deny" },
+    { "action": "shell", "resource": "git bisect *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git grep *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git branch", "effect": "allow" },
+    { "action": "shell", "resource": "git tag", "effect": "allow" },
+    // Tools
+    { "action": "cbm_*", "resource": "*", "effect": "deny" },
+    { "action": "groove_*", "resource": "*", "effect": "deny" },
+    { "action": "iwe_*", "resource": "*", "effect": "deny" },
+    { "action": "contex7_*", "resource": "*", "effect": "deny" },
+  ],
+  "experimental": {
+    "subagent_depth": 3
+  },
+  "instructions": [ ],
+  "mcp": {
+    "servers": {
+      "leanctx": {
+        "type": "local",
+        "command": [
+          "/home/gilles/.local/bin/lean-ctx"
+        ],
+        "disabled": false
+      },
+      "cbm": {
+        "type": "local",
+        "command": [
+          "/home/gilles/.local/bin/codebase-memory-mcp"
+        ],
+        "disabled": false
+      },
+      "groove": {
+        "type": "remote",
+        "url": "http://localhost:3100/mcp",
+        "disabled": false
+      },
+      "iwe": {
+        "type": "remote",
+        "url": "http://localhost:4321/mcp",
+        "disabled": false
+      },
+      "astro": {
+        "type": "remote",
+        "url": "https://mcp.docs.astro.build/mcp",
+        "disabled": true
+      },
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "disabled": false
+      }
     }
+  },
+  "default_agent": "chat",
+  "agents": {
+    "build": {
+      "system": "You are the orchestrator of all the operations affecting the project state. With great privilege comes great responsibility. While you're able to do things on your own, prefer proactively to use specialized subagents (e.g. delegate writing code to the coder agent). You will be responsible for its work; apply the same rigor to a subagent's edits as you would to your own.",
+      "permissions": [ ]
+    },
+    "plan": {
+      "disabled": true
+    }
+  },
+  "lsp": {
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".bash",
+        ".sh",
+        ".bob",
+        ".pacstall",
+        ".pacscript"
+      ],
+      "initialization": {
+        "config": {
+          "backgroundAnalysisMaxFiles": 1,
+          "includeAllWorkspaceSymbols": true
+        }
+      }
+    },
+    "zuban": {
+      "command": [
+        "zuban",
+        "server"
+      ],
+      "env": {
+        "LC_ALL": "en_US",
+        "LANGUAGE": "en-us",
+        "LANG": "en_US"
+      },
+      "extensions": [
+        ".py",
+        ".pyw",
+        "ipy"
+      ]
+    },
+    "ruff": {
+      "command": [
+        "ruff",
+        "server"
+      ],
+      "env": {
+        "RUFF_TRACE": "messages"
+      },
+      "extensions": [
+        ".py",
+        ".pyw",
+        "ipy"
+      ]
+    },
+    "json-lsp": {
+      "command": [
+        "vscode-json-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json"
+      ],
+      "initialization": {
+        "config": {
+          "json": {
+            "validate": {
+              "enable": true
+            },
+            "keepLines": {
+              "enanle": true
+            }
+          }
+        }
+      }
+    },
+    "yaml-ls": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "initialization": {
+        "config": {
+          "yaml": {
+            "validate": {
+              "enable": true
+            },
+            "schema": {
+              "enable": true
+            }
+          }
+        }
+      }
+    },
+    "typescript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".mts",
+        ".cts",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs"
+      ],
+      "initialization": {
+        "config": {
+          "hostinfo": "opencode"
+        }
+      }
+    },
+    "biome": {
+      "command": [
+        "npm",
+        "exec",
+        "--no",
+        "--",
+        "biome",
+        "lsp-proxy"
+      ],
+      "extensions": [
+        ".ts",
+        ".mts",
+        ".cts",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs"
+      ]
+    },
+    "eslint": {
+      "disabled": true
+    },
+    "deno": {
+      "disabled": true
+    },
+    "astro": {
+      "command": [
+        "astro-ls",
+        "--stdio"
+      ],
+      "extensions": [
+        ".astro",
+        ".mdx"
+      ],
+      "initialization": {
+        "config": {
+          "contentIntellisense": true,
+          "typescript": {
+            "tsdk": "/home/gilles/.nvm/versions/node/v23.7.0/lib/node_modules/typescript/lib",
+            "environment": "node"
+          }
+        }
+      }
+    },
+    "somesass": {
+      "command": [
+        "some-sass-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".scss",
+        ".sass",
+        ".css"
+      ],
+      "initialization": {
+        "config": {
+          "somesass": {
+            "workspace": {
+              "loadPaths": [
+                "**/*.scss",
+                "**/*.sass"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "steel": {
+      "command": [
+        "steel-language-server"
+      ],
+      "extensions": [
+        ".scm"
+      ]
+    }
+  },
+  "formatter": {
+    "steel": {
+      "command": [
+        "schemat"
+      ],
+      "extensions": [
+        ".scm"
+      ]
+    }
+  },
+  "providers": {
+    "requesty": {
+      "name": "Requesty AI",
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "https://router.requesty.ai/v1"
+      },
+      "models": {
+        "google/gemma-4-31b-it": {
+          "name": "Gemma-4[free]"
+        },
+        "nvidia/muse-glimmer-30b": {
+          "name": "Muse-glimmer[free]"
+        }
+      }
+    },
+    "google": {
+      "name": "Google",
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai"
+      },
+      "models": {
+        "gemini-2.5-pro": {
+          "name": "Gemini Pro(Free)",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": 131072,
+            "output": 131072
+          }
+        }
+      }
+    },
+    "openrouter": {
+      "name": "MyOpenRouter",
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "https://openrouter.ai/api/v1"
+      },
+      "models": {
+        "z-ai/glm-4.5-air:free": {
+          "name": "Glm-4.5[free]",
+          "settings": {
+            "provider": {
+              "only": [
+                "z-ai"
+              ]
+            }
+          }
+        },
+        "qwen/qwen3-coder:free": {
+          "name": "Qwen3-Coder[free]",
+          "settings": {
+            "provider": {
+              "only": [
+                "venice/beta"
+              ]
+            }
+          }
+        },
+        "mistralai/devstral-2512:free": {
+          "name": "Devstral-2[free]"
+        }
+      }
+    },
+    "llamacpp": {
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "http://127.0.0.1:9999/v1"
+      },
+      "models": {
+        "deepseek4:4b": {
+          "capabilities": {
+            "tools": true
+          },
+          "limit": {
+            "context": 16000,
+            "output": 16000
+          }
+        },
+        "gemma4:E2b": {
+          "capabilities": {
+            "tools": true
+          },
+          "limit": {
+            "context": 16000,
+            "output": 16000
+          }
+        },
+        "granite3.3:2b": {
+          "name": "granite:2b",
+          "capabilities": {
+            "tools": true
+          },
+          "limit": {
+            "context": 16384,
+            "output": 16384
+          },
+          "settings": {
+            "messages": [
+              {
+                "role": "control",
+                "content": "thinking"
+              }
+            ]
+          }
+        },
+        "granite-code:3b": {
+          "name": "granite-code:3b",
+          "capabilities": {
+            "tools": false
+          },
+          "limit": {
+            "context": 8192,
+            "output": 8192
+          }
+        }
+      }
+    }
+  },
+  "provider": {
+    "openai": {
+      "options": {
+        "baseURL": "http://127.0.0.1:8787/w/opencode/openai/v1"
+      }
+    },
+    "anthropic": {
+      "options": {
+        "baseURL": "http://127.0.0.1:8787/w/opencode/anthropic/v1"
+      }
+    },
+    "opencode-go": {
+      "options": {
+        "baseURL": "http://127.0.0.1:8787/w/opencode/compat/opencode-go/v1"
+      }
+    }
+  }
 }
