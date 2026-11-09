@@ -3,12 +3,14 @@ local config = wezterm.config_builder()
 
 config.default_prog = { 'zsh' }
 
-config.font_size = 16
+config.font_size = 12
 config.line_height = 1.05
 config.font = wezterm.font 'JetBrains Mono'
 
 -- config.term = 'wezterm'
 config.term = "xterm-256color"
+config.enable_csi_u_key_encoding = true
+config.enable_kitty_keyboard = true
 config.color_scheme = 'Catppuccin Mocha'
 config.colors = {
   foreground = '#d1d1d1',
