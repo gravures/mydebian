@@ -1,12 +1,23 @@
 # ~/.config/helix/config.toml
-
 theme = "franky"
+
+[icons.vcs]
+enable = true
+branch = " "
+
+[icons.kind]
+enable = true
+
+[icons.fs]
+enable = true
+
+[icons.diagnostic]
+enable = false
+warn = "▲"
 
 [editor]
 scrolloff = 5
 mouse = true
-default-yank-register = "+"
-middle-click-paste = true
 scroll-lines = 2
 shell = ["sh", "-c"]
 line-number = "absolute"
@@ -33,6 +44,15 @@ popup-border = "none"
 indent-heuristic = "hybrid"
 jump-label-alphabet = "abcdefghijklmnopqrstuvwxyz"
 end-of-line-diagnostics = "error"
+
+# Clipboard
+clipboard-provider = "wayland"
+default-yank-register = "+"    # + system | * primary | " last yanked
+middle-click-paste = true
+
+[editor.breadcrumb]
+enable = true
+path = "none" # full|file|none
 
 [editor.statusline]
 left = [
@@ -133,7 +153,7 @@ min-width = 3
 enable = true
 max-wrap = 20
 max-indent-retain = 10
-wrap-indicator = '↪" '
+wrap-indicator = '↪'
 wrap-at-text-width = false
 
 [editor.smart-tab]
@@ -160,38 +180,13 @@ C-right = "goto_next_buffer"
 C-left = "goto_previous_buffer"
 C-up = ["delete_selection", "move_line_up", "paste_before"]
 C-down = ["delete_selection", "paste_after"]
+# "C-]" = ":noop"
 
-# C-u = ":sh tmux display-popup '~/.config/helix/yazi-picker.sh'"
-
-## Minors modes
-[keys.normal.space]
-
-[keys.normal."#"]
-"k" = "hover"
-"#" = "code_action"
-"'" = "rename_symbol"
-";" = "goto_definition"
-"]" = ":lsp-workspace-command"
-"h" = ":set-option end-of-line-diagnostics disable"
-"H" = ":set-option end-of-line-diagnostics error"
-"s" = ":lsp-stop"
-"r" = ":lsp-restart"
-"z" = [ # Zen Mode
-  ":set bufferline never",
-  ':set gutters.layout ["spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer"]',
-  ":set soft-wrap.wrap-at-text-width true",
-  ":set soft-wrap.wrap-indicator \f",
-  ":set end-of-line-diagnostics disable",
-]
-"d" = [ # dict
-  ":sh dict %{selection}",
-]
-"b" = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 
 [keys.normal."'"]
-"/" = ":config-reload"
-"c" = ":config-open"
-"l" = ":o ~/.config/helix/languages.toml"
+# "/" = ":config-reload"
+# "c" = ":config-open"
+# "l" = ":o ~/.config/helix/languages.toml"
 "y" = [ # Yazi
   ":write-all",
   ":new",

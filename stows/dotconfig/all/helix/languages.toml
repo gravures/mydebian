@@ -166,6 +166,19 @@ trace.server = "verbose" # off | messages | verbose
 
 
 ##################################################################
+#                  STEEL
+##################################################################
+[language-server.steel]
+command = "steel-language-server"
+
+[[language]]
+name = "scheme"
+language-servers = [{ name = "steel" }, { name = "helix" }]
+formatter = { command = "schemat", args = [] }
+auto-format = true
+comment-token = ";;"
+
+##################################################################
 #                  RST - RestructuredText
 ##################################################################
 [language-server.esbonio]
@@ -269,7 +282,16 @@ shellcheckExternalSources = true
 [[language]]
 name = "bash"
 scope = "source.bash"
-file-types = ["bash", "sh", "bob", "pacstall", "pacscript", "conf", "nb-plugin"]
+file-types = [
+  "bash",
+  "zsh",
+  "sh",
+  "bob",
+  "pacstall",
+  "pacscript",
+  "conf",
+  "nb-plugin",
+]
 language-servers = [
   { name = "bash-language-server", except-features = [
     "format",
