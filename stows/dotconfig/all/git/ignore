@@ -1,0 +1,14 @@
+#
+.opencode/
+.paul/
+.cbmignore
+
+# tokenade — per-project cache / scaffold flag / dedup refs (global)
+.tokenade/
+
+# tokenade — legacy per-project embedding model cache (now global)
+.fastembed_cache/
+
+# tokenade — original copies kept so the install can be reverted
+*.tokenade-original
+*.tokenade-backup-*
