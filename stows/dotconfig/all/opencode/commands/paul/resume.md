@@ -14,7 +14,7 @@ Restore PAUL context after a session break, determine current position, and sugg
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/resume-project.md
+paul-framework/workflows/resume-project.md
 </execution_context>
 
 <context>
@@ -24,7 +24,7 @@ $ARGUMENTS (optional handoff path)
 </context>
 
 <process>
-**Follow workflow: @./.opencode/paul-framework/workflows/resume-project.md**
+**Follow workflow: paul-framework/workflows/resume-project.md**
 
 The workflow implements:
 1. Verify .paul/ exists

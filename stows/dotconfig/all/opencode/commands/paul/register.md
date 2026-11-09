@@ -15,7 +15,7 @@ Migrate `.paul/paul.json` → `.paul/paul.toml` for pre-v1.4 projects, or create
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/register-manifest.md
+paul-framework/workflows/register-manifest.md
 </execution_context>
 
 <context>
@@ -23,7 +23,7 @@ Current directory (check for .paul/, existing paul.json, existing paul.toml)
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/register-manifest.md
+Follow workflow: paul-framework/workflows/register-manifest.md
 </process>
 
 <success_criteria>

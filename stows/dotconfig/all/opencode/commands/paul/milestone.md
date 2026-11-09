@@ -12,7 +12,7 @@ Create a new milestone with defined scope and phases.
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/create-milestone.md
+paul-framework/workflows/create-milestone.md
 </execution_context>
 
 <context>
@@ -24,7 +24,7 @@ $ARGUMENTS
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/create-milestone.md
+Follow workflow: paul-framework/workflows/create-milestone.md
 </process>
 
 <success_criteria>

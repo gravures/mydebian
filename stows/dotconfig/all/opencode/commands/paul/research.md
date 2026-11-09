@@ -18,8 +18,8 @@ Research a specific topic using subagents and save findings for review.
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/research.md
-@./.opencode/paul-framework/references/subagent-criteria.md
+paul-framework/workflows/research.md
+paul-framework/references/subagent-criteria.md
 </execution_context>
 
 <context>
@@ -35,7 +35,7 @@ Optional flags:
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/research.md
+Follow workflow: paul-framework/workflows/research.md
 </process>
 
 <success_criteria>

@@ -14,7 +14,7 @@ Surface opencode's assumptions about a phase to validate understanding before pl
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/phase-assumptions.md
+paul-framework/workflows/phase-assumptions.md
 </execution_context>
 
 <context>
@@ -26,7 +26,7 @@ Phase number: $ARGUMENTS (required)
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/phase-assumptions.md
+Follow workflow: paul-framework/workflows/phase-assumptions.md
 </process>
 
 <success_criteria>

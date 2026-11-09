@@ -12,7 +12,7 @@ Complete the current milestone, archive it, and evolve PROJECT.md.
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/complete-milestone.md
+paul-framework/workflows/complete-milestone.md
 </execution_context>
 
 <context>
@@ -25,7 +25,7 @@ $ARGUMENTS
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/complete-milestone.md
+Follow workflow: paul-framework/workflows/complete-milestone.md
 </process>
 
 <success_criteria>

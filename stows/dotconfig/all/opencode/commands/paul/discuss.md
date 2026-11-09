@@ -12,7 +12,7 @@ Facilitate vision discussion for a specific phase and create context handoff.
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/discuss-phase.md
+paul-framework/workflows/discuss-phase.md
 </execution_context>
 
 <context>
@@ -24,7 +24,7 @@ Phase number: $ARGUMENTS (required)
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/discuss-phase.md
+Follow workflow: paul-framework/workflows/discuss-phase.md
 </process>
 
 <success_criteria>

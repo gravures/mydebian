@@ -12,7 +12,7 @@ Remove a future phase from the roadmap and clean up its directory.
 </objective>
 
 <execution_context>
-@./.opencode/paul-framework/workflows/roadmap-management.md
+paul-framework/workflows/roadmap-management.md
 </execution_context>
 
 <context>
@@ -24,7 +24,7 @@ $ARGUMENTS
 </context>
 
 <process>
-Follow workflow: @./.opencode/paul-framework/workflows/roadmap-management.md
+Follow workflow: paul-framework/workflows/roadmap-management.md
 
 Execute: **remove-phase** operation
 </process>
